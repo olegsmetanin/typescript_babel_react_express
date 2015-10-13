@@ -1,8 +1,8 @@
-import ServiceInterface from './../../interfaces/ServiceInterface';
+import IService from './../../interfaces/IService';
 import Delay from './../../commands/Delay';
 import DelayedValue from './../../commands/DelayedValue';
 
-export default class APIService implements ServiceInterface {
+export default class APIService implements IService {
 
   counter: number;
 

@@ -1,9 +1,9 @@
-import ServiceInterface from './interfaces/ServiceInterface'
+import IService from './interfaces/IService'
 import APIService from './services/api/APIService';
 
 export default class Server {
 
-  apiService: ServiceInterface;
+  apiService: IService;
 
   constructor() {
     this.apiService = new APIService();
