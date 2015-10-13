@@ -1,6 +1,7 @@
 import IService from './../../../framework/server/interfaces/IService';
 import Delay from './../../../framework/server/commands/Delay';
 import DelayedValue from './../../../framework/server/commands/DelayedValue';
+import invoke from './../../helpers/invoke';
 
 export default class APIService implements IService {
 
@@ -12,7 +13,7 @@ export default class APIService implements IService {
 
   async start() {
     // load config, create classes, etc ...
-    await(new Delay(1000).execute());
+    await(invoke(new Delay(1000)));
     // run processing
     this.process();
 
@@ -20,7 +21,7 @@ export default class APIService implements IService {
   }
 
   async process() {
-    this.counter = await (new DelayedValue(this.counter + 1, 1000).execute());
+    this.counter = await (invoke(new DelayedValue(this.counter + 1, 1000)));
     console.log('Processing: ', this.counter);
     setTimeout(() => this.process(), 1000);
   }
