@@ -1,13 +1,18 @@
-import ServiceInterface from './../../interfaces/ServiceInterface';
+import ISystem from './../../interfaces/ISystem';
+import IService from './../../interfaces/IService';
+
 import Delay from './../../commands/Delay';
 import DelayedValue from './../../commands/DelayedValue';
 
-export default class APIService implements ServiceInterface {
+export default class APIService implements IService {
+
+  logger: ILogger;
 
   counter: number;
 
-  constructor() {
+  constructor(system: ISystem) {
     this.counter = 0;
+    this.system = system;
   }
 
   async start() {

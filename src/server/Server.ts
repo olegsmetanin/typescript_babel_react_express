@@ -1,12 +1,19 @@
-import ServiceInterface from './interfaces/ServiceInterface'
+import ISystem from './interfaces/ISystem';
+
+import IService from './interfaces/IService';
 import APIService from './services/api/APIService';
+
+import ILogger from './interfaces/ILogger';
+import DefaultLogger from './logger/DefaultLogger';
 
 export default class Server {
 
-  apiService: ServiceInterface;
+  apiService: IService;
+  logger: ILogger;
 
-  constructor() {
-    this.apiService = new APIService();
+  constructor(settings: any, config: any) {
+    this.system = system;
+    this.apiService = new APIService(system);
   }
 
   async start() {

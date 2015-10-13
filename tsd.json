@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "55f5aec4260b7679892cbd586d11cc8fd811615f"
+      "commit": "66f88ec51858bb21bc375fa91a963c04bc09401e"
     },
     "mime/mime.d.ts": {
       "commit": "55f5aec4260b7679892cbd586d11cc8fd811615f"
@@ -19,6 +19,18 @@
     },
     "mocha/mocha.d.ts": {
       "commit": "14ab703f435375194360cdba3abab61afc879c18"
+    },
+    "eventemitter3/eventemitter3.d.ts": {
+      "commit": "e9be3cecf8a326d3e220c52b42d218169a7bb9f2"
+    },
+    "pg/pg.d.ts": {
+      "commit": "66f88ec51858bb21bc375fa91a963c04bc09401e"
+    },
+    "bluebird/bluebird.d.ts": {
+      "commit": "66f88ec51858bb21bc375fa91a963c04bc09401e"
+    },
+    "knex/knex.d.ts": {
+      "commit": "66f88ec51858bb21bc375fa91a963c04bc09401e"
     }
   }
 }
