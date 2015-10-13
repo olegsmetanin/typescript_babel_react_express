@@ -5,7 +5,8 @@
   "scripts": {
     "devserver": "node devserver.js",
     "build": "node_modules/webpack/bin/webpack.js --config webpack.server.config.js",
-    "tsd": "node_modules/tsd/build/cli.js"
+    "tsd": "node_modules/tsd/build/cli.js",
+    "test": "node_modules/webpack/bin/webpack.js --config webpack.test.config.js && mocha ./build/test.js"
   },
   "dependencies": {
     "babel-core": "^5.8.24",
@@ -20,6 +21,7 @@
     "webpack": "^1.12.1"
   },
   "devDependencies": {
+    "mocha": "^2.3.3",
     "webpack": "^1.12.2"
   }
 }
