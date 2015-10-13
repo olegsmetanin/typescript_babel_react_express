@@ -1,10 +1,8 @@
-// !/ <reference path="../../../../../../typings/es6-promise/es6-promise.d.ts" />
+import ICommand from './../../../../framework/server/interfaces/ICommand';
 
-import Command from './../../../interfaces/Command'
+export default class APICommand implements ICommand<Promise<string>> {
 
-export default class APICommand extends Command<Promise<string>> {
-
-  internalExecute() {
+  execute() {
     return new Promise<string>(resolve => setTimeout(() => resolve('qwe'), 1000))
   }
 

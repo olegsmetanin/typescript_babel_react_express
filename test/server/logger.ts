@@ -1,7 +1,7 @@
 /// <reference path="../test.d.ts"/>
 
-import ILogger from '../../src/server/common/logging/ILogger';
-import ConsoleLogger from '../../src/server/common/logging/ConsoleLogger';
+import ILogger from '../../src/framework/server/interfaces/ILogger';
+import ConsoleLogger from '../../src/framework/server/logging/ConsoleLogger';
 
 describe('just an example', () => {
 

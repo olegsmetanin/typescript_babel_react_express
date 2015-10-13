@@ -1,15 +1,14 @@
-import Command from './../interfaces/Command'
+import ICommand from './../interfaces/ICommand'
 
-export default class Delay extends Command<Promise<void>> {
+export default class Delay implements ICommand<Promise<void>> {
 
   wait: number;
 
   constructor(wait: number) {
-    super();
     this.wait = wait;
   }
 
-  internalExecute() {
+  execute() {
     return new Promise<void>(resolve => setTimeout(resolve, this.wait));
   }
 

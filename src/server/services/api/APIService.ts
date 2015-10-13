@@ -1,6 +1,6 @@
-import IService from './../../interfaces/IService';
-import Delay from './../../commands/Delay';
-import DelayedValue from './../../commands/DelayedValue';
+import IService from './../../../framework/server/interfaces/IService';
+import Delay from './../../../framework/server/commands/Delay';
+import DelayedValue from './../../../framework/server/commands/DelayedValue';
 
 export default class APIService implements IService {
 

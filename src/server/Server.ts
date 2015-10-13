@@ -1,4 +1,4 @@
-import IService from './interfaces/IService'
+import IService from './../framework/server/interfaces/IService'
 import APIService from './services/api/APIService';
 
 export default class Server {
