@@ -1,9 +1,20 @@
 import ICommand from './../../../../framework/server/interfaces/ICommand';
 
-export default class APICommand implements ICommand<Promise<string>> {
+interface IAPICommandOptions {
+  value: number;
+  timeout: number;
+}
 
-  execute() {
-    return new Promise<string>(resolve => setTimeout(() => resolve('qwe'), 1000))
+export default class APICommand implements ICommand<Promise<number>> {
+
+  options: IAPICommandOptions;
+
+  constructor(options: IAPICommandOptions) {
+    this.options = options;
+  }
+
+  async execute() {
+    return new Promise<number>(resolve => setTimeout(() => resolve(this.options.value), this.options.timeout))
   }
 
 }

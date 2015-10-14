@@ -1,6 +1,7 @@
 import IService from './../../../framework/server/interfaces/IService';
 import Delay from './../../../framework/server/commands/Delay';
 import DelayedValue from './../../../framework/server/commands/DelayedValue';
+import APICommand from './commands/APICommand';
 import invoke from './../../helpers/invoke';
 
 interface APIServiceSettings {
@@ -27,7 +28,7 @@ export default class APIService implements IService {
   }
 
   async process() {
-    this.counter = await (invoke(new DelayedValue(this.counter + 1, 1000)));
+    this.counter = await (invoke(new APICommand({value: this.counter + 1, timeout: 1000})));
     console.log('Processing: ', this.counter);
     setTimeout(() => this.process(), 1000);
   }
