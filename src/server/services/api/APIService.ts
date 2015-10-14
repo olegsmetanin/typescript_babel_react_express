@@ -1,11 +1,15 @@
 import IService from './../../../framework/server/interfaces/IService';
+import IDB from './../../../framework/server/interfaces/IDB';
 import Delay from './../../../framework/server/commands/Delay';
 import DelayedValue from './../../../framework/server/commands/DelayedValue';
 import APICommand from './commands/APICommand';
+import DBCommand from './commands/DBCommand';
 import invoke from './../../helpers/invoke';
+
 
 interface APIServiceSettings {
   name: string;
+  db: IDB;
 }
 
 export default class APIService implements IService {
@@ -29,6 +33,8 @@ export default class APIService implements IService {
 
   async process() {
     this.counter = await (invoke(new APICommand({value: this.counter + 1, timeout: 1000})));
+    var q = await invoke(new DBCommand({db: this.settings.db}));
+    console.log('q', q);
     console.log('Processing: ', this.counter);
     setTimeout(() => this.process(), 1000);
   }

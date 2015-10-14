@@ -7,6 +7,7 @@ import * as pg from 'pg';
 interface IPG_Config {
   connectionString: string;
 }
+
 export default class PG implements IDB {
   config: IPG_Config;
 
