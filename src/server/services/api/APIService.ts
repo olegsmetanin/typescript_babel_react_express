@@ -3,12 +3,18 @@ import Delay from './../../../framework/server/commands/Delay';
 import DelayedValue from './../../../framework/server/commands/DelayedValue';
 import invoke from './../../helpers/invoke';
 
+interface APIServiceSettings {
+  name: string;
+}
+
 export default class APIService implements IService {
 
   counter: number;
+  settings: APIServiceSettings;
 
-  constructor() {
+  constructor(settings: APIServiceSettings) {
     this.counter = 0;
+    this.settings = settings;
   }
 
   async start() {
@@ -17,7 +23,7 @@ export default class APIService implements IService {
     // run processing
     this.process();
 
-    console.log('API Service started');
+    console.log(this.settings.name + ' started');
   }
 
   async process() {
@@ -29,7 +35,7 @@ export default class APIService implements IService {
   async stop() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        console.log('API Service stopped');
+        console.log(this.settings.name + ' stopped');
         resolve();
       }, 1000);
     })

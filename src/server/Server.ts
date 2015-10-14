@@ -6,7 +6,7 @@ export default class Server {
   apiService: IService;
 
   constructor() {
-    this.apiService = new APIService();
+    this.apiService = new APIService({name: 'API Service'});
   }
 
   async start() {
