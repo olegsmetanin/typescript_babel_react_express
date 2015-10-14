@@ -1,6 +1,6 @@
 import ILogger from './ILogger';
 import IEventBus from './IEventBus';
-import IDBClient from './IDBClient';
+import {IDBClient} from './IDB';
 import IHTTPClient from './IHTTPClient';
 
 interface ISystemContext {
