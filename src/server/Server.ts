@@ -7,7 +7,7 @@ export default class Server {
   apiService: IService;
 
   constructor() {
-    this.apiService = new APIService({name: 'API Service', db: new PG({connectionString: 'postgres://postgres:mysecretpassword@192.168.99.100/ts'})});
+    this.apiService = new APIService({name: 'API Service', db: new PG({connectionString: 'postgres://postgres:mysecretpassword@192.168.99.100/postgres'})});
   }
 
   async start() {

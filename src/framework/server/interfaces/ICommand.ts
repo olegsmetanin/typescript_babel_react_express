@@ -1,5 +1,6 @@
 interface ICommand<T> {
-  execute(): T
+  name(): string;
+  execute(): T;
 }
 
 export default ICommand;

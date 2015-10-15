@@ -1,11 +1,12 @@
-import ICommand from './../interfaces/ICommand'
+import Command from './../interfaces/Command'
 
-export default class DelayedValue implements ICommand<Promise<any>> {
+export default class DelayedValue extends Command<Promise<any>> {
 
   wait: number;
   value: any;
 
   constructor(value: any, wait: number) {
+    super();
     this.wait = wait;
     this.value = value;
   }

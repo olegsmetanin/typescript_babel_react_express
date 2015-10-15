@@ -1,18 +1,21 @@
 /// <reference path="../server.d.ts"/>
+/// <reference path="../../../../typings/pg/pg.d.ts"/>
 
 import IDB, {IDBClient} from './../interfaces/IDB';
 
-import * as pg from 'pg';
+var pg = require('pg'); // needed for Babel transpilation
 
 interface IPG_Config {
   connectionString: string;
 }
 
 export default class PG implements IDB {
+
   config: IPG_Config;
 
   constructor(config: IPG_Config) {
     this.config = config;
+
   }
 
   query(...args: any[]): Promise<any> {

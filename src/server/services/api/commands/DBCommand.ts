@@ -1,21 +1,24 @@
-import ICommand from './../../../../framework/server/interfaces/ICommand';
+import Command from './../../../../framework/server/interfaces/Command';
 import IDB from './../../../../framework/server/interfaces/IDB';
 
 
 interface IDBCommandOptions {
+  q: string;
   db: IDB;
 }
 
-export default class DBCommand implements ICommand<Promise<number>> {
+export default class DBCommand extends Command<Promise<any>> {
 
-  db: IDB;
+  options: IDBCommandOptions;
 
   constructor(options: IDBCommandOptions) {
-    this.db = options.db;
+    super();
+    this.options = options;
   }
 
   async execute() {
-    return (await this.db.query('select 1 as q')).rows[0];
+    var {q, db} = this.options;
+    return (await db.query(q)).rows;
   }
 
 }
