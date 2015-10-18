@@ -2,6 +2,8 @@ import Command from './../interfaces/Command'
 
 export default class DelayedValue extends Command<Promise<any>> {
 
+  className = 'DelayedValue';
+  
   wait: number;
   value: any;
 

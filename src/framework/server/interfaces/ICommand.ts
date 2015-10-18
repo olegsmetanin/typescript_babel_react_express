@@ -1,5 +1,5 @@
 interface ICommand<T> {
-  name: string;
+  className: string;
   execute(): T;
 }
 
