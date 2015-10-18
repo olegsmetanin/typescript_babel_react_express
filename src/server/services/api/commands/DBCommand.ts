@@ -9,6 +9,8 @@ interface IDBCommandOptions {
 
 export default class DBCommand extends Command<Promise<any>> {
 
+  name = 'DBCommand';
+
   options: IDBCommandOptions;
 
   constructor(options: IDBCommandOptions) {

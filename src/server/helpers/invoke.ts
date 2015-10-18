@@ -2,7 +2,7 @@ import ICommand from './../../framework/server/interfaces/ICommand';
 
 export default async function invoke<T>(command: ICommand<T>) {
 
-  var name = command.name();
+  var name = command.name;
   var startTime = global.process.hrtime();
   var value = await command.execute();
   var diff = global.process.hrtime(startTime);

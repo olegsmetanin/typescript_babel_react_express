@@ -7,6 +7,8 @@ interface IAPICommandOptions {
 
 export default class APICommand extends Command<Promise<number>> {
 
+  name = 'APICommand';
+  
   options: IAPICommandOptions;
 
   constructor(options: IAPICommandOptions) {
