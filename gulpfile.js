@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');
 var babel = require('gulp-babel');
+var mocha = require('gulp-mocha');
 
 
 
@@ -36,6 +37,17 @@ gulp.task('server', ['build:server'], function() {
   gulp.watch(['build/framework/**/*.js', 'build/server/**/*.js'], function() {
     server.start.bind(server)();
   });
+});
+
+gulp.task('test', ['build:server'], function() {
+  return gulp.src('build/test/**/*.js')
+    .pipe(mocha())
+    .once('error', function () {
+      process.exit(1);
+    })
+    .once('end', function () {
+      process.exit();
+    });
 });
 
 gulp.task('default', ['build:server']);
