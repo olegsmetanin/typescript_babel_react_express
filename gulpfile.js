@@ -3,6 +3,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');
 var babel = require('gulp-babel');
 var mocha = require('gulp-mocha');
+var webpack = require('webpack-stream');
 
 
 
@@ -12,20 +13,44 @@ var gls = require('gulp-live-server');
 // restore original process.env.NODE_ENV
 process.env.NODE_ENV = node_env;
 
+gulp.task('webpublic', function() {
+  gulp.src(['src/webpublic/**']).pipe(gulp.dest('build/webpublic'
+    ));
+});
+
+gulp.task("webpack", function() {
+  var config = require('./webpack.client.config.js');
+  return gulp.src('src/webclient/index.ts')
+    .pipe(webpack(config))
+    .pipe(gulp.dest('build/webpublic/assets/js'));
+});
+
+gulp.task('build:webclient', ['webpack', 'webpublic']);
+
+gulp.task("webpack-watch", function() {
+  var config = require('./webpack.client.config.js');
+  config.watch = true;
+  return gulp.src('src/webclient/index.ts')
+    .pipe(webpack(config))
+    .pipe(gulp.dest('build/webpublic/assets/js'));
+});
+
+gulp.task('webclient', ['webpack-watch', 'webpublic']);
 
 var tsProject = ts.createProject('./tsconfig.json');
 
-gulp.task('build:server', function() {
-    return gulp.src(['src/**/*.ts'])
+gulp.task('build:server:resources', function() {
+  gulp.src(['src/server/*.raml']).pipe(gulp.dest('build/server'
+    ));
+});
+
+gulp.task('build:server', ['build:server:resources'], function() {
+    return gulp.src(['src/**/*.ts', 'src/**/*.tsx'])
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .pipe(babel())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('build'));
-});
-
-gulp.task('watch', function() {
-
 });
 
 var serverArgs = ['./build/server/index.js'];
@@ -50,4 +75,4 @@ gulp.task('test', ['build:server'], function() {
     });
 });
 
-gulp.task('default', ['build:server']);
+gulp.task('default', ['build:server', 'build:webclient']);

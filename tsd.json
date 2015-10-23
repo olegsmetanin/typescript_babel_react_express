@@ -6,22 +6,34 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "3a6e1b8988eba0ba74fe4db20c950242552857e2"
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
     },
     "mime/mime.d.ts": {
-      "commit": "3a6e1b8988eba0ba74fe4db20c950242552857e2"
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "3a6e1b8988eba0ba74fe4db20c950242552857e2"
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
     },
     "express/express.d.ts": {
-      "commit": "3a6e1b8988eba0ba74fe4db20c950242552857e2"
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
     },
     "mocha/mocha.d.ts": {
-      "commit": "3a6e1b8988eba0ba74fe4db20c950242552857e2"
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
     },
     "pg/pg.d.ts": {
-      "commit": "3a6e1b8988eba0ba74fe4db20c950242552857e2"
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
+    },
+    "body-parser/body-parser.d.ts": {
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
+    },
+    "cookie-parser/cookie-parser.d.ts": {
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
+    },
+    "react/react.d.ts": {
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
+    },
+    "react-router/react-router.d.ts": {
+      "commit": "44cbde48eecd1918ed54b3be49a9752688b6c65a"
     }
   }
 }
