@@ -1,5 +1,7 @@
 import IService from './../../../framework/server/interfaces/IService';
 import HTMLStab from './HTMLStab';
+import reactServerRender from './reactServerRender';
+
 
 var wrap = fn => (...args) => fn(...args).catch(args[2]);
 
@@ -20,19 +22,20 @@ export default class AppService implements IService {
 
   async start() {
 
-    this.webserver.get('/', wrap(async (req, res) => {
-      res.send(HTMLStab({}));
-    }));
+  this.webserver.get('/', wrap(async(req, res, next) => {
+    var { content, cachedump } = await reactServerRender(req.url);
+    res.send(HTMLStab({content, cachedump}));
+  }));
 
-    console.log(this.settings.name + ' started');
-  }
+  console.log(this.settings.name + ' started');
+}
 
-  async stop() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        console.log(this.settings.name + ' stopped');
-        resolve();
-      }, 1000);
-    })
-  }
+async stop() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log(this.settings.name + ' stopped');
+      resolve();
+    }, 1000);
+  })
+}
 }

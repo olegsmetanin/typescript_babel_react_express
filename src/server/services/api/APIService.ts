@@ -5,11 +5,12 @@ import DelayedValue from './../../../framework/server/commands/DelayedValue';
 import APICommand from './commands/APICommand';
 import DBCommand from './commands/DBCommand';
 import invoke from './../../helpers/invoke';
-
+var wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 interface APIServiceSettings {
   name: string;
   db: IDB;
+  webserver: any;
 }
 
 export default class APIService implements IService {
@@ -26,6 +27,12 @@ export default class APIService implements IService {
     // load config, create classes, etc ...
     await(invoke(new Delay(1000)));
     // run processing
+
+    this.settings.webserver.post('/api/data', wrap(async (req, res) => {
+      res.send(req.body);
+    }));
+
+
     this.process();
 
     console.log(this.settings.name + ' started');
@@ -38,7 +45,7 @@ export default class APIService implements IService {
       this.counter = await (invoke(new APICommand({value: this.counter + 1, timeout: 1000})));
       var q = await invoke(new DBCommand({q: 'select 1 as q', db: this.settings.db}));
 
-      setTimeout(() => this.process(), 1000);
+      //setTimeout(() => this.process(), 1000);
     } catch(e) {
       console.log(e);
       console.trace();

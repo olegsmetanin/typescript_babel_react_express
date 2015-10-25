@@ -11,7 +11,6 @@ import PG from './../framework/server/database/PG';
 
 import * as bodyParser from 'body-parser';
 
-
 export default class Server {
 
   webserver: any;
@@ -19,29 +18,32 @@ export default class Server {
   apiService: IService;
 
   constructor() {
-    var raml = require('raml-parser');
-    raml.loadFile(__dirname +'/publicAPI.raml').then( function(data) {
-      console.log('RAML: ', data);
-    }, function(error) {
-      console.log('Error parsing: ' + error);
-    });
+    // var raml = require('raml-parser');
+    // raml.loadFile(__dirname +'/publicAPI.raml').then( function(data) {
+    //   console.log('RAML: ', data);
+    // }, function(error) {
+    //   console.log('Error parsing: ' + error);
+    // });
 
     var express = require('express');
     var webserver = express();
     webserver.use(bodyParser.json());
     webserver.use(express.static('build/webpublic'));
 
+
+    this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:mysecretpassword@192.168.99.100/postgres' }) });
+
     this.appService = new AppService({ name: 'App Service', webserver: webserver });
 
-    this.apiService = new APIService({ name: 'API Service', db: new PG({ connectionString: 'postgres://postgres:mysecretpassword@192.168.99.100/postgres' }) });
 
     this.webserver = webserver;
   }
 
   async start() {
   console.log('Start server');
-  await this.appService.start();
   await this.apiService.start();
+  // at last!
+  await this.appService.start();
   this.webserver.listen(3000);
 }
 

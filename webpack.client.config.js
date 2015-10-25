@@ -23,6 +23,10 @@ var config = {
       exclude: /node_modules/,
       loaders: ['babel', 'ts-loader']
     }, {
+      test: /\.jsx?$/,
+      exclude: /node_modules/,
+      loaders: ['babel']
+    }, {
       test: /\.scss$/,
       loader: ExtractTextPlugin.extract("style", "css", "sass")
     }]
@@ -33,7 +37,10 @@ var config = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin("lib", 'lib.js'),
     new webpack.BannerPlugin('Build: '+new Date()),
-    new ExtractTextPlugin("app.css")
+    new ExtractTextPlugin('../css/app.css', {
+       publicPath: '/assets/css/',
+       allChunks: true
+     })
   ].concat(!process.env.NODE_ENV || process.env.NODE_ENV === 'production'
     ? [new webpack.optimize.UglifyJsPlugin({
         compress: {

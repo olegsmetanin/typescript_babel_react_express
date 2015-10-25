@@ -1,6 +1,6 @@
 export default (options) => {
-  let {title = '', meta = '', content = '', state = {}} = options || {};
-  var stateJSON = JSON.stringify(state);
+  let {title = '', meta = '', content = '', cachedump = {}} = options || {};
+  var cachedumpJSON = JSON.stringify(cachedump);
 
   return `<!DOCTYPE html>
     <html lang="ru">
@@ -20,7 +20,7 @@ export default (options) => {
         <script src="/assets/js/app.js"></script>
         <div id="app">${content}</div>
         <script>
-          app({el:document.getElementById('app'), state: ${stateJSON}});
+          app({el:document.getElementById('app'), cachedump: ${cachedumpJSON}});
         </script>
 
       </body>
