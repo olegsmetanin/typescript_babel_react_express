@@ -21,7 +21,7 @@ export default class AppService implements IService {
 
   async start() {
 
-  this.webserver.get('/', this.render.bind(this));
+  this.webserver.get('*', this.render.bind(this));
 
   console.log(this.settings.name + ' started');
 }

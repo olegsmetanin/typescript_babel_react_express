@@ -18,15 +18,15 @@ window['app'] = (options: any) => {
 
       async function run() {
 
-        async function fillCache(routes, methodName, ...args) {
-            return Promise.all(routes
-                .map(route => route.handler[methodName])
-                .filter(method => typeof method === 'function')
-                .map(method => method(...args))
-            );
-        }
-
-        await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
+        // async function fillCache(routes, methodName, ...args) {
+        //     return Promise.all(routes
+        //         .map(route => route.handler[methodName])
+        //         .filter(method => typeof method === 'function')
+        //         .map(method => method(...args))
+        //     );
+        // }
+        //
+        // await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
 
         React.render(<Context
           invoke={invoke}
