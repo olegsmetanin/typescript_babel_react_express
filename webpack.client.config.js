@@ -20,15 +20,13 @@ var config = {
   module: {
     loaders: [{
       test: /\.tsx?$/,
-      exclude: /node_modules/,
-      loaders: ['babel', 'ts-loader']
+      loaders: ['component-css?ext=scss','babel', 'ts-loader']
     }, {
       test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loaders: ['babel']
+      loaders: ['component-css?ext=scss','babel']
     }, {
       test: /\.scss$/,
-      loader: ExtractTextPlugin.extract("style", "css", "sass")
+      loader: ExtractTextPlugin.extract("style", "css", "autoprefixer-loader?browsers=last 2 version", "sass-loader")
     }]
   },
   ts: {
@@ -48,7 +46,10 @@ var config = {
         }
       })]
     : []
-  )
+  ),
+  sassLoader: {
+    includePaths: [path.resolve(__dirname, "./src/webclient")]
+  }
 }
 
 if (process.env.NODE_ENV === 'development') {
