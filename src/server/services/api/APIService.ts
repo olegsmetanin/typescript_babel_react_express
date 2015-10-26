@@ -1,12 +1,12 @@
 import {Request, Response} from 'express';
 import IService from './../../../framework/server/interfaces/IService';
 import IDB from './../../../framework/server/interfaces/IDB';
-import Delay from './../../../framework/server/commands/Delay';
-import DelayedValue from './../../../framework/server/commands/DelayedValue';
+import Delay from './../../../framework/common/commands/Delay';
+import DelayedValue from './../../../framework/common/commands/DelayedValue';
 import APICommand from './commands/APICommand';
 import DBCommand from './commands/DBCommand';
-import invoke from './../../helpers/invoke';
-import wrapAsync from '../../helpers/wrapAsync';
+import invoke from './../../../framework/server/invoke/invoke';
+import wrapAsync from './../../../framework/server/express/wrapAsync';
 
 interface APIServiceSettings {
   name: string;

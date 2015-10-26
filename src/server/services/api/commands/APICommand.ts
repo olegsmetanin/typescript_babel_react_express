@@ -1,4 +1,4 @@
-import Command from './../../../../framework/server/interfaces/Command';
+import Command from './../../../../framework/common/command/Command';
 
 interface IAPICommandOptions {
   value: number;

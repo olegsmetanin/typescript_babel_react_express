@@ -1,5 +1,5 @@
-import Command from './../interfaces/Command';
-import IHTTPClient from './../interfaces/IHTTPClient';
+import Command from '../command/Command';
+import IHTTPClient from '../http/IHTTPClient';
 
 interface IJSONPostOptions {
   data: any;

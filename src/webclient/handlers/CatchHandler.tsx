@@ -1,7 +1,7 @@
 import * as React from 'react';
 import CatchServerException from '../commands/CatchServerException';
-import IHTTPClient from '../../framework/server/interfaces/IHTTPClient';
-import IInvoke from '../../framework/server/interfaces/IInvoke';
+import IHTTPClient from '../../framework/common/http/IHTTPClient';
+import IInvoke from '../../framework/common/invoke/IInvoke';
 
 interface ICatchHandlerContext {
   httpClient : IHTTPClient;

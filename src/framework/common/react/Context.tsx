@@ -1,11 +1,12 @@
 import * as React from 'react';
 import * as ReactRouter from 'react-router';
-import IInvoke from '../../server/interfaces/IInvoke';
-import IHTTPClient from '../../server/interfaces/IHTTPClient';
+import IInvoke from '../invoke/IInvoke';
+import ICache from '../cache/ICache';
+import IHTTPClient from '../http/IHTTPClient';
 
 interface IContextProps {
   invoke: IInvoke;
-  cache: any;
+  cache: ICache;
   render: Function;
   httpClient: IHTTPClient;
 }

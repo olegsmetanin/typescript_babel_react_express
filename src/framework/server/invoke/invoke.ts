@@ -1,4 +1,4 @@
-import ICommand from './../../framework/server/interfaces/ICommand';
+import ICommand from '../../common/command/ICommand';
 
 export default async function invoke<T>(command: ICommand<T>) {
 

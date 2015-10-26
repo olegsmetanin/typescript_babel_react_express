@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as Router from 'react-router';
-import invoke from '../../helpers/invoke';
-import Context from '../../../framework/client/context/Context';
-var LRU = require("lru-cache");
+import invoke from '../../../framework/server/invoke/invoke';
+import Context from '../../../framework/common/react/Context';
 import routes from '../../../webclient/routes/index';
 import HTTPClient from '../../../framework/server/http/HTTPClient';
+import Cache from '../../../framework/common/cache/Cache';
 
 interface IReactServerRender {
   content: string;
@@ -14,7 +14,7 @@ interface IReactServerRender {
 export default function reactServerRender(url) {
   return new Promise<IReactServerRender>((resolve, reject) => {
 
-    var cache = LRU({max: 500});
+    var cache = new Cache();
     var httpClient = new HTTPClient();
 
     const reactRouter = Router.create({

@@ -1,5 +1,5 @@
-import ICommand from './../../framework/server/interfaces/ICommand';
-import IInvoke from './../../framework/server/interfaces/IInvoke';
+import ICommand from '../../common/command/ICommand';
+import IInvoke from '../../common/invoke/IInvoke';
 
 async function invoke<T>(command: ICommand<T>) {
   const className = command.className

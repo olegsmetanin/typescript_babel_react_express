@@ -2,7 +2,7 @@ import {Request, Response} from 'express';
 import IService from './../../../framework/server/interfaces/IService';
 import HTMLStab from './HTMLStab';
 import reactServerRender from './reactServerRender';
-import wrapAsync from '../../helpers/wrapAsync';
+import wrapAsync from './../../../framework/server/express/wrapAsync';
 
 interface AppServiceSettings {
   name: string;

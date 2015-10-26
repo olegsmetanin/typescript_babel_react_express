@@ -1,4 +1,4 @@
-import ICommand from './ICommand';
+import ICommand from '../command/ICommand';
 
 interface IInvoke {
     <T>(command: ICommand<T>): T;

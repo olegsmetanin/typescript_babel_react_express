@@ -3,14 +3,14 @@ import * as React from 'react';
 import * as Router from 'react-router';
 //import Layout from './components/Layout'
 import routes from './routes/index';
-import Context from '../framework/client/context/Context';
-import invoke from './helpers/invoke';
+import Context from '../framework/common/react/Context';
+import invoke from '../framework/client/invoke/invoke';
 import HTTPClient from '../framework/client/http/HTTPClient';
-var LRU = require("lru-cache");
+import Cache from '../framework/common/cache/Cache';
 
 window['app'] = (options: any) => {
   var {el, cachedump} = options || {};
-  var cache = LRU({max: 500});
+  var cache = new Cache();;
   cache.load(cachedump);
   var httpClient = new HTTPClient();
 

@@ -1,4 +1,4 @@
-import IHTTPClient, {IHTTPRequest} from '../interfaces/IHTTPClient';
+import IHTTPClient, {IHTTPRequest} from '../../common/http/IHTTPClient';
 
 var node_request = require('request');
 

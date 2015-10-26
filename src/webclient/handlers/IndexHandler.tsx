@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Link} from 'react-router';
 import GetData from '../commands/GetData';
-import IHTTPClient from '../../framework/server/interfaces/IHTTPClient';
-import IInvoke from '../../framework/server/interfaces/IInvoke';
+import IHTTPClient from '../../framework/common/http/IHTTPClient';
+import IInvoke from '../../framework/common/invoke/IInvoke';
 
 interface IIndexHandlerContext {
   httpClient: IHTTPClient;

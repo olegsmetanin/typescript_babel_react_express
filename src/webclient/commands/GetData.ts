@@ -1,5 +1,5 @@
-import IHTTPClient from '../../framework/server/interfaces/IHTTPClient';
-import JSONPost from '../../framework/server/commands/JSONPost';
+import IHTTPClient from '../../framework/common/http/IHTTPClient';
+import JSONPost from '../../framework/common/commands/JSONPost';
 
 
 interface IGetDataOptions {

@@ -1,4 +1,4 @@
-import Command from './../interfaces/Command'
+import Command from '../command/Command';
 
 export default class Delay extends Command<Promise<void>> {
 

@@ -1,4 +1,4 @@
-import IHTTPClient, {IHTTPRequest} from '../../server/interfaces/IHTTPClient';
+import IHTTPClient, {IHTTPRequest} from '../../common/http/IHTTPClient';
 
 require('whatwg-fetch');
 var fetch = window['fetch'];
