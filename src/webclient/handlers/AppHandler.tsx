@@ -25,6 +25,7 @@ export default class AppHandler extends React.Component<IAppHandlerProps, {}> {
     return <Layout>
       <Link to="home">Home</Link>
       <Link to="about">About</Link>
+      <Link to="catch">Catch server error</Link>
       <RouteHandler/>
     </Layout>;
   }

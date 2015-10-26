@@ -30,7 +30,7 @@ export default class Server {
     webserver.use(bodyParser.json());
     webserver.use(express.static('build/webpublic'));
 
-
+    //this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
     this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:mysecretpassword@192.168.99.100/postgres' }) });
 
     this.appService = new AppService({ name: 'App Service', webserver: webserver });
@@ -39,7 +39,7 @@ export default class Server {
     this.webserver = webserver;
   }
 
-  async start() {
+async start() {
   console.log('Start server');
   await this.apiService.start();
   // at last!
@@ -51,6 +51,6 @@ async stop() {
   await this.appService.stop();
   await this.apiService.stop();
   //this.webserver.stop();
-  console.log('Start stopped');
+  console.log('Stop server');
 }
 }

@@ -1,3 +1,4 @@
+import {Request, Response} from 'express';
 import IService from './../../../framework/server/interfaces/IService';
 import IDB from './../../../framework/server/interfaces/IDB';
 import Delay from './../../../framework/server/commands/Delay';
@@ -5,7 +6,7 @@ import DelayedValue from './../../../framework/server/commands/DelayedValue';
 import APICommand from './commands/APICommand';
 import DBCommand from './commands/DBCommand';
 import invoke from './../../helpers/invoke';
-var wrap = fn => (...args) => fn(...args).catch(args[2]);
+import wrapAsync from '../../helpers/wrapAsync';
 
 interface APIServiceSettings {
   name: string;
@@ -23,15 +24,31 @@ export default class APIService implements IService {
     this.settings = settings;
   }
 
+  @wrapAsync
+  async throwApiError(req: Request, res: Response) {
+    throw new Error('Test api error');
+  }
+
+  @wrapAsync
+  async pinpong(req: Request, res: Response) {
+    res.send(req.body);
+  }
+
   async start() {
     // load config, create classes, etc ...
     await(invoke(new Delay(1000)));
     // run processing
 
-    this.settings.webserver.post('/api/data', wrap(async (req, res) => {
-      res.send(req.body);
-    }));
+    this.settings.webserver.post('/api/data', this.pinpong.bind(this));
+    this.settings.webserver.post('/api/throw', this.throwApiError.bind(this));
+    this.settings.webserver.use('/', (err, req, res, next) => {
+      if (err) {
+        res.status(400).json({errors: { general: 'Unexpected api error'}});
+        return next(err);
+      }
 
+      next();
+    })
 
     this.process();
 

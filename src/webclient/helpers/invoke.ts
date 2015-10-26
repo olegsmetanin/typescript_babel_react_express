@@ -2,12 +2,13 @@ import ICommand from './../../framework/server/interfaces/ICommand';
 import IInvoke from './../../framework/server/interfaces/IInvoke';
 
 async function invoke<T>(command: ICommand<T>) {
-  var className = command.className;
-  var startTime = (new Date()).getTime();
-  var value = await command.execute();
-  var diff = (new Date()).getTime() - startTime;
-  console.log(className + ': ' +diff + 'ms')
-  return value;
+  const className = command.className
+      , startTime = Date.now();
+  try {
+    return await command.execute();
+  } finally {
+    console.log(`${className}: ${Date.now() - startTime}ms`)
+  }
 }
 
 export default invoke;

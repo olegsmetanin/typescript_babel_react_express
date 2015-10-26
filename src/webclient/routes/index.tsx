@@ -4,10 +4,12 @@ import { Route, DefaultRoute } from 'react-router';
 import AppHandler from '../handlers/AppHandler';
 import IndexHandler from '../handlers/IndexHandler';
 import AboutHandler from '../handlers/AboutHandler';
+import CatchHandler from '../handlers/CatchHandler';
 
 let routes =  <Route handler={AppHandler}>
     <DefaultRoute name="home" handler={IndexHandler}/>
     <Route name="about" path="/about" handler={AboutHandler} />
+    <Route name="catch" path="/catch" handler={CatchHandler} />
 </Route>
 
 export default routes;
