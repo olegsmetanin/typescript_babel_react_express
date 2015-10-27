@@ -26,6 +26,7 @@ export default class APIService implements IService {
 
   @wrapAsync
   async throwApiError(req: Request, res: Response) {
+    //console.log('this', this);
     throw new Error('Test api error');
   }
 
