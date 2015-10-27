@@ -4,11 +4,13 @@ import invoke from '../../../framework/server/invoke/invoke';
 import Context from '../../../framework/common/react/Context';
 import routes from '../../../webclient/routes/index';
 import HTTPClient from '../../../framework/server/http/HTTPClient';
+
 import Cache from '../../../framework/common/cache/Cache';
 
 interface IReactServerRender {
   content: string;
   cachedump: any;
+  status: number;
 }
 
 export default function reactServerRender(url) {
@@ -24,26 +26,31 @@ export default function reactServerRender(url) {
 
     reactRouter.run(async (Handler, state) => {
 
-          async function fillCache(routes, methodName, ...args) {
-              return Promise.all(routes
-                  .map(route => route.handler[methodName])
-                  .filter(method => typeof method === 'function')
-                  .map(method => method(...args))
-              );
-          }
+      async function fillCache(routes, methodName, ...args) {
+          return Promise.all(routes
+              .map(route => route.handler[methodName])
+              .filter(method => typeof method === 'function')
+              .map(method => method(...args))
+          );
+      }
 
-          await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
+      await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
 
-           var content = React.renderToString(<Context
-            invoke={invoke}
-            cache={cache}
-            httpClient={httpClient}
-            render={() => <Handler />}
-            />);
+      var content = React.renderToString(<Context
+        invoke={invoke}
+        cache={cache}
+        httpClient={httpClient}
+        render={() => <Handler />}
+      />);
 
-            var cachedump = cache.dump();
-            //console.log('cachedump',cachedump);
-            resolve({content, cachedump});
+      var cachedump = cache.dump();
+
+      var isNotFound = state.routes.some(route => {
+        var r: any = route;
+        return r.isNotFound;
+      });
+
+      resolve({content, cachedump, status: isNotFound ? 404 : 200});
 
     });
   })

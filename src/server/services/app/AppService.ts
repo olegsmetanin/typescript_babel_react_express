@@ -28,8 +28,8 @@ export default class AppService implements IService {
 
 @wrapAsync
 async render(req: Request, res: Response) {
-  const { content, cachedump } = await reactServerRender(req.url);
-  res.send(HTMLStab({content, cachedump}));
+  const { content, cachedump, status } = await reactServerRender(req.url);
+  res.status(status).send(HTMLStab({content, cachedump}));
 }
 
 async stop() {

@@ -15,33 +15,42 @@ interface IIndexHandlerProps {
 
 export default class IndexHandler extends React.Component<IIndexHandlerProps, {}> {
 
-context: IIndexHandlerContext;
+  context: IIndexHandlerContext;
 
-static contextTypes: React.ValidationMap<any> = {
-  httpClient: React.PropTypes.object.isRequired,
-  invoke: React.PropTypes.func.isRequired,
-  cache: React.PropTypes.object.isRequired,
-  //router: React.PropTypes.func.isRequired
-}
-
-static async fillCache(state, cache, invoke, httpClient) {
-  //console.log('IndexHandler fillCache');
-  var data = await invoke(new GetData({
-    data: {a: 'a'},
-    httpClient,
-    siteroot: 'http://localhost:3000'
-  }));
-
-  cache.set('index', data);
-
-}
-
-componentWillMount() {
-  var cache = this.context.cache.get('index');
-  if (cache) {
-    this.setState(cache);
+  static contextTypes: React.ValidationMap<any> = {
+    httpClient: React.PropTypes.object.isRequired,
+    invoke: React.PropTypes.func.isRequired,
+    cache: React.PropTypes.object.isRequired,
+    //router: React.PropTypes.func.isRequired
   }
-}
+
+  static async fillCache(state, cache, invoke, httpClient) {
+    var data = await invoke(new GetData({
+      data: {a: 'a'},
+      httpClient,
+      siteroot: 'http://localhost:3000'
+    }));
+
+    cache.set('index', data);
+
+  }
+
+  componentWillMount() {
+    var data = this.context.cache.get('index');
+    if (data) {
+      this.setState(data);
+    }
+  }
+
+  async componentDidMount() {
+    let { invoke, httpClient } = this.context;
+    var data = await invoke(new GetData({
+      data: {a: 'a'},
+      httpClient,
+      siteroot: 'http://localhost:3000'
+    }));
+    this.setState(data);
+  }
 
   render() {
     return <div>
