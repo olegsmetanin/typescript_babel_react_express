@@ -33,7 +33,7 @@ export default class Server {
     // this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
     this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:mysecretpassword@192.168.99.100/postgres' }) });
 
-    this.appService = new AppService({ name: 'App Service', webserver: webserver });
+    this.appService = new AppService({ name: 'App Service', webserver: webserver, siteroot: 'http://localhost:3000' });
 
 
     this.webserver = webserver;

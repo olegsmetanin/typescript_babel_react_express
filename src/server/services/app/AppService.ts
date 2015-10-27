@@ -7,6 +7,7 @@ import wrapAsync from './../../../framework/server/express/wrapAsync';
 interface AppServiceSettings {
   name: string;
   webserver: any;
+  siteroot: string;
 }
 
 export default class AppService implements IService {
@@ -28,7 +29,7 @@ export default class AppService implements IService {
 
 @wrapAsync
 async render(req: Request, res: Response) {
-  const { content, cachedump, status } = await reactServerRender(req.url);
+  const { content, cachedump, status } = await reactServerRender(req.url, this.settings.siteroot);
   res.status(status).send(HTMLStab({content, cachedump}));
 }
 

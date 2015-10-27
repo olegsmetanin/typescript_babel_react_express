@@ -13,11 +13,11 @@ interface IReactServerRender {
   status: number;
 }
 
-export default function reactServerRender(url) {
+export default function reactServerRender(url, siteroot: string) {
   return new Promise<IReactServerRender>((resolve, reject) => {
 
     var cache = new Cache();
-    var httpClient = new HTTPClient();
+    var httpClient = new HTTPClient(siteroot);
 
     const reactRouter = Router.create({
       location: url,

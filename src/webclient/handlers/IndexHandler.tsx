@@ -27,8 +27,7 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
   static async fillCache(state, cache, invoke, httpClient) {
     var data = await invoke(new GetData({
       data: {a: 'a'},
-      httpClient,
-      siteroot: 'http://localhost:3000'
+      httpClient
     }));
 
     cache.set('index', data);
@@ -46,8 +45,7 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
     let { invoke, httpClient } = this.context;
     var data = await invoke(new GetData({
       data: {a: 'a'},
-      httpClient,
-      siteroot: 'http://localhost:3000'
+      httpClient
     }));
     this.setState(data);
   }
