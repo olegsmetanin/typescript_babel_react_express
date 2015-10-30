@@ -11,13 +11,23 @@ import PG from './../framework/server/database/PG';
 
 import * as bodyParser from 'body-parser';
 
+interface IServerOptions {
+  config: any;
+  nodename: string;
+}
+
 export default class Server {
 
   webserver: any;
   appService: IService;
   apiService: IService;
+  config: any;
+  options: IServerOptions;
 
-  constructor() {
+  constructor(options: IServerOptions) {
+    this.options = options;
+    this.config = options.config;
+
     // var raml = require('raml-parser');
     // raml.loadFile(__dirname +'/publicAPI.raml').then( function(data) {
     //   console.log('RAML: ', data);
@@ -31,26 +41,31 @@ export default class Server {
     webserver.use(express.static('build/webpublic'));
 
     // this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
-    this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:mysecretpassword@192.168.99.100/postgres' }) });
+    this.apiService = new APIService({
+      webserver: webserver,
+      db: new PG({ connectionString: this.config.db.main })
+    });
 
-    this.appService = new AppService({ name: 'App Service', webserver: webserver, siteroot: 'http://localhost:3000' });
-
+    this.appService = new AppService({
+      webserver: webserver,
+      siteroot: this.config.front.siteroot
+    });
 
     this.webserver = webserver;
   }
 
-async start() {
-  console.log('Start server');
+  async start() {
+  console.log('Start server ' + this.options.nodename);
   await this.apiService.start();
   // at last!
   await this.appService.start();
-  this.webserver.listen(3000);
+  this.webserver.listen(this.config.back.port);
 }
 
 async stop() {
   await this.appService.stop();
   await this.apiService.stop();
   //this.webserver.stop();
-  console.log('Stop server');
+  console.log('Stop server ' + this.options.nodename);
 }
 }

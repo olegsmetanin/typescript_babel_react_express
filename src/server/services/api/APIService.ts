@@ -9,7 +9,6 @@ import invoke from './../../../framework/server/invoke/invoke';
 import wrapAsync from './../../../framework/server/express/wrapAsync';
 
 interface APIServiceSettings {
-  name: string;
   db: IDB;
   webserver: any;
 }
@@ -53,7 +52,7 @@ export default class APIService implements IService {
 
     this.process();
 
-    console.log(this.settings.name + ' started');
+    console.log('APIService started');
   }
 
   async process() {
@@ -74,7 +73,7 @@ export default class APIService implements IService {
   async stop() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        console.log(this.settings.name + ' stopped');
+        console.log('APIService stopped');
         resolve();
       }, 1000);
     })

@@ -1,12 +1,18 @@
 # typescript_babel_react_express
 typescript+babel+react+express
 
-npm install
+$ npm install
 
-npm run tsd install
+$ npm run tsd install
 
-export NODE_ENV=development
+$ docker run --name redis -p 6379:6379 -d redis
 
-gulp webclient
+$ docker run -d --name rabbit --hostname rabbithostname -p 5672:5672 -p 15672:15672 rabbitmq:management
 
-gulp server
+$ docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres
+
+$ export NODE_ENV=development
+
+$ gulp webclient
+
+$ gulp server

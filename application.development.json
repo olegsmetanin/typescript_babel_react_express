@@ -1,0 +1,20 @@
+{
+  "db": {
+    "main": "postgres://postgres:mysecretpassword@192.168.99.100/qwerty"
+  },
+  "redis": {
+    "host": "192.168.99.100",
+    "port": 6379,
+    "options": null
+  },
+  "rabbitmq": {
+    "url": "amqp://guest:guest@192.168.99.100:5672?heartbeat=5",
+    "socketOptions": {}
+  },
+  "front": {
+    "siteroot": "http://localhost:3000"
+  },
+  "back": {
+    "port": 3000
+  }
+}

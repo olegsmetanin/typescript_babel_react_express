@@ -5,7 +5,6 @@ import reactServerRender from './reactServerRender';
 import wrapAsync from './../../../framework/server/express/wrapAsync';
 
 interface AppServiceSettings {
-  name: string;
   webserver: any;
   siteroot: string;
 }
@@ -24,7 +23,7 @@ export default class AppService implements IService {
 
   this.webserver.get('*', this.render.bind(this));
 
-  console.log(this.settings.name + ' started');
+  console.log('AppService started');
 }
 
 @wrapAsync
@@ -36,7 +35,7 @@ async render(req: Request, res: Response) {
 async stop() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      console.log(this.settings.name + ' stopped');
+      console.log('AppService stopped');
       resolve();
     }, 1000);
   })

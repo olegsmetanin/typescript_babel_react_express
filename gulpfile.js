@@ -56,7 +56,7 @@ gulp.task('build:server', ['build:server:resources'], function() {
 var serverArgs = ['./build/server/index.js'];
 
 gulp.task('server', ['build:server'], function() {
-  var server = gls(serverArgs, undefined, 35729);
+  var server = gls(serverArgs, {cwd: __dirname, env: {NODE_ENV: 'development'}}, 35729);
   server.start();
   gulp.watch('src/**/*.ts', ['build:server']);
   gulp.watch(['build/framework/**/*.js', 'build/server/**/*.js'], function() {
