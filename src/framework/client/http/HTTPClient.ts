@@ -22,7 +22,7 @@ class HTTPClient implements IHTTPClient {
       fetch(request.url, {
         method: request.method,
         headers: request.headers,
-        body: JSON.stringify(request.data)
+        body: request.data && JSON.stringify(request.data)
       }).then(response => {
         if (response.ok) {
           response.json().then(json => resolve(json));
