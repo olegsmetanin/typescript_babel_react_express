@@ -28,7 +28,7 @@ class EventBus implements IEventBus {
   }
 
   emit<T extends EBEvent>(event: T) {
-    return this.em.emit(event.type, event.data);
+    return this.em.emit(event.type, event);
   }
 
 }

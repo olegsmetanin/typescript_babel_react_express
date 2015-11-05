@@ -1,11 +1,6 @@
-import EBEvent from '../event/EBEvent';
+import TEBEvent from '../event/TEBEvent';
 
-export class FailedToConnectEvent extends EBEvent {
+export class FailedToConnectEvent extends TEBEvent<string> {
   static type = 'FailedToConnectEvent';
   type = FailedToConnectEvent.type;
-  data: string;
-  constructor(data: string) {
-    super();
-    this.data = data;
-  }
 }

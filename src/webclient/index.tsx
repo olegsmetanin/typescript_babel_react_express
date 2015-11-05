@@ -16,8 +16,8 @@ window['app'] = (options: any) => {
   cache.load(cachedump);
   var eventBus = new EventBus({});
 
-  eventBus.on<FailedToConnectEvent>(FailedToConnectEvent.type, (ar) => {
-      console.log('FailedToConnectEvent!');
+  eventBus.on<FailedToConnectEvent>(FailedToConnectEvent.type, (evt) => {
+    console.log('FailedToConnectEvent: ', evt);
   })
 
   var httpClient = new HTTPClient({eventBus});
