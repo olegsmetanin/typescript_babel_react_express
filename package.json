@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "node_modules/gulp/bin/gulp.js",
-    "tsd": "node_modules/tsd/build/cli.js",
+    "tsd": "node node_modules/tsd/build/cli.js",
     "test": "node_modules/webpack/bin/webpack.js --config webpack.test.config.js && mocha ./build/test.js",
     "server": "node ./build/server/index.js"
   },
