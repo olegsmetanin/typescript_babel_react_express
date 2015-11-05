@@ -15,7 +15,7 @@ export default class GetData extends JSONPost {
     super({
       data: options.data,
       httpClient: options.httpClient,
-      url: '/api/data'
+      url: '/api/echo'
     });
   }
 

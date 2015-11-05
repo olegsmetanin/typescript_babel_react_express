@@ -7,6 +7,8 @@ import APICommand from './commands/APICommand';
 import DBCommand from './commands/DBCommand';
 import invoke from './../../../framework/server/invoke/invoke';
 import wrapAsync from './../../../framework/server/express/wrapAsync';
+import APIRoutes from './APIRoutes';
+
 
 interface APIServiceSettings {
   db: IDB;
@@ -23,34 +25,12 @@ export default class APIService implements IService {
     this.settings = settings;
   }
 
-  @wrapAsync
-  async throwApiError(req: Request, res: Response) {
-    //console.log('this', this);
-    throw new Error('Test api error');
-  }
-
-  @wrapAsync
-  async pinpong(req: Request, res: Response) {
-    res.send(req.body);
-  }
-
   async start() {
     // load config, create classes, etc ...
-    await(invoke(new Delay(1000)));
+    var { webserver } = this.settings;
+    (new APIRoutes({webserver})).setup();
     // run processing
-
-    this.settings.webserver.post('/api/data', this.pinpong.bind(this));
-    this.settings.webserver.post('/api/throw', this.throwApiError.bind(this));
-    this.settings.webserver.use('/', (err, req, res, next) => {
-      if (err) {
-        res.status(400).json({errors: { general: 'Unexpected api error'}});
-        return next(err);
-      }
-
-      next();
-    })
-
-    this.process();
+    //this.process();
 
     console.log('APIService started');
   }

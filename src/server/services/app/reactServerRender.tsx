@@ -34,23 +34,27 @@ export default function reactServerRender(url, siteroot: string) {
           );
       }
 
-      await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
+      try {
+        await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
 
-      var content = React.renderToString(<Context
-        invoke={invoke}
-        cache={cache}
-        httpClient={httpClient}
-        render={() => <Handler />}
-      />);
+        var content = React.renderToString(<Context
+          invoke={invoke}
+          cache={cache}
+          httpClient={httpClient}
+          render={() => <Handler />}
+        />);
 
-      var cachedump = cache.dump();
+        var cachedump = cache.dump();
 
-      var isNotFound = state.routes.some(route => {
-        var r: any = route;
-        return r.isNotFound;
-      });
+        var isNotFound = state.routes.some(route => {
+          var r: any = route;
+          return r.isNotFound;
+        });
 
-      resolve({content, cachedump, status: isNotFound ? 404 : 200});
+        resolve({content, cachedump, status: isNotFound ? 404 : 200});
+      } catch (e) {
+        reject(e);
+      }
 
     });
   })

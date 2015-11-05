@@ -21,10 +21,12 @@ class HTTPClient implements IHTTPClient {
         headers: request.headers,
         body: JSON.stringify(request.data),
       }, function(error, response, body) {
-          if (error) {
-            reject(error);
-          } else {
+          if (!error && response.statusCode == 200) {
             resolve(JSON.parse(body))
+          } else if (response.statusCode == 404) {
+            reject(body);
+          } else {
+            reject(error);
           }
         })
     })

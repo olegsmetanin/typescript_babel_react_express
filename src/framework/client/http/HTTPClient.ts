@@ -1,9 +1,21 @@
 import IHTTPClient, {IHTTPRequest} from '../../common/http/IHTTPClient';
+import IEventBus from '../../common/event/IEventBus';
+import {FailedToConnectEvent} from '../../common/events/Events';
 
 require('whatwg-fetch');
 var fetch = window['fetch'];
 
+interface IHTTPClientSettings {
+  eventBus: IEventBus;
+}
+
 class HTTPClient implements IHTTPClient {
+
+  settings: IHTTPClientSettings;
+
+  constructor(settings: IHTTPClientSettings) {
+    this.settings = settings;
+  }
 
   send(request: IHTTPRequest) {
     return new Promise((resolve, reject) => {
@@ -22,7 +34,9 @@ class HTTPClient implements IHTTPClient {
             reject(response);
           }
         }
-      }, reject);
+      }, () => {
+        this.settings.eventBus.emit<FailedToConnectEvent>(new FailedToConnectEvent('qwe'));
+      });
     });
   }
 

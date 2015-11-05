@@ -59,6 +59,17 @@ export default class Server {
   await this.apiService.start();
   // at last!
   await this.appService.start();
+  // Handle errors
+  this.webserver.use('/', (err, req, res, next) => {
+    if (err) {
+      if (req.is('application/json')) {
+        res.status(400).json({errors: { general: 'Unexpected api error'}});
+        return next(err);
+      }
+    }
+    next();
+  })
+
   this.webserver.listen(this.config.back.port);
 }
 

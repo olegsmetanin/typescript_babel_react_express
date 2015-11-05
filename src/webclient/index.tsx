@@ -7,26 +7,24 @@ import Context from '../framework/common/react/Context';
 import invoke from '../framework/client/invoke/invoke';
 import HTTPClient from '../framework/client/http/HTTPClient';
 import Cache from '../framework/common/cache/Cache';
+import EventBus from '../framework/common/event/EventBus';
+import {FailedToConnectEvent} from '../framework/common/events/Events';
 
 window['app'] = (options: any) => {
-  var {el, cachedump} = options || {};
+  var {el, cachedump} = options;
   var cache = new Cache();;
   cache.load(cachedump);
-  var httpClient = new HTTPClient();
+  var eventBus = new EventBus({});
+
+  eventBus.on<FailedToConnectEvent>(FailedToConnectEvent.type, (ar) => {
+      console.log('FailedToConnectEvent!');
+  })
+
+  var httpClient = new HTTPClient({eventBus});
 
     let render = (Handler, state) => {
 
       async function run() {
-
-        // async function fillCache(routes, methodName, ...args) {
-        //     return Promise.all(routes
-        //         .map(route => route.handler[methodName])
-        //         .filter(method => typeof method === 'function')
-        //         .map(method => method(...args))
-        //     );
-        // }
-        //
-        // await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
 
         React.render(<Context
           invoke={invoke}

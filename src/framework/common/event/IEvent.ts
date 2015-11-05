@@ -1,6 +1,6 @@
 interface IEvent {
-  name: string;
-  data?: any;
+  type: string;
+  data: any;
 }
 
 export default IEvent;

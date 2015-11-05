@@ -1,5 +1,5 @@
 /// <reference path="../common.d.ts"/>
-import IEvent from './IEvent';
+import EBEvent from './EBEvent';
 import IEventBus from './IEventBus';
 
 //import {EventEmitter} from 'eventemitter3';
@@ -17,18 +17,18 @@ class EventBus implements IEventBus {
     this.em = new EventEmitter();
   }
 
-  on(event: IEvent, handler: Function) {
-    this.em.on(event.name, handler);
+  on<T extends EBEvent>(type: string, handler: (T) => void) {
+    this.em.on(type, handler);
     return this;
   }
 
-  off(event: IEvent, handler: Function) {
-    this.em.off(event.name, handler);
+  off<T extends EBEvent>(type: string, handler: (T) => void) {
+    this.em.off(type, handler);
     return this;
   }
 
-  emit(event: IEvent) {
-    return this.em.emit(event.name, event.data);
+  emit<T extends EBEvent>(event: T) {
+    return this.em.emit(event.type, event.data);
   }
 
 }
