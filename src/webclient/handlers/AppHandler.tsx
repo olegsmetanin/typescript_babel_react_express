@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { RouteHandler, State, Link } from 'react-router';
 import Layout from '../components/Layout';
+var DocumentMeta = require('react-document-meta');
 
 interface IAppHandlerProps {
 }
@@ -23,6 +24,9 @@ export default class AppHandler extends React.Component<IAppHandlerProps, {}> {
 
   render() {
     return <Layout>
+      <DocumentMeta
+        title={'React-blog'}
+      />
       <Link to="home">Home</Link>
       <Link to="about">About</Link>
       <Link to="catch">Catch server error</Link>
