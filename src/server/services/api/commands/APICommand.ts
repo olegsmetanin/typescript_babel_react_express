@@ -16,7 +16,7 @@ export default class APICommand extends Command<Promise<number>> {
     this.options = options;
   }
 
-  async execute() {
+  execute() {
     return new Promise<number>(resolve => setTimeout(() => resolve(this.options.value), this.options.timeout))
   }
 
