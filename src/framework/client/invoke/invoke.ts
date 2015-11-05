@@ -7,7 +7,8 @@ async function invoke<T>(command: ICommand<T>) {
   try {
     return await command.execute();
   } catch (e) {
-    console.log('(invoke) ', e)
+    console.log('(invoke) ', e);
+    throw e;
   } finally {
     console.log(`${className}: ${Date.now() - startTime}ms`)
   }
