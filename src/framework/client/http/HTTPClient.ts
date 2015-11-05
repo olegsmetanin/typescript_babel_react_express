@@ -34,7 +34,8 @@ class HTTPClient implements IHTTPClient {
             reject(response);
           }
         }
-      }, () => {
+      }, (e) => {
+        reject(e);
         this.settings.eventBus.emit<FailedToConnectEvent>(new FailedToConnectEvent('qwe'));
       });
     });

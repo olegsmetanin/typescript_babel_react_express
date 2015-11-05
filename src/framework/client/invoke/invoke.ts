@@ -6,6 +6,8 @@ async function invoke<T>(command: ICommand<T>) {
       , startTime = Date.now();
   try {
     return await command.execute();
+  } catch (e) {
+    console.log('(invoke) ', e)
   } finally {
     console.log(`${className}: ${Date.now() - startTime}ms`)
   }

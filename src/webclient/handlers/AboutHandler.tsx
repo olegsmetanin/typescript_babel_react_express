@@ -7,7 +7,6 @@ interface IAboutHandlerProps {
 export default class AboutHandler extends React.Component<IAboutHandlerProps, {}> {
 
 static async fillCache(state, cache) {
-  console.log('AboutHandler fillCache');
   cache.set('about', 'about');
 }
 

@@ -47,7 +47,9 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
       data: {a: 'a'},
       httpClient
     }));
-    this.setState(data);
+    if (typeof data !== 'undefined') {
+      this.setState(data);
+    }
   }
 
   render() {
