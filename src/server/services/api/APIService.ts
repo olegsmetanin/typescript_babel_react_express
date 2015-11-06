@@ -39,7 +39,7 @@ export default class APIService implements IService {
     var counter = this.counter;
     console.log('Start processing: ', counter);
     try {
-      this.counter = await (invoke(new APICommand({value: this.counter + 1, timeout: 1000})));
+      this.counter = (await invoke(new APICommand({value: this.counter + 1, timeout: 1000})));
       var q = await invoke(new DBCommand({q: 'select 1 as q', db: this.settings.db}));
 
       //setTimeout(() => this.process(), 1000);

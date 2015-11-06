@@ -1,5 +1,6 @@
 import * as React from 'react';
 import CatchServerException from '../commands/CatchServerException';
+import TrySecureEndpoint from '../commands/TrySecuredEndpoint';
 import IHTTPClient from '../../framework/common/http/IHTTPClient';
 import IInvoke from '../../framework/common/invoke/IInvoke';
 
@@ -11,11 +12,12 @@ interface ICatchHandlerContext {
 interface ICatchHandlerState {
   callNumber? : number;
   errors?     : any;
+  data?       : any;
 }
 
 export default class CatchHandler extends React.Component<{}, ICatchHandlerState> {
 
-  context: ICatchHandlerContext
+  context: ICatchHandlerContext;
 
   static contextTypes: React.ValidationMap<any> = {
     httpClient : React.PropTypes.object.isRequired,
@@ -28,7 +30,7 @@ export default class CatchHandler extends React.Component<{}, ICatchHandlerState
     this.state = {};
   }
 
-  callApi = async () => {
+  callThrowApi = async () => {
     const {httpClient, invoke} = this.context;
     let {callNumber = 0} = this.state;
     callNumber++;
@@ -43,12 +45,27 @@ export default class CatchHandler extends React.Component<{}, ICatchHandlerState
     }
   }
 
+  callAuthorizedApi = async () => {
+    const {httpClient, invoke} = this.context;
+    try {
+      const data = await invoke(new TrySecureEndpoint({httpClient}));
+      this.setState({data});
+    } catch(e) {
+      console.error('e', e);
+      this.setState({errors: e.errors});
+    }
+  }
+
   render() {
 
     return (
       <div>
-        <div>Press btn to call api</div>
-        <button onClick={this.callApi}>Call api</button>
+        <div>Press btn to call throw api</div>
+        <button onClick={this.callThrowApi}>Call throw api</button>
+        <br/>
+        <div>Press btn to call auth api</div>
+        <button onClick={this.callAuthorizedApi}>Call auth api</button>
+        <br/>
         <div style={{display: 'block', backgroundColor: '#eee', color: 'red'}}>
           {JSON.stringify(this.state)}
         </div>

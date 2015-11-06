@@ -2,7 +2,7 @@ import Command from '../command/Command';
 import IHTTPClient from '../http/IHTTPClient';
 
 interface IJSONPostOptions {
-  data: any;
+  data?: any;
   httpClient: IHTTPClient;
   url: string;
 }

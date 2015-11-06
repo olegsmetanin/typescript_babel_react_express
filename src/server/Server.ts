@@ -10,6 +10,7 @@ import PG from './../framework/server/database/PG';
 //import * as express from 'express';
 
 import * as bodyParser from 'body-parser';
+import {Request, Response} from "express";
 
 interface IServerOptions {
   config: any;
@@ -36,8 +37,10 @@ export default class Server {
     // });
 
     var express = require('express');
+    const cookieParser = require('cookie-parser');
     var webserver = express();
     webserver.use(bodyParser.json());
+    webserver.use(cookieParser(this.config.back.cookieSignature));
     webserver.use(express.static('build/webpublic'));
 
     // this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
@@ -60,15 +63,15 @@ export default class Server {
   // at last!
   await this.appService.start();
   // Handle errors
-  this.webserver.use('/', (err, req, res, next) => {
+  this.webserver.use('/', (err, req: Request, res: Response, next) => {
     if (err) {
       if (req.is('application/json')) {
         res.status(400).json({errors: { general: 'Unexpected api error'}});
-        return next(err);
       }
+      return next(err);
     }
     next();
-  })
+  });
 
   this.webserver.listen(this.config.back.port);
 }
