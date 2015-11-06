@@ -6,6 +6,7 @@ import routes from '../../../webclient/routes/index';
 import HTTPClient from '../../../framework/server/http/HTTPClient';
 
 import Cache from '../../../framework/common/cache/Cache';
+import EventBus from "../../../framework/common/event/EventBus";
 
 interface IReactServerRender {
   content: string;
@@ -16,8 +17,9 @@ interface IReactServerRender {
 export default function reactServerRender(url, siteroot: string) {
   return new Promise<IReactServerRender>((resolve, reject) => {
 
-    var cache = new Cache();
-    var httpClient = new HTTPClient(siteroot);
+    const cache = new Cache();
+    const httpClient = new HTTPClient(siteroot);
+    const eventBus = new EventBus({});
 
     const reactRouter = Router.create({
       location: url,
@@ -41,6 +43,7 @@ export default function reactServerRender(url, siteroot: string) {
           invoke={invoke}
           cache={cache}
           httpClient={httpClient}
+          eventBus={eventBus}
           render={() => <Handler />}
         />);
 

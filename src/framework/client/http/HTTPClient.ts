@@ -1,12 +1,10 @@
 import IHTTPClient, {IHTTPRequest} from '../../common/http/IHTTPClient';
-import IEventBus from '../../common/event/IEventBus';
-import {FailedToConnectEvent} from '../../common/events/Events';
+import {AuthenticationRequiredError, ConnectionBrokenError} from "./Errors";
 
 require('whatwg-fetch');
 var fetch = window['fetch'];
 
 interface IHTTPClientSettings {
-  eventBus: IEventBus;
 }
 
 class HTTPClient implements IHTTPClient {
@@ -22,21 +20,30 @@ class HTTPClient implements IHTTPClient {
       fetch(request.url, {
         method: request.method,
         headers: request.headers,
+        credentials: 'same-origin',
         body: request.data && JSON.stringify(request.data)
       }).then(response => {
         if (response.ok) {
-          response.json().then(json => resolve(json));
+          const contentLength = parseInt(response.headers.get('Content-Length'), 10);
+          if (contentLength > 0) {
+            response.json().then(json => resolve(json));
+          } else {
+            resolve();
+          }
         } else {
-          if (response.status === 400) {
+          if (response.status === 401) {
+            reject(new AuthenticationRequiredError());
+          } else if (response.status === 400) {
+            //new APIError extends HTTPError?
             response.json().then(json => reject(json));
           } else {
             //FIXME custom error shape with response or extracted info?
+            //new APIError extends HTTPError?
             reject(response);
           }
         }
-      }, (e) => {
-        reject(e);
-        this.settings.eventBus.emit<FailedToConnectEvent>(new FailedToConnectEvent('qwe'));
+      }, () => {
+        reject(new ConnectionBrokenError());
       });
     });
   }

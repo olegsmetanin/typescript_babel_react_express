@@ -21,7 +21,8 @@ export default class APIRoutes {
     webserver.post('/api/echo', this.echo.bind(this));
     webserver.post('/api/delay', this.delay.bind(this));
     webserver.post('/api/throw', this.throwApiError.bind(this));
-    webserver.post('/api/authonly', this.authonly.bind(this))
+    webserver.post('/api/authonly', this.authonly.bind(this));
+    webserver.post('/api/login', this.login.bind(this));
   }
 
   @wrapAsync
@@ -53,6 +54,16 @@ export default class APIRoutes {
     }
 
     res.json({ok: true});
+  }
+
+  @wrapAsync
+  async login(req: Request, res: Response) {
+    res.cookie('user', 'toby', {
+      signed: true,
+      maxAge: 365 * 24 * 60 * 60 * 1000, //1 year
+      httpOnly: true
+    });
+    res.status(200).end();
   }
 
 }

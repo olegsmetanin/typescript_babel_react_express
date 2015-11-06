@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { RouteHandler, State, Link } from 'react-router';
 import Layout from '../components/Layout';
+import Popup from '../components/Popup';
 
 interface IAppHandlerProps {
 }
@@ -23,6 +24,7 @@ export default class AppHandler extends React.Component<IAppHandlerProps, {}> {
 
   render() {
     return <Layout>
+      <Popup />
       <Link to="home">Home</Link>
       <Link to="about">About</Link>
       <Link to="catch">Catch server error</Link>
