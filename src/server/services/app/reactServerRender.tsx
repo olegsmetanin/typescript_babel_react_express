@@ -4,12 +4,13 @@ import invoke from '../../../framework/server/invoke/invoke';
 import Context from '../../../framework/common/react/Context';
 import routes from '../../../webclient/routes/index';
 import HTTPClient from '../../../framework/server/http/HTTPClient';
-
 import Cache from '../../../framework/common/cache/Cache';
 import EventBus from "../../../framework/common/event/EventBus";
+var DocumentMeta = require('react-document-meta');
 
 interface IReactServerRender {
   content: string;
+  head: string;
   cachedump: any;
   status: number;
 }
@@ -39,7 +40,7 @@ export default function reactServerRender(url, siteroot: string) {
       try {
         await fillCache(state.routes, 'fillCache', state, cache, invoke, httpClient);
 
-        var content = React.renderToString(<Context
+        let content = React.renderToString(<Context
           invoke={invoke}
           cache={cache}
           httpClient={httpClient}
@@ -47,14 +48,16 @@ export default function reactServerRender(url, siteroot: string) {
           render={() => <Handler />}
         />);
 
-        var cachedump = cache.dump();
+        let head = DocumentMeta.renderAsHTML();
 
-        var isNotFound = state.routes.some(route => {
+        let cachedump = cache.dump();
+
+        let isNotFound = state.routes.some(route => {
           var r: any = route;
           return r.isNotFound;
         });
 
-        resolve({content, cachedump, status: isNotFound ? 404 : 200});
+        resolve({content, head, cachedump, status: isNotFound ? 404 : 200});
       } catch (e) {
         reject(e);
       }

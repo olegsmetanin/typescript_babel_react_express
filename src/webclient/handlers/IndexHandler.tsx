@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import GetData from '../commands/GetData';
 import IHTTPClient from '../../framework/common/http/IHTTPClient';
 import IInvoke from '../../framework/common/invoke/IInvoke';
+var DocumentMeta = require('react-document-meta');
 
 interface IIndexHandlerContext {
   httpClient: IHTTPClient;
@@ -54,6 +55,9 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
 
   render() {
     return <div>
+      <DocumentMeta
+        title={'React-blog: Home'}
+      />
       Home content. State: {JSON.stringify(this.state)}
     </div>;
   }
