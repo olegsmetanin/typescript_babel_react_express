@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import IService from './../../../framework/server/interfaces/IService';
-import IDB from './../../../framework/server/interfaces/IDB';
+import IDB from './../../../framework/server/database/IDB';
 import Delay from './../../../framework/common/commands/Delay';
 import DelayedValue from './../../../framework/common/commands/DelayedValue';
 import APICommand from './commands/APICommand';

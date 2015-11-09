@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RouteHandler, State, Link } from 'react-router';
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
+import OAuthPopup from '../components/OAuthPopup';
 var DocumentMeta = require('react-document-meta');
 
 interface IAppHandlerProps {
@@ -32,6 +33,11 @@ export default class AppHandler extends React.Component<IAppHandlerProps, {}> {
       <Link to="home">Home</Link>
       <Link to="about">About</Link>
       <Link to="catch">Catch server error</Link>
+      <div>
+        <OAuthPopup type='facebook'>
+          facebook oauth
+        </OAuthPopup>
+      </div>
       <RouteHandler/>
     </Layout>;
   }

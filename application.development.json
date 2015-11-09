@@ -1,6 +1,7 @@
 {
   "db": {
-    "main": "postgres://postgres:mysecretpassword@192.168.99.100/qwerty"
+    "main": "postgres://postgres:mysecretpassword@192.168.99.100/main",
+    "master": "postgres://postgres:mysecretpassword@192.168.99.100/postgres"
   },
   "redis": {
     "host": "192.168.99.100",
@@ -17,5 +18,11 @@
   "back": {
     "port": 3000,
     "cookieSignature": "Us7LU6JF775sZZcKe9cuW5CHTQav5RuW2uPKsTjLRS"
+  },
+  "oauth": {
+    "facebook": {
+      "facebook_api_key": "170056803341123",
+      "facebook_api_secret": ""
+    }
   }
 }

@@ -6,49 +6,49 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "mime/mime.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "express/express.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "mocha/mocha.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "pg/pg.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "body-parser/body-parser.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "cookie-parser/cookie-parser.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "react/react.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "react-router/react-router.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "whatwg-fetch/whatwg-fetch.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "es6-promise/es6-promise.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "request/request.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "form-data/form-data.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "eventemitter3/eventemitter3.d.ts": {
-      "commit": "62eedc3121a5e28c50473d2e4a9cefbcb9c3957f"
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     }
   }
 }

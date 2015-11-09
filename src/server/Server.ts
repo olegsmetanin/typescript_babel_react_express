@@ -4,7 +4,9 @@
 import IService from './../framework/server/interfaces/IService'
 import APIService from './services/api/APIService';
 import AppService from './services/app/AppService';
+import AuthService from './services/auth/AuthService';
 import PG from './../framework/server/database/PG';
+import PasswordUtils from './../framework/server/password/PasswordUtils';
 
 // NOT WORKING: express is not a function
 //import * as express from 'express';
@@ -20,8 +22,11 @@ interface IServerOptions {
 export default class Server {
 
   webserver: any;
-  appService: IService;
+
+  authService: IService;
   apiService: IService;
+  appService: IService;
+
   config: any;
   options: IServerOptions;
 
@@ -43,42 +48,50 @@ export default class Server {
     webserver.use(cookieParser(this.config.back.cookieSignature));
     webserver.use(express.static('build/webpublic'));
 
-    // this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
-    this.apiService = new APIService({
-      webserver: webserver,
-      db: new PG({ connectionString: this.config.db.main })
-    });
+    let config = this.config;
+    let db = new PG({ connectionString: this.config.db.main });
+    let siteroot = this.config.front.siteroot;
+    let passwordUtils = new PasswordUtils();
 
-    this.appService = new AppService({
-      webserver: webserver,
-      siteroot: this.config.front.siteroot
-    });
+    this.authService = new AuthService({ webserver, config, db, passwordUtils });
+
+    // this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
+    this.apiService = new APIService({ webserver, db });
+
+    this.appService = new AppService({ webserver, siteroot });
 
     this.webserver = webserver;
   }
 
   async start() {
   console.log('Start server ' + this.options.nodename);
-  await this.apiService.start();
-  // at last!
-  await this.appService.start();
-  // Handle errors
-  this.webserver.use('/', (err, req: Request, res: Response, next) => {
-    if (err) {
-      if (req.is('application/json')) {
-        res.status(400).json({errors: { general: 'Unexpected api error'}});
-      }
-      return next(err);
-    }
-    next();
-  });
+  try {
+    await this.authService.start();
+    await this.apiService.start();
+    // at last!
+    await this.appService.start();
 
-  this.webserver.listen(this.config.back.port);
+    // Handle errors
+    this.webserver.use('/', (err, req: Request, res: Response, next) => {
+      if (err) {
+        if (req.is('application/json')) {
+          res.status(400).json({ errors: { general: 'Unexpected api error' } });
+        }
+        return next(err);
+      }
+      next();
+    });
+
+    this.webserver.listen(this.config.back.port);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 async stop() {
   await this.appService.stop();
   await this.apiService.stop();
+  await this.authService.stop();
   //this.webserver.stop();
   console.log('Stop server ' + this.options.nodename);
 }

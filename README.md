@@ -15,4 +15,6 @@ $ export NODE_ENV=development
 
 $ gulp webclient
 
+$ npm run migrate init
+
 $ gulp server

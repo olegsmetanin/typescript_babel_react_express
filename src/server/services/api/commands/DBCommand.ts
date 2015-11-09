@@ -1,5 +1,5 @@
 import Command from './../../../../framework/common/command/Command';
-import IDB from './../../../../framework/server/interfaces/IDB';
+import IDB from './../../../../framework/server/database/IDB';
 
 
 interface IDBCommandOptions {

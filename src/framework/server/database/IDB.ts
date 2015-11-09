@@ -12,8 +12,8 @@ export interface IDBTransaction {
 interface IDB {
 //connect(config: IDB_ConnectionConfig): Promise<IDBClient>;
   query(...args: any[]): Promise<any>;
-//  transaction(options: any): Promise<IDBTransaction>;
-//  end(): void;
+  end(): void;
+  trx(options?: any): Promise<IDBTransaction>;
 }
 
 export default IDB;

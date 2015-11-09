@@ -43,7 +43,8 @@ var config = {
     ? [new webpack.optimize.UglifyJsPlugin({
         compress: {
            warnings: false
-        }
+        },
+        minimize: true
       })]
     : []
   ),
