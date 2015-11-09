@@ -52,7 +52,7 @@ export default class AuthRoutes {
         }
 
         try {
-          run();
+          run().catch(console.error);
         } catch (e) {
           console.log(e);
         }

@@ -28,47 +28,30 @@ export default class NewUser extends Command<Promise<User>> {
   }
 
   async execute() {
-    let {first_name, last_name, provider, provider_id, db, passwordUtils} = this.options;
+    const {first_name, last_name, provider, provider_id, db, passwordUtils} = this.options;
 
-    var trx = await db.trx();
+    const trx = await db.begin();
+    try {
+      let id:string = uuid.v4();
 
-    let id: string = uuid.v4();
+      const sqlInsUser = queryBuilder.insert({id, slug: id, first_name, last_name}).into('users').toString();
+      await trx.query(sqlInsUser);
 
-    var qUsers = queryBuilder
-      .insert({
-        id,
-        slug: id,
-        first_name,
-        last_name,
-      })
-      .into('users').toString();
+      const sqlInsAuth = queryBuilder.insert({id, provider, provider_id}).into('userauth').toString();
+      await trx.query(sqlInsAuth);
 
-    await trx.query(qUsers);
+      const {hash} = await passwordUtils.hash(uuid.v4());
 
-    var qUserAuth = queryBuilder
-      .insert({
-        id,
-        provider,
-        provider_id,
-      })
-      .into('userauth').toString();
+      const sqlInsPass = queryBuilder .insert({id, hash}).into('userpass').toString();
+      await trx.query(sqlInsPass);
 
-    await trx.query(qUserAuth);
+      await trx.commit();
 
-    let { hash, salt } = await passwordUtils.hash(uuid.v4());
-
-    var qUserPass = queryBuilder
-      .insert({
-        id,
-        hash
-      })
-      .into('userpass').toString();
-
-    await trx.query(qUserPass);
-
-    await trx.commit();
-    
-    return await invoke(new GetUser({query:{id}, db}));
+      return await invoke(new GetUser({query: {id}, db: trx}));
+    } catch(e) {
+      await trx.rollback();
+      throw e;
+    }
   }
 
 }
