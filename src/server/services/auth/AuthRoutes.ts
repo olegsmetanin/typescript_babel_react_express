@@ -82,11 +82,18 @@ export default class AuthRoutes {
     webserver.use(passport.initialize());
     webserver.use(passport.session());
     webserver.get('/auth/closepopup', (req, res) => res.send(ClosePopup()));
-    webserver.get('/auth/facebook', passport.authenticate('facebook'));
+    webserver.get('/auth/facebook', passport.authenticate('facebook', {session: false, scope: []}));
     webserver.get('/auth/facebook/callback',
-      (req, res, next) => {
-      passport.authenticate('facebook', { successRedirect: '/auth/closepopup',
-                                          failureRedirect: '/auth/closepopup' })(req, res, next)
+      passport.authenticate('facebook', { session: false, failureRedirect: '/auth/closepopup' }),
+      (req, res) => {
+        console.log('auth user:', req.user);
+        res.cookie('user', 'toby', {
+          signed: true,
+          maxAge: 365 * 24 * 60 * 60 * 1000, //1 year
+          httpOnly: true
+        });
+        res.redirect('/auth/closepopup');
+        //res.status(200).end();
      }
     );
   }
