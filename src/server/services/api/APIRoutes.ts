@@ -2,9 +2,12 @@ import {Request, Response} from 'express';
 import wrapAsync from './../../../framework/server/express/wrapAsync';
 import invoke from './../../../framework/server/invoke/invoke';
 import Delay from './../../../framework/common/commands/Delay';
+import GetUser from './commands/User/GetUser';
+import IDB from './../../../framework/server/database/IDB';
 
 interface APIRoutesSettings {
   webserver: any;
+  db: IDB;
 }
 
 export default class APIRoutes {
@@ -23,6 +26,7 @@ export default class APIRoutes {
     webserver.post('/api/throw', this.throwApiError.bind(this));
     webserver.post('/api/authonly', this.authonly.bind(this));
     webserver.post('/api/login', this.login.bind(this));
+    webserver.post('/api/me', this.me.bind(this));
   }
 
   @wrapAsync
@@ -64,6 +68,19 @@ export default class APIRoutes {
       httpOnly: true
     });
     res.status(200).end();
+  }
+
+  @wrapAsync
+  async me(req: Request, res: Response) {
+    if (!req.signedCookies || !req.signedCookies.user) {
+      return res.json({});
+    }
+    var { db } = this.settings;
+    let user_id = req.signedCookies.user;
+    let user = await invoke(new GetUser({query: {id: user_id}, db}));
+    let u: any = user;
+    u.provider = req.signedCookies.authprovider;
+    return res.json(u);
   }
 
 }

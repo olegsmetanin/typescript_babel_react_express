@@ -27,8 +27,8 @@ export default class APIService implements IService {
 
   async start() {
     // load config, create classes, etc ...
-    var { webserver } = this.settings;
-    (new APIRoutes({webserver})).setup();
+    var { webserver, db } = this.settings;
+    (new APIRoutes({webserver, db})).setup();
     // run processing
     //this.process();
 

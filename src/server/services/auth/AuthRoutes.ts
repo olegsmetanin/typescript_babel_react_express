@@ -86,14 +86,17 @@ export default class AuthRoutes {
     webserver.get('/auth/facebook/callback',
       passport.authenticate('facebook', { session: false, failureRedirect: '/auth/closepopup' }),
       (req, res) => {
-        console.log('auth user:', req.user);
-        res.cookie('user', 'toby', {
+        res.cookie('user', req.user.id, {
+          signed: true,
+          maxAge: 365 * 24 * 60 * 60 * 1000, //1 year
+          httpOnly: true
+        });
+        res.cookie('authprovider', 'fb', {
           signed: true,
           maxAge: 365 * 24 * 60 * 60 * 1000, //1 year
           httpOnly: true
         });
         res.redirect('/auth/closepopup');
-        //res.status(200).end();
      }
     );
   }

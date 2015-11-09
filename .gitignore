@@ -5,3 +5,6 @@ typings/
 /build/*
 .idea
 **/*.orig
+/application.development.json
+/application.test.json
+/application.production.json
