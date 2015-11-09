@@ -13,8 +13,10 @@ $ docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:54
 
 $ export NODE_ENV=development
 
-$ gulp webclient
+$ gulp
 
-$ npm run migrate init
+$ npm run migration init
+
+$ gulp webclient
 
 $ gulp server
