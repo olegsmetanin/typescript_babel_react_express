@@ -28,16 +28,7 @@ export default class AppService implements IService {
 
 @wrapAsync
 async render(req: Request, res: Response) {
-  //try {
-
-    // const { content, head, cachedump, status } = await
-    await reactServerRender(req.url, this.settings.siteroot, req, res);
-    // res.status(status).send(HTMLStab({content, head, cachedump}));
-    //res.status(200).send(HTMLStab({content: '', cachedump: []}));
-  //} catch (e) {
-    // return application stub with 200?
-    //res.status(200).send(HTMLStab({content: '', cachedump: []}));
-  //}
+  await reactServerRender(req.url, this.settings.siteroot, req, res);
 }
 
 async stop() {

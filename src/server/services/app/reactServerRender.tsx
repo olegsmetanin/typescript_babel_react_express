@@ -11,38 +11,40 @@ import EventBus from "../../../framework/common/event/EventBus";
 import HTMLStab from './HTMLStab';
 var DocumentMeta = require('react-document-meta');
 
-interface IReactServerRender {
-  content: string;
-  head: string;
-  cachedump: any;
-  status: number;
-}
-
 export default async function reactServerRender(url, siteroot: string, req, res) {
 
-    const cache = new Cache();
-    const httpClient = new HTTPClient(siteroot);
-    const eventBus = new EventBus({});
+  const cache = new Cache();
+  const httpClient = new HTTPClient(siteroot);
+  const eventBus = new EventBus({});
 
-      // Filling cache from static method is broken
-      //console.log('routes', routes)
+  //preload data for rendering
+  async function fillCache(routes, methodName, ...args) {
+    return Promise.all(routes
+      .filter(route => !!route)
+      .map(route => route[methodName])
+      .filter(method => typeof method === 'function')
+      .map(method => method(...args))
+    );
+  }
 
-      // async function fillCache(routes, methodName, ...args) {
-      //     return Promise.all(routes
-      //         .map(route => route.handler[methodName])
-      //         .filter(method => typeof method === 'function')
-      //         .map(method => method(...args))
-      //     );
-      // }
-      //
-      //   await fillCache(createRoutes(routes), 'fillCache', cache, invoke, httpClient);
+  match({ routes, location: url }, async (error, redirectLocation, renderProps) => {
 
-      match({ routes, location: url }, (error, redirectLocation, renderProps) => {
-        if (error) {
-          res.status(500).send(error.message)
-        } else if (redirectLocation) {
-          res.redirect(302, redirectLocation.pathname + redirectLocation.search)
-        } else if (renderProps) {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search)
+    } else if (renderProps) {
+      //console.log('renderProps', renderProps);
+      //because when NotFoundRoute exists, renderProps will be filled for unknown path's,
+      // we test this situation manually
+      const isNotFound = renderProps.components.some(route => route && route.isNotFound);
+
+      if (isNotFound) {
+        res.status(404).send(HTMLStab({content:'Not found', head: 'Not found', cachedump: []}));
+      } else {
+        try {
+          //renderProps.components contains route handlers itself (first elm always undefined, why?)
+          await fillCache(renderProps.components, 'fillCache', cache, invoke, httpClient);
 
           let content = renderToString(<Context
             invoke={invoke}
@@ -53,12 +55,15 @@ export default async function reactServerRender(url, siteroot: string, req, res)
           />);
 
           let head = DocumentMeta.renderAsHTML();
-
           let cachedump = cache.dump();
 
           res.status(200).send(HTMLStab({content, head, cachedump}))
-        } else {
-          res.status(404).send(HTMLStab({content:'Not found', head: 'Not found', cachedump: []}))
+        } catch(e) {
+          res.status(500).send(error.message);
         }
-      })
+      }
+    } else {
+      res.status(404).send(HTMLStab({content:'Not found', head: 'Not found', cachedump: []}));
+    }
+  });
 }
