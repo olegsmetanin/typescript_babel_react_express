@@ -53,11 +53,11 @@ class PGClient implements IDBClient {
     this.releaseClient = options.releaseClient;
 
     const logger = options.logger || console.warn;
-    this.releaseTimeout = setTimeout(() => {
-      logger('Db client too long unreleased to the pool');
-      options.stack && logger(options.stack);
-      this.releaseClient('destroy me');
-    }, options.timeout || 60000);//1min by default
+    // this.releaseTimeout = setTimeout(() => {
+    //   logger('Db client too long unreleased to the pool');
+    //   options.stack && logger(options.stack);
+    //   this.releaseClient('destroy me');
+    // }, options.timeout || 60000);//1min by default
   }
 
   query(...args: any[]): Promise<any> {

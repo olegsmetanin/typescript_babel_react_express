@@ -20,11 +20,12 @@ var config = {
   module: {
     loaders: [{
       test: /\.tsx?$/,
-      loaders: ['component-css?ext=scss','babel', 'ts-loader']
+      loaders: ['component-css?ext=scss','babel-loader', 'ts-loader']
     }, {
-      test: /\.jsx?$/,
-      loaders: ['component-css?ext=scss','babel']
-    }, {
+    //  ReactElement.js Line 25: Unexpected string
+    //   test: /\.jsx?$/,
+    //   loaders: ['component-css?ext=scss','babel-loader']
+    // }, {
       test: /\.scss$/,
       loader: ExtractTextPlugin.extract("style", "css", "autoprefixer-loader?browsers=last 2 version", "sass-loader")
     }]
