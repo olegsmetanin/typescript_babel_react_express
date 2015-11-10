@@ -1,12 +1,12 @@
 import * as React from 'react';
-import * as ReactRouter from 'react-router';
+var ReactRouter = require('react-router');
 
 interface IAboutHandlerProps {
 }
 
 export default class AboutHandler extends React.Component<IAboutHandlerProps, {}> {
 
-static async fillCache(state, cache) {
+static async fillCache(cache) {
   cache.set('about', 'about');
 }
 

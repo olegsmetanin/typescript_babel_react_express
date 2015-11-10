@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactRouter from 'react-router';
+var ReactRouter = require('react-router');
 import IInvoke from '../invoke/IInvoke';
 import ICache from '../cache/ICache';
 import IHTTPClient from '../http/IHTTPClient';

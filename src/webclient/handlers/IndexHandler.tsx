@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Link} from 'react-router';
+var ReactRouter = require('react-router');
+const { Link } = ReactRouter;
 import GetData from '../commands/GetData';
 import IHTTPClient from '../../framework/common/http/IHTTPClient';
 import IInvoke from '../../framework/common/invoke/IInvoke';
@@ -25,7 +26,7 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
     //router: React.PropTypes.func.isRequired
   }
 
-  static async fillCache(state, cache, invoke, httpClient) {
+  static async fillCache(cache, invoke, httpClient) {
     var data = await invoke(new GetData({
       data: {a: 'a'},
       httpClient

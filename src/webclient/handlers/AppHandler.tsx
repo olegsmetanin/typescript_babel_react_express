@@ -1,27 +1,28 @@
 import * as React from 'react';
-import { RouteHandler, State, Link } from 'react-router';
+var ReactRouter = require('react-router');
+const { Link } = ReactRouter;
 import Layout from '../components/Layout';
 import Popup from '../components/Popup';
 import OAuthPopup from '../components/OAuthPopup';
 var DocumentMeta = require('react-document-meta');
 
-interface IAppHandlerProps {
+interface IAppHandlerProps extends React.Props<any> {
 }
 
 export default class AppHandler extends React.Component<IAppHandlerProps, {}> {
 
-  static async fillCache(state, cache) {
+  static async fillCache(cache) {
     //console.log('AppHandler fillCache');
   }
 
   context: {
-    router: ReactRouter.Context;
+    // router: ReactRouter.Context;
     cache: any;
   }
 
   static contextTypes: React.ValidationMap<any> = {
     cache: React.PropTypes.object.isRequired,
-    router: React.PropTypes.func.isRequired
+    //router: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -30,15 +31,15 @@ export default class AppHandler extends React.Component<IAppHandlerProps, {}> {
       <DocumentMeta
         title={'React-blog'}
       />
-      <Link to="home">Home</Link>
-      <Link to="about">About</Link>
-      <Link to="catch">Catch server error</Link>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+      <Link to="/catch">Catch server error</Link>
       <div>
         <OAuthPopup type='facebook'>
           facebook oauth
         </OAuthPopup>
       </div>
-      <RouteHandler/>
+      {this.props.children}
     </Layout>;
   }
 

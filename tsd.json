@@ -32,9 +32,6 @@
     "react/react.d.ts": {
       "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
-    "react-router/react-router.d.ts": {
-      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
-    },
     "whatwg-fetch/whatwg-fetch.d.ts": {
       "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
@@ -48,6 +45,9 @@
       "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     },
     "eventemitter3/eventemitter3.d.ts": {
+      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
+    },
+    "react-dom/react-dom.d.ts": {
       "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
     }
   }

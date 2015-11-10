@@ -1,4 +1,5 @@
 import * as React from 'react';
+var ReactRouter = require('react-router');
 import IEventBus from '../../framework/common/event/IEventBus';
 import IHTTPClient from "../../framework/common/http/IHTTPClient";
 import IInvoke from '../../framework/common/invoke/IInvoke';
@@ -16,7 +17,7 @@ interface IPopupState {
 }
 
 interface IPopupContext {
-  router     : ReactRouter.Context;
+  history    : any;
   httpClient : IHTTPClient;
   eventBus   : IEventBus;
   invoke     : IInvoke;
@@ -25,7 +26,7 @@ interface IPopupContext {
 export default class Popup extends React.Component<{}, IPopupState> {
 
   static contextTypes: React.ValidationMap<any> = {
-    router     : React.PropTypes.func.isRequired,
+    history    : React.PropTypes.object.isRequired,
     httpClient : React.PropTypes.object.isRequired,
     eventBus   : React.PropTypes.object.isRequired,
     invoke     : React.PropTypes.func.isRequired,
@@ -70,7 +71,8 @@ export default class Popup extends React.Component<{}, IPopupState> {
   cancel = () => {
     this.setState({open: false, auth: false, reconnect: false});
     this.context.eventBus.emit(new BufferDropEvent('User cancel pending requests'));
-    this.context.router.transitionTo("home");
+    //this.context.router.transitionTo("home"); router 0.13
+    this.context.history.pushState(null, '/');
   }
 
   login = async () => {

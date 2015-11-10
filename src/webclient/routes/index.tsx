@@ -1,6 +1,7 @@
 /// <reference path="../webclient.d.ts"/>
 import * as React from 'react';
-import { Route, DefaultRoute, NotFoundRoute } from 'react-router';
+var ReactRouter = require('react-router');
+var { IndexRoute, Route } = ReactRouter;
 import AppHandler from '../handlers/AppHandler';
 import IndexHandler from '../handlers/IndexHandler';
 import AboutHandler from '../handlers/AboutHandler';
@@ -9,12 +10,12 @@ import NotFoundHandler from '../handlers/NotFoundHandler';
 
 
 let routes = <Route>
-  <Route handler={AppHandler}>
-    <DefaultRoute name="home" handler={IndexHandler}/>
-    <Route name="about" path="/about" handler={AboutHandler} />
-    <Route name="catch" path="/catch" handler={CatchHandler} />
+  <Route path="/" component={AppHandler}>
+    <IndexRoute component={IndexHandler}/>
+    <Route path="about" component={AboutHandler} />
+    <Route path="catch" component={CatchHandler} />
   </Route>
-  <NotFoundRoute name="notFound" handler={NotFoundHandler} />
+  <Route path="*" component={NotFoundHandler} />
 </Route>
 
 export default routes;
