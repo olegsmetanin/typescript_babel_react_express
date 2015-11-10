@@ -2,6 +2,10 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+//https://github.com/keokilee/react-typescript-boilerplate
+
+var APP_DIR = path.join(__dirname, 'src');
+
 var config = {
   entry: {
     app: './src/webclient/index.tsx',
@@ -20,12 +24,13 @@ var config = {
   module: {
     loaders: [{
       test: /\.tsx?$/,
-      loaders: ['component-css?ext=scss','babel-loader', 'ts-loader']
+      loaders: ['component-css?ext=scss', 'babel', 'ts'],
+      include: APP_DIR
     }, {
-    //  ReactElement.js Line 25: Unexpected string
-    //   test: /\.jsx?$/,
-    //   loaders: ['component-css?ext=scss','babel-loader']
-    // }, {
+      test: /\.jsx?$/,
+      loaders: ['component-css?ext=scss','babel'],
+      include: APP_DIR
+    }, {
       test: /\.scss$/,
       loader: ExtractTextPlugin.extract("style", "css", "autoprefixer-loader?browsers=last 2 version", "sass-loader")
     }]
