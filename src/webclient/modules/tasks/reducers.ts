@@ -1,6 +1,6 @@
 /// <reference path="../../webclient.d.ts"/>
 
-import { handleActions, Action } from 'redux-actions';
+import {handleActions, Action} from 'redux-actions';
 
 import {Task, ITasksModuleState} from './model';
 import {TASKS_REQUEST, TASKS_REQUEST_SUCCESS, TASKS_REQUEST_FAILURE} from './actionTypes';
@@ -13,7 +13,7 @@ const initialState: ITasksModuleState = {
 export default handleActions<ITasksModuleState>({
   [TASKS_REQUEST]: (state, action) => Object.assign({}, state, {loading: true}),
 
-  [TASKS_REQUEST_SUCCESS]: (state, action) => Object.assign({}, state,{
+  [TASKS_REQUEST_SUCCESS]: (state, action) => Object.assign({}, state, {
     tasks: action.payload.tasks,
     count: action.payload.count,
     loading: false,

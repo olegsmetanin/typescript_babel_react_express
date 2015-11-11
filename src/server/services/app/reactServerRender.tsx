@@ -7,14 +7,17 @@ import {
   compose,
   createStore,
   bindActionCreators,
+  applyMiddleware,
   combineReducers
 } from 'redux';
 import {connect, Provider} from 'react-redux';
 import { Action } from 'redux-actions';
+import thunk from 'redux-thunk';
 
 import invoke from '../../../framework/server/invoke/invoke';
 import Context from '../../../framework/common/react/Context';
 import routes from '../../../webclient/routes/index';
+import {rootReducer as modulesRootReducer} from '../../../webclient/modules/rootReducer';
 import HTTPClient from '../../../framework/server/http/HTTPClient';
 import Cache from '../../../framework/common/cache/Cache';
 import EventBus from "../../../framework/common/event/EventBus";
@@ -28,8 +31,15 @@ export default async function reactServerRender(url, siteroot: string, req, res)
   const eventBus = new EventBus({});
 
   const initialState: any = {};//TODO typed and dehidrated from server (instead of cache)
-  const rootReducer = combineReducers({appdata: (state, action: Action) => ({})});//TODO real reducers
-  const store = createStore(rootReducer, initialState);
+  const rootReducer = combineReducers({
+    app: (state, action: Action) => ({}),//TODO app-wide state
+    modules: modulesRootReducer
+  });
+  const finalCreateStore = compose(
+    applyMiddleware(thunk)
+    //TODO redux-react-router???
+  )(createStore);
+  const store: Store = finalCreateStore(rootReducer, initialState);
 
   //preload data for rendering
   async function fillCache(routes, methodName, ...args) {
@@ -50,7 +60,7 @@ export default async function reactServerRender(url, siteroot: string, req, res)
     } else if (renderProps) {
       //console.log('renderProps', renderProps);
       //because when NotFoundRoute exists, renderProps will be filled for unknown path's,
-      // we test this situation manually
+      //we test this situation manually
       const isNotFound = renderProps.components.some(route => route && route.isNotFound);
 
       if (isNotFound) {
@@ -59,6 +69,7 @@ export default async function reactServerRender(url, siteroot: string, req, res)
         try {
           //renderProps.components contains route handlers itself (first elm always undefined, why?)
           await fillCache(renderProps.components, 'fillCache', cache, invoke, httpClient);
+          await fillCache(renderProps.components, 'composeState', store.dispatch);
 
           let content = renderToString(
             <Provider store={store}>
@@ -74,8 +85,9 @@ export default async function reactServerRender(url, siteroot: string, req, res)
 
           let head = DocumentMeta.renderAsHTML();
           let cachedump = cache.dump();
+          const state = store.getState();
 
-          res.status(200).send(HTMLStab({content, head, cachedump}))
+          res.status(200).send(HTMLStab({content, head, cachedump, state}));
         } catch(e) {
           res.status(500).send(error.message);
         }

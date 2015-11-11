@@ -1,6 +1,6 @@
 /// <reference path="../../webclient.d.ts"/>
 
-import {createAction, Action} from 'redux-actions';
+import {createAction} from 'redux-actions';
 import {Dispatch} from 'redux';
 import {Task, TaskStatus} from './model';
 import * as ActionTypes from './actionTypes';

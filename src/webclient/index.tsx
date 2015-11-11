@@ -29,7 +29,7 @@ import EventBus from '../framework/common/event/EventBus';
 import {rootReducer as modulesRootReducer} from './modules/rootReducer';
 
 window['app'] = (options: any) => {
-  const {el, cachedump} = options;
+  const {el, cachedump, state} = options;
 
   const cache = new Cache();
   cache.load(cachedump);
@@ -38,7 +38,7 @@ window['app'] = (options: any) => {
   const httpClient = new HTTPClient({});
   const httpBuffer = new HTTPBuffer({httpClient, eventBus});
 
-  const initialState: any = {};//TODO typed and dehidrated from server (instead of cache)
+  const initialState: any = state;//TODO typed and dehidrated from server (instead of cache)
   const rootReducer = combineReducers({
     app: (state, action: Action) => ({}),//TODO app-wide state
     modules: modulesRootReducer

@@ -36,7 +36,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   componentWillMount() {
     if (typeof window !== 'undefined') {
       console.log(`${new Date().toISOString()} dispatching action requestTasks`);
-      this.props.dispatch(TasksActions.requestTasks('client filter'));
+      this.state.actions.requestTasks('client filter');
       console.log(`${new Date().toISOString()} dispatched action requestTasks`);
     }
   }
