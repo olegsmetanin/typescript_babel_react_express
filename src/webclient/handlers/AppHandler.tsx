@@ -34,6 +34,9 @@ export default class AppHandler extends React.Component<IAppHandlerProps, {}> {
       <Link to="/">Home</Link>
       <Link to="/about">About</Link>
       <Link to="/catch">Catch server error</Link>
+      <br/>
+      <Link to="/tasks">Master-details example</Link>
+      <br/>
       <div>
         <OAuthPopup type='facebook'>
           facebook oauth
