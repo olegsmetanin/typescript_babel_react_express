@@ -1,8 +1,22 @@
 /// <reference path="webclient.d.ts"/>
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
+//waiting for actual d.ts
+const ReactRouter = require('react-router');
+const Router = ReactRouter.Router;
+import {
+  Store,
+  compose,
+  createStore,
+  bindActionCreators,
+  combineReducers
+} from 'redux';
+import {
+  connect,
+  Provider
+} from 'react-redux';
+import { Action } from 'redux-actions';
+
 import routes from './routes/index';
 import Context from '../framework/common/react/Context';
 import invoke from '../framework/client/invoke/invoke';
