@@ -5,20 +5,24 @@ import {Dispatch} from 'redux';
 import {Task, TaskStatus} from './model';
 import * as ActionTypes from './actionTypes';
 
+const tasksRequestBegin = createAction(ActionTypes.TASKS_REQUEST);
+
 const tasksRequestSuccess = createAction<any>(
   ActionTypes.TASKS_REQUEST_SUCCESS,
   (data) => data
 );
 
-const tasksRequestFailure = createAction(
-    ActionTypes.TASKS_REQUEST_FAILURE,
-    (e: Error) => e
-);
+const tasksRequestFailure = () => {
+  const action = createAction(ActionTypes.TASKS_REQUEST_FAILURE, (e:Error) => e)();
+  action.error = true;
+  return action;
+}
 
 const requestTasks = (search: string) => (dispatch: Dispatch) => {
 
     //TODO api call
     console.log(`${new Date().toISOString()} tasks request called with ${search}`);
+    dispatch(tasksRequestBegin());
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         console.log(`${new Date().toISOString()} tasks request finished for ${search}`);

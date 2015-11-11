@@ -10,3 +10,10 @@ export class Task {
   status: TaskStatus;
   //TODO executors
 }
+
+export interface ITasksModuleState {
+  tasks: Task[];
+  count: number;
+  loading?: boolean;
+  error?: (Error|{})
+}

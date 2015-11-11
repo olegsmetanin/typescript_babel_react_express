@@ -55,7 +55,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
 }
 
 const mapStateToProps = state => ({
-  tasks: state.tasks
+  tasks: state.modules && state.modules.tasks
 });
 
 export default connect(mapStateToProps)(TasksHandler);

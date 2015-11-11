@@ -26,6 +26,7 @@ import HTTPClient from '../framework/client/http/HTTPClient';
 import HTTPBuffer from '../framework/client/http/HTTPBuffer';
 import Cache from '../framework/common/cache/Cache';
 import EventBus from '../framework/common/event/EventBus';
+import {rootReducer as modulesRootReducer} from './modules/rootReducer';
 
 window['app'] = (options: any) => {
   const {el, cachedump} = options;
@@ -38,7 +39,10 @@ window['app'] = (options: any) => {
   const httpBuffer = new HTTPBuffer({httpClient, eventBus});
 
   const initialState: any = {};//TODO typed and dehidrated from server (instead of cache)
-  const rootReducer = combineReducers({appdata: (state, action: Action) => ({})});//TODO real reducers
+  const rootReducer = combineReducers({
+    app: (state, action: Action) => ({}),//TODO app-wide state
+    modules: modulesRootReducer
+  });
   const finalCreateStore = compose(
     applyMiddleware(thunk)
     //TODO redux-react-router???
