@@ -49,6 +49,7 @@
     "redbox-react": "^1.1.1",
     "redux": "^3.0.4",
     "redux-actions": "^0.8.0",
+    "redux-thunk": "^1.0.0",
     "request": "^2.65.0",
     "rimraf": "^2.4.3",
     "sass-loader": "^3.0.0",

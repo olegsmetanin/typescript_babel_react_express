@@ -9,7 +9,7 @@ var APP_DIR = path.join(__dirname, 'src');
 var config = {
   entry: {
     app: './src/webclient/index.tsx',
-    lib: ['react', 'react-router', 'redux', 'react-redux', 'redux-actions']
+    lib: ['react', 'react-router', 'redux', 'react-redux', 'redux-actions', 'redux-thunk']
   },
   output: {
     path: __dirname + '/build/webclient/assets/js',

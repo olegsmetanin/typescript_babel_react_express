@@ -9,13 +9,15 @@ import {
   compose,
   createStore,
   bindActionCreators,
-  combineReducers
+  combineReducers,
+  applyMiddleware
 } from 'redux';
 import {
   connect,
   Provider
 } from 'react-redux';
 import { Action } from 'redux-actions';
+import thunk from 'redux-thunk';
 
 import routes from './routes/index';
 import Context from '../framework/common/react/Context';
@@ -37,7 +39,11 @@ window['app'] = (options: any) => {
 
   const initialState: any = {};//TODO typed and dehidrated from server (instead of cache)
   const rootReducer = combineReducers({appdata: (state, action: Action) => ({})});//TODO real reducers
-  const store = createStore(rootReducer, initialState);
+  const finalCreateStore = compose(
+    applyMiddleware(thunk)
+    //TODO redux-react-router???
+  )(createStore);
+  const store = finalCreateStore(rootReducer, initialState);
 
   const createBrowserHistory = require('history/lib/createBrowserHistory');
   const useScroll = require('scroll-behavior/lib/useStandardScroll');
