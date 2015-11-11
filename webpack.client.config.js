@@ -41,7 +41,7 @@ var config = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin("lib", 'lib.js'),
     new webpack.BannerPlugin('Build: '+new Date()),
-    new ExtractTextPlugin('../css/app.css', {
+    new ExtractTextPlugin(__dirname + '/build/webclient/assets/css/app.css', {
        publicPath: '/assets/css/',
        allChunks: true
      })
