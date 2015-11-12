@@ -1,6 +1,7 @@
 export default (options) => {
-  let {head = '', content = '', cachedump = {}} = options || {};
-  var cachedumpJSON = JSON.stringify(cachedump);
+  const {head = '', content = '', cachedump = {}, state = {}} = options || {};
+  const cachedumpJSON = JSON.stringify(cachedump);
+  const stateJSON = JSON.stringify(state);
 
   return `<!DOCTYPE html>
     <html>
@@ -19,7 +20,7 @@ export default (options) => {
         <script src="/assets/js/app.js"></script>
         <div id="app">${content}</div>
         <script>
-          app({el:document.getElementById('app'), cachedump: ${cachedumpJSON}});
+          app({el:document.getElementById('app'), cachedump: ${cachedumpJSON}, state: ${stateJSON}});
         </script>
 
       </body>

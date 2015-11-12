@@ -7,13 +7,14 @@ import IndexHandler from '../handlers/IndexHandler';
 import AboutHandler from '../handlers/AboutHandler';
 import CatchHandler from '../handlers/CatchHandler';
 import NotFoundHandler from '../handlers/NotFoundHandler';
-
+import TasksHandler from '../modules/tasks/TasksHandler';
 
 let routes = <Route>
   <Route path="/" component={AppHandler}>
     <IndexRoute component={IndexHandler}/>
     <Route path="about" component={AboutHandler} />
     <Route path="catch" component={CatchHandler} />
+    <Route path="tasks" component={TasksHandler} />
   </Route>
   <Route path="*" component={NotFoundHandler} />
 </Route>

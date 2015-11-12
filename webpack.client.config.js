@@ -9,7 +9,7 @@ var APP_DIR = path.join(__dirname, 'src');
 var config = {
   entry: {
     app: './src/webclient/index.tsx',
-    lib: ['react', 'react-router']
+    lib: ['react', 'react-router', 'redux', 'react-redux', 'redux-actions', 'redux-thunk']
   },
   output: {
     path: __dirname + '/build/webclient/assets/js',
@@ -41,7 +41,7 @@ var config = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin("lib", 'lib.js'),
     new webpack.BannerPlugin('Build: '+new Date()),
-    new ExtractTextPlugin('../css/app.css', {
+    new ExtractTextPlugin(__dirname + '/build/webclient/assets/css/app.css', {
        publicPath: '/assets/css/',
        allChunks: true
      })

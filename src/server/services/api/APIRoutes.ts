@@ -16,6 +16,8 @@ export default class APIRoutes {
 
   constructor(settings: APIRoutesSettings) {
     this.settings = settings;
+
+    this._generateStubData();
   }
 
   setup() {
@@ -27,6 +29,7 @@ export default class APIRoutes {
     webserver.post('/api/authonly', this.authonly.bind(this));
     webserver.post('/api/login', this.login.bind(this));
     webserver.post('/api/me', this.me.bind(this));
+    webserver.post('/api/tasks/find', this.tasksList.bind(this));
   }
 
   @wrapAsync
@@ -81,6 +84,37 @@ export default class APIRoutes {
     let u: any = user;
     u.provider = req.signedCookies.authprovider;
     return res.json(u);
+  }
+
+  @wrapAsync
+  async tasksList(req: Request, res: Response) {
+    setTimeout(() => {
+      const {search} = req.body;
+      const terms = (search || '').split(' ');
+      const matchedTasks = !terms.length ? this.tasks :
+        this.tasks.filter(task => terms.some(term => task.id.toString() === term || task.title.indexOf(term) >= 0));
+      res.json({
+        tasks: matchedTasks,
+        count: matchedTasks.length,
+      });
+    }, 1000);
+  }
+
+  tasks: Array<{id: number, title: string, status: number}>;
+  executors: Array<number>;
+
+  private _generateStubData() {
+    const statuses = [1, 2, 3];
+    const prefixes = ['Ongoing', 'Urgent', 'Decliend', 'Some example', 'Low level prioritized']
+    this.tasks = [];
+    for(let i = 0; i < 100; ++i) {
+      this.tasks.push({
+        id: i,
+        title: `${prefixes[Math.floor(Math.random() * prefixes.length)]} task`,
+        status: statuses[Math.floor(Math.random() * statuses.length)],
+      });
+    }
+    //TODO executors
   }
 
 }
