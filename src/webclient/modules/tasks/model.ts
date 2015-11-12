@@ -5,15 +5,27 @@ export enum TaskStatus {
 }
 
 export class Task {
-  id     : number;
-  title  : string;
-  status : TaskStatus;
-  //TODO executors
+  id        : number;
+  title     : string;
+  status    : TaskStatus;
+  executors : number[];
+}
+
+export class Executor {
+  id    : number;
+  name  : string;
+  tasks : number[];
 }
 
 export interface ITasksModuleState {
-  tasks    : Task[];
-  count    : number;
-  loading? : boolean;
-  error?   : (Error|{})
+  data: {
+    tasks     : Task[];
+    count     : number;
+    executors : Executor[];
+  },
+  view?: {
+    loading? : boolean;
+    error?   : (Error|{});
+    [key: number]: (boolean | Error)
+  }
 }

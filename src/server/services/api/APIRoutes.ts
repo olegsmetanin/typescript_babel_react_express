@@ -30,6 +30,7 @@ export default class APIRoutes {
     webserver.post('/api/login', this.login.bind(this));
     webserver.post('/api/me', this.me.bind(this));
     webserver.post('/api/tasks/find', this.tasksList.bind(this));
+    webserver.post('/api/tasks/executors', this.executorsList.bind(this));
   }
 
   @wrapAsync
@@ -100,8 +101,20 @@ export default class APIRoutes {
     }, 1000);
   }
 
-  tasks: Array<{id: number, title: string, status: number}>;
-  executors: Array<number>;
+  @wrapAsync
+  async executorsList(req: Request, res: Response) {
+    setTimeout(() => {
+      const {ids} = req.body;
+      if (ids.some(id => id === 6)) {
+        return res.status(500).send('Test api error for executor 6');
+      }
+      const matched = this.executors.filter(e => ids.some(id => id === e.id));
+      res.json(matched);
+    }, 1000);
+  }
+
+  tasks: Array<{id: number, title: string, status: number, executors?: number[]}>;
+  executors: Array<{id: number, name: string, tasks?: number[]}>;
 
   private _generateStubData() {
     const statuses = [1, 2, 3];
@@ -114,7 +127,23 @@ export default class APIRoutes {
         status: statuses[Math.floor(Math.random() * statuses.length)],
       });
     }
-    //TODO executors
+    this.executors = [
+      {id: 1, name: 'toby brian', tasks: [1, 6, 4, 34]},
+      {id: 2, name: 'bobby patric', tasks: [6, 56, 77, 72]},
+      {id: 3, name: 'genry south'},
+      {id: 4, name: 'dobby potter', tasks: [98]},
+      {id: 5, name: 'jillian donnald', tasks: [6, 11, 22, 33, 44, 55, 66, 77, 88]},
+      {id: 6, name: 'may flower', tasks: [1, 4, 22, 54, 56, 77]},
+    ];
+    this.executors.forEach(executor => {
+      if (Array.isArray(executor.tasks)) {
+        executor.tasks.forEach(id => {
+          const task = this.tasks.find(t => t.id === id);
+          task.executors = task.executors || [];
+          task.executors.push(executor.id);
+        })
+      }
+    });
   }
 
 }

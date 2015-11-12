@@ -1,9 +1,9 @@
 /// <reference path="../../webclient.d.ts"/>
 
-import {createAction} from 'redux-actions';
+import {Action, createAction} from 'redux-actions';
 import {Dispatch} from 'redux';
 import IHTTPClient from '../../../framework/common/http/IHTTPClient';
-import {Task, TaskStatus} from './model';
+import {Task, TaskStatus, Executor} from './model';
 import * as ActionTypes from './actionTypes';
 import TasksApi from './api';
 
@@ -31,6 +31,35 @@ const requestTasks = (search: string, httpClient: IHTTPClient) => (dispatch: Dis
   ).then(() => console.log(`${new Date().toISOString()} tasks request finished for ${search}`));
 }
 
+
+
+const taskExecutorsRequest = (id: number, stage: string, payload?: (Executor[] | Error)) => {
+  let a: Action = {
+    type: ActionTypes.TASKS_TASK_EXECUTORS_REQUEST,
+    payload,
+    meta: {id, stage},
+  };
+  //FSA has strange assumption about error actions, and discussion not completed yet
+  //if (payload instanceof Error) {
+  //  a.error = true;
+  //};
+  return a;
+}
+
+const requestExecutors = (id: number, ids: number[], httpClient: IHTTPClient) => async (dispatch: Dispatch) => {
+
+  dispatch(taskExecutorsRequest(id, 'begin'));
+
+  try {
+    const executors: Executor[] = await new TasksApi({httpClient}).executors({ids});
+    dispatch(taskExecutorsRequest(id, 'success', executors));
+  } catch(err) {
+    dispatch(taskExecutorsRequest(id, 'failure', err));
+  }
+
+}
+
 export {
-  requestTasks
+  requestTasks,
+  requestExecutors as requestTaskExecutors
 }

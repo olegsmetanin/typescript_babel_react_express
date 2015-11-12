@@ -2,6 +2,7 @@
 export class HTTPError extends Error {
   constructor(status:number, msg: string) {
     super(msg);
+    this.message = msg;
     this.status = status;
   }
 

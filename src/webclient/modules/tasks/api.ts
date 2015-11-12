@@ -21,8 +21,12 @@ export default class TasksApi {
   }
 
   //TODO @deduplicate decorator
-  async find(options: {search: string}) {
+  find(options: {search: string}) {
     return this._post('/api/tasks/find', options);
   }
 
+  //@deduplicate
+  executors(options: {ids: number[]}) {
+    return this._post('/api/tasks/executors', options);
+  }
 }

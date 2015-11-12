@@ -1,5 +1,5 @@
 import IHTTPClient, {IHTTPRequest} from '../../common/http/IHTTPClient';
-import {AuthenticationRequiredError, ConnectionBrokenError} from "./Errors";
+import {HTTPError, AuthenticationRequiredError, ConnectionBrokenError} from "./Errors";
 
 require('whatwg-fetch');
 var fetch = window['fetch'];
@@ -39,7 +39,8 @@ class HTTPClient implements IHTTPClient {
           } else {
             //FIXME custom error shape with response or extracted info?
             //new APIError extends HTTPError?
-            reject(response);
+            reject(new HTTPError(response.status, response.statusText));
+            //reject(response);
           }
         }
       }, () => {
