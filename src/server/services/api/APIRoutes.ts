@@ -92,7 +92,7 @@ export default class APIRoutes {
       const {search} = req.body;
       const terms = (search || '').split(' ');
       const matchedTasks = !terms.length ? this.tasks :
-        this.tasks.filter(task => terms.some(term => task.title.indexOf(term) >= 0));
+        this.tasks.filter(task => terms.some(term => task.id.toString() === term || task.title.indexOf(term) >= 0));
       res.json({
         tasks: matchedTasks,
         count: matchedTasks.length,
@@ -105,11 +105,12 @@ export default class APIRoutes {
 
   private _generateStubData() {
     const statuses = [1, 2, 3];
+    const prefixes = ['Ongoing', 'Urgent', 'Decliend', 'Some example', 'Low level prioritized']
     this.tasks = [];
     for(let i = 0; i < 100; ++i) {
       this.tasks.push({
         id: i,
-        title: `#${i} task`,
+        title: `${prefixes[Math.floor(Math.random() * prefixes.length)]} task`,
         status: statuses[Math.floor(Math.random() * statuses.length)],
       });
     }

@@ -3,16 +3,18 @@
 import * as React from 'react';
 import {bindActionCreators, Store, Dispatch} from 'redux';
 import {connect} from 'react-redux';
-import {Task} from './model';
+import {Task, ITasksModuleState} from './model';
 import * as TasksActions from './actions';
 import IHTTPClient from "../../../framework/common/http/IHTTPClient";
+import TaskItem from './components/TaskItem';
+import TaskFilter from './components/TaskFilter';
 
 interface ITasksHandlerContext {
   httpClient: IHTTPClient;
 }
 
 interface ITasksHandlerProps {
-  tasks: Task[];
+  state: ITasksModuleState;
   dispatch: Dispatch;
 }
 
@@ -48,13 +50,20 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
     }
   }
 
+  onSearch = (filter: {search: string}) => {
+    this.state.actions.requestTasks(filter.search, this.context.httpClient);
+  }
+
   render() {
-    const {tasks} = this.props;
+    const {state}  = this.props;
 
     return (
       <div>
         <hr />
-        TODO tasks list {JSON.stringify(tasks)}
+        <TaskFilter onSearch={this.onSearch} loading={state.loading} />
+        {state.loading === true && <div>Loading...</div>}
+        {state.tasks.map((task: Task) => <TaskItem key={task.id} task={task} />)}
+        TODO paging, sorting
       </div>
     )
   }
@@ -62,7 +71,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
 }
 
 const mapStateToProps = state => ({
-  tasks: state.modules && state.modules.tasks
+  state: state.modules && state.modules.tasks
 });
 
 export default connect(mapStateToProps)(TasksHandler);
