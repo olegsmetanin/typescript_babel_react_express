@@ -5,6 +5,11 @@ import {bindActionCreators, Store, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import {Task} from './model';
 import * as TasksActions from './actions';
+import IHTTPClient from "../../../framework/common/http/IHTTPClient";
+
+interface ITasksHandlerContext {
+  httpClient: IHTTPClient;
+}
 
 interface ITasksHandlerProps {
   tasks: Task[];
@@ -17,12 +22,14 @@ interface ITasksHandlerState {
 
 class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerState> {
 
-  static async composeState(dispatch: Dispatch) {
-    try {
-      await dispatch(TasksActions.requestTasks('server filter'));
-    } catch(e) {
-      console.error(e);
-    }
+  context: ITasksHandlerContext;
+
+  static contextTypes: React.ValidationMap<any> = {
+    httpClient: React.PropTypes.object.isRequired,
+  };
+
+  static async composeState(dispatch: Dispatch, httpClient: IHTTPClient) {
+    await dispatch(TasksActions.requestTasks('server filter 10 11', httpClient));
   }
 
   constructor(props, context) {
@@ -36,7 +43,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   componentWillMount() {
     if (typeof window !== 'undefined') {
       console.log(`${new Date().toISOString()} dispatching action requestTasks`);
-      this.state.actions.requestTasks('client filter');
+      this.state.actions.requestTasks('client filter 3 4', this.context.httpClient);
       console.log(`${new Date().toISOString()} dispatched action requestTasks`);
     }
   }

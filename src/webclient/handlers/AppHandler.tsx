@@ -28,7 +28,7 @@ export default class AppHandler extends React.Component<React.Props<any>, {}> {
         </div>
 
         {this.props.children}
-    </Layout>
+      </Layout>
     )
   }
 

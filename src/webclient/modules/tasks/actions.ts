@@ -2,8 +2,10 @@
 
 import {createAction} from 'redux-actions';
 import {Dispatch} from 'redux';
+import IHTTPClient from '../../../framework/common/http/IHTTPClient';
 import {Task, TaskStatus} from './model';
 import * as ActionTypes from './actionTypes';
+import TasksApi from './api';
 
 const tasksRequestBegin = createAction(ActionTypes.TASKS_REQUEST);
 
@@ -12,34 +14,21 @@ const tasksRequestSuccess = createAction<any>(
   (data) => data
 );
 
-const tasksRequestFailure = () => {
-  const action = createAction(ActionTypes.TASKS_REQUEST_FAILURE, (e:Error) => e)();
+const tasksRequestFailure = (e: Error) => {
+  const action = createAction(ActionTypes.TASKS_REQUEST_FAILURE, (e:Error) => e)(e);
   action.error = true;
   return action;
 }
 
-const requestTasks = (search: string) => (dispatch: Dispatch) => {
+const requestTasks = (search: string, httpClient: IHTTPClient) => (dispatch: Dispatch) => {
 
-    //TODO api call
-    console.log(`${new Date().toISOString()} tasks request called with ${search}`);
-    dispatch(tasksRequestBegin());
-    return new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        console.log(`${new Date().toISOString()} tasks request finished for ${search}`);
-
-        const stub = {
-          tasks: <Task[]>[
-            {id: 1, title: 'First task', status: TaskStatus.NEW},
-            {id: 2, title: 'Second task', status: TaskStatus.RUNNING},
-            {id: 3, title: 'Third task', status: TaskStatus.DONE},
-          ],
-          count: 22,
-        };
-
-        dispatch(tasksRequestSuccess(stub));
-        resolve();
-      }, 500);
-    });
+  console.log(`${new Date().toISOString()} tasks request called with ${search}`);
+  dispatch(tasksRequestBegin());
+  const api = new TasksApi({httpClient});
+  return api.find({search}).then(
+    result => dispatch(tasksRequestSuccess(result)),
+    error => dispatch(tasksRequestFailure(error))
+  ).then(() => console.log(`${new Date().toISOString()} tasks request finished for ${search}`));
 }
 
 export {
