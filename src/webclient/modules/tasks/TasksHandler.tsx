@@ -68,6 +68,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   }
 
   mapExecutorsToModels = (task: Task): (Executor[] | boolean | Error) => {
+    //console.log('mapE2M called');
     const {state: {view, data: {executors}}} = this.props;
     if (view[task.id] === true || view[task.id] instanceof Error) {
       return view[task.id];
@@ -86,7 +87,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
 
         {view.loading === true && <div>Loading...</div>}
         {data.tasks.map((task: Task) =>
-          <TaskItem key={task.id} task={task} executors={this.mapExecutorsToModels(task)} onExpand={this.onExpandExecutors} />)}
+          <TaskItem key={task.id} task={task} executorsFn={() => this.mapExecutorsToModels(task)} onExpand={this.onExpandExecutors} />)}
 
         TODO paging, sorting <br/>
         Debug state: {JSON.stringify(this.props.state)};

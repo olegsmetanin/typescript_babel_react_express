@@ -5,7 +5,7 @@ import {Task, TaskStatus, Executor} from '../model';
 
 interface ITaskItemProps extends React.Props<TaskItem> {
   task: Task;
-  executors: (Executor[] | boolean | Error);
+  executorsFn: () => (Executor[] | boolean | Error);
   onExpand: (id: number) => void;
 }
 
@@ -33,7 +33,7 @@ export default class TaskItem extends React.Component<ITaskItemProps, ITaskItemS
   }
 
   render() {
-    const {task, executors} = this.props;
+    const {task, executorsFn} = this.props;
     const {collapsed} = this.state;
 
     const renderStatus = (status: TaskStatus) => {
@@ -72,7 +72,7 @@ export default class TaskItem extends React.Component<ITaskItemProps, ITaskItemS
           <a style={{cursor: 'pointer', float: 'right', marginRight: '5px'}} onClick={this.toggle}>Executors</a>
         </div>
 
-        {collapsed === false && <div>{renderExecutors(executors)}</div>}
+        {collapsed === false && <div>{renderExecutors(executorsFn())}</div>}
       </div>
     )
   }
