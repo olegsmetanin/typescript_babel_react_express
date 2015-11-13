@@ -62,12 +62,16 @@ const handleExecutorsActions = handleAction(TASKS_TASK_EXECUTORS_REQUEST, {
         return Object.assign({}, state, {data, view});
       }
       default:
-        return state || initialState;
+        return state || initialState; //handleAction does not have possibilities to set default state
+                                      //and reducer signature can't set default value to first property only
+                                      //redux does't like undefined as reducer result
     }
   },
 
   ['throw']: (state:ITasksModuleState, action:Action) => {
-    state = state || initialState;
+    state = state || initialState; //handleAction does not have possibilities to set default state
+                                   //and reducer signature can't set default value to first property only
+                                   //redux does't like undefined as reducer result
     const view = Object.assign({}, state.view, {[action.meta.id]: action.payload});//mark loading error
 
     return Object.assign({}, state, {view});
