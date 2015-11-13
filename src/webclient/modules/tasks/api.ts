@@ -1,4 +1,5 @@
-import IHTTPClient from "../../../framework/common/http/IHTTPClient";
+import IHTTPClient from '../../../framework/common/http/IHTTPClient';
+import deduplicate from '../../../framework/client/invoke/deduplicate';
 
 export default class TasksApi {
 
@@ -20,12 +21,12 @@ export default class TasksApi {
     });
   }
 
-  //TODO @deduplicate decorator
+  @deduplicate
   find(options: {search: string}) {
     return this._post('/api/tasks/find', options);
   }
 
-  //@deduplicate
+  @deduplicate
   executors(options: {ids: number[]}) {
     return this._post('/api/tasks/executors', options);
   }
