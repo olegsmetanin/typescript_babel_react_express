@@ -37,14 +37,15 @@ const taskExecutorsRequest = (id: number, stage: string, payload?: (Executor[] |
   let a: Action = {
     type: ActionTypes.TASKS_TASK_EXECUTORS_REQUEST,
     payload,
-    meta: {id, stage},
+    meta: {id, stage}, //wait for https://github.com/acdlite/redux-actions/issues/2 for async support (but now works too)
   };
-  //FSA has strange assumption about error actions, and discussion not completed yet
-  //if (payload instanceof Error) {
-  //  a.error = true;
-  //};
+  //wait for https://github.com/acdlite/redux-actions/pull/16
+  if (payload instanceof Error) {
+    a.error = true;
+  };
   return a;
 }
+
 
 const requestExecutors = (id: number, ids: number[], httpClient: IHTTPClient) => async (dispatch: Dispatch) => {
 

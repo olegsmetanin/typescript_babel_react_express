@@ -55,7 +55,7 @@ export default class TaskItem extends React.Component<ITaskItemProps, ITaskItemS
         const arr: Executor[] = e;
         return !arr.length
           ? <i>This task has no executors</i>
-          : <ul>{arr.map(executor => <li>#{executor.id}&nbsp;{executor.name}</li>)}</ul>;
+          : <ul>{arr.map(executor => <li key={executor.id}>#{executor.id}&nbsp;{executor.name}</li>)}</ul>;
       }
 
       throw new Error(`Unknown executors type ${typeof e}`);

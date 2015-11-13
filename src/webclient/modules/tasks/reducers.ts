@@ -1,6 +1,6 @@
 /// <reference path="../../webclient.d.ts"/>
 
-import {handleActions, Action} from 'redux-actions';
+import {handleAction, handleActions, Action} from 'redux-actions';
 
 import {Task, Executor, ITasksModuleState} from './model';
 import {TASKS_REQUEST, TASKS_REQUEST_SUCCESS, TASKS_REQUEST_FAILURE, TASKS_TASK_EXECUTORS_REQUEST} from './actionTypes';
@@ -13,7 +13,7 @@ const initialState: ITasksModuleState = {
   }
 };
 
-export default handleActions<ITasksModuleState>({
+const handleTaskActions = handleActions<ITasksModuleState>({
   [TASKS_REQUEST]: (state: ITasksModuleState, action: Action) => {
     const view = Object.assign({}, state.view, {loading: true});
 
@@ -40,9 +40,14 @@ export default handleActions<ITasksModuleState>({
 
     return Object.assign({}, state, {view});
   },
+}, initialState);
 
-  [TASKS_TASK_EXECUTORS_REQUEST]: (state: ITasksModuleState, action: Action) => {
-    switch(action.meta.stage) {
+//can't using FSA-action with error handling in handleActions (signature disallow reducer-map), so,
+//split this reducer into separate part and use reduceReducers in rootReducer for modules
+const handleExecutorsActions = handleAction(TASKS_TASK_EXECUTORS_REQUEST, {
+
+  ['next']: (state:ITasksModuleState, action:Action) => {
+    switch (action.meta.stage) {
       case 'begin':
       {
         const view = Object.assign({}, state.view, {[action.meta.id]: true});//mark loading started
@@ -56,15 +61,20 @@ export default handleActions<ITasksModuleState>({
 
         return Object.assign({}, state, {data, view});
       }
-      case 'failure':
-      {
-        const view = Object.assign({}, state.view, {[action.meta.id]: action.payload});//mark loading error
-
-        return Object.assign({}, state, {view});
-      }
       default:
-        return state;
+        return state || initialState;
     }
-  }
+  },
 
-}, initialState);
+  ['throw']: (state:ITasksModuleState, action:Action) => {
+    state = state || initialState;
+    const view = Object.assign({}, state.view, {[action.meta.id]: action.payload});//mark loading error
+
+    return Object.assign({}, state, {view});
+  }
+});
+
+export {
+  handleTaskActions,
+  handleExecutorsActions
+}
