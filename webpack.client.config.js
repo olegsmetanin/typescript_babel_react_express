@@ -8,12 +8,13 @@ var APP_DIR = path.join(__dirname, 'src');
 
 var config = {
   entry: {
-    app: './src/webclient/index.tsx',
-    lib: ['react', 'react-router', 'redux', 'react-redux', 'redux-actions', 'redux-thunk']
+    main: './src/webclient/index.tsx',
+    lib: ['react', 'react-router', 'redux', 'react-redux', 'redux-actions', 'redux-thunk', 'react-document-meta'],
+    //about: './src/webclient/handlers/AboutHandler.tsx'
   },
   output: {
     path: __dirname + '/build/webclient/assets/js',
-    filename: 'app.js',
+    filename: '[name].js',
     publicPath: '/assets/js/'
   },
   resolve: {
