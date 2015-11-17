@@ -10,9 +10,13 @@ import NotFoundHandler from '../handlers/NotFoundHandler';
 //import TasksHandler from '../modules/tasks/TasksHandler';
 
 const loadContainerAsync = bundle => (location, cb) => {
-  bundle(component => {
-    cb(null, component);
-  });
+  if (typeof window !== 'undefined') {
+    bundle(component => {
+      cb(null, component);
+    });
+  } else {
+    cb(null, bundle);
+  }
 };
 
 let routes = <Route>

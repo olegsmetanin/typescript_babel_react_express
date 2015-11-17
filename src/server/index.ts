@@ -17,14 +17,16 @@ commander
 var config = {};
 var nodename = commander.nodename ? commander.nodename : uuid.v4();
 
-process.env.NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV: 'production';
+//process.env.NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV: 'production';
 
 if (commander.config) {
   // Parse config source string
 } else {
-  config = require(process.cwd()+'/application.'+process.env.NODE_ENV+'.json');
+  //config = require(process.cwd()+'/application.'+process.env.NODE_ENV+'.json');
+  //console.log();
+  config = require('./../../application.' + process.env.NODE_ENV + '.json');
 }
-
+//src/server/index.ts
 if (commander.migration == 'init') {
   try {
     var logger = console;

@@ -45,24 +45,40 @@ gulp.task('build:server:resources', function() {
 });
 
 gulp.task('build:server', ['build:server:resources'], function() {
-    return gulp.src(['src/**/*.ts', 'src/**/*.tsx'])
-        .pipe(sourcemaps.init())
-        .pipe(ts(tsProject))
-        .pipe(babel())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('build'));
+  var config = require('./webpack.server.config.js');
+  return gulp.src('src/server/index.ts')
+    .pipe(webpack(config))
+    .pipe(gulp.dest('build/server'));
 });
 
-var serverArgs = ['./build/server/index.js'];
+// gulp.task('build:server', ['build:server:resources'], function() {
+//     return gulp.src(['src/**/*.ts', 'src/**/*.tsx'])
+//         .pipe(sourcemaps.init())
+//         .pipe(ts(tsProject))
+//         .pipe(babel())
+//         .pipe(sourcemaps.write('.'))
+//         .pipe(gulp.dest('build'));
+// });
+
+var serverArgs = ['./build/server/server.js'];
 
 gulp.task('server', ['build:server'], function() {
   var server = gls(serverArgs, {cwd: __dirname, env: {NODE_ENV: 'development'}}, 35729);
   server.start();
   gulp.watch('src/**/*.ts', ['build:server']);
-  gulp.watch(['build/framework/**/*.js', 'build/server/**/*.js'], function() {
+  gulp.watch(['src/**/*.ts'], function() {
     server.start.bind(server)();
   });
 });
+
+// gulp.task('server', ['build:server'], function() {
+//   var server = gls(serverArgs, {cwd: __dirname, env: {NODE_ENV: 'development'}}, 35729);
+//   server.start();
+//   gulp.watch('src/**/*.ts', ['build:server']);
+//   gulp.watch(['build/framework/**/*.js', 'build/server/**/*.js'], function() {
+//     server.start.bind(server)();
+//   });
+// });
 
 gulp.task('test', ['build:server'], function() {
   return gulp.src('build/test/**/*.js')

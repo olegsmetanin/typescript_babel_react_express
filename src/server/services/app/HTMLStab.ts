@@ -17,7 +17,7 @@ export default (options) => {
       <body>
         <!--  Scripts-->
         <script src="/assets/js/lib.js"></script>
-        <script src="/assets/js/app.js"></script>
+        <script src="/assets/js/main.js"></script>
         <div id="app">${content}</div>
         <script>
           app({el:document.getElementById('app'), cachedump: ${cachedumpJSON}, state: ${stateJSON}});
