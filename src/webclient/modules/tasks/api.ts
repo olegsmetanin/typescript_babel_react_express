@@ -30,4 +30,9 @@ export default class TasksApi {
   executors(options: {ids: number[]}) {
     return this._post('/api/tasks/executors', options);
   }
+
+  @deduplicate
+  updateExecutor(options: {id: number, name: string}) {
+    return this._post('/api/tasks/executors/update', options);
+  }
 }

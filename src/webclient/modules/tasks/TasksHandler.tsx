@@ -31,7 +31,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   };
 
   static async composeState(dispatch: Dispatch, httpClient: IHTTPClient) {
-    await dispatch(TasksActions.requestTasks('server filter 10 11', httpClient));
+    await dispatch(TasksActions.requestTasks('server filter 1 3 4 6', httpClient));
   }
 
   constructor(props, context) {
@@ -45,7 +45,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   componentWillMount() {
     if (typeof window !== 'undefined') {
       console.log(`${new Date().toISOString()} dispatching action requestTasks`);
-      this.state.actions.requestTasks('client filter 3 4 6', this.context.httpClient);
+      this.state.actions.requestTasks('client filter 1 3 4 6', this.context.httpClient);
       console.log(`${new Date().toISOString()} dispatched action requestTasks`);
     }
   }
@@ -77,6 +77,18 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
     return Array.isArray(task.executors) ? task.executors.map(id => executors.find((e: Executor) => e.id === id)) : [];
   }
 
+  onEditExecutor = (taskId: number, executorId: number) => {
+    this.state.actions.editExecutor(taskId, executorId);
+  }
+
+  onCancelExecutor = (taskId: number, executorId: number) => {
+    this.state.actions.cancelExecutor(taskId, executorId);
+  }
+
+  onSaveExecutor = (taskId: number, executorId: number, name: string) => {
+    this.state.actions.saveExecutor(taskId, executorId, name, this.context.httpClient);
+  }
+
   render() {
     const {state: {data, view}} = this.props;
 
@@ -86,11 +98,19 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
         <TaskFilter onSearch={this.onSearch} loading={view && view.loading === true} />
 
         {view && view.loading === true && <div>Loading...</div>}
-        {data.tasks.map((task: Task) =>
-          <TaskItem key={task.id} task={task} executorsFn={() => this.mapExecutorsToModels(task)} onExpand={this.onExpandExecutors} />)}
+        {data.tasks.map((task: Task) => <TaskItem
+          key={task.id}
+          task={task}
+          editState={view && view.editState && view.editState[task.id]}
+          executorsFn={() => this.mapExecutorsToModels(task)} onExpand={this.onExpandExecutors}
+          onEditExecutor={this.onEditExecutor}
+          onSaveExecutor={this.onSaveExecutor}
+          onCancelExecutor={this.onCancelExecutor}
+        />)}
 
-        TODO paging, sorting <br/>
-        Debug state: {JSON.stringify(this.props.state)};
+        <br/>TODO paging, sorting <br/>
+        Debug state:
+        <pre>{JSON.stringify(this.props.state, null, 2)};</pre>
         <br/>
         Hint: load executor #6 (for ex. in task #4) throw test api error
       </div>

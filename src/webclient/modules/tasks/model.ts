@@ -17,6 +17,12 @@ export class Executor {
   tasks : number[];
 }
 
+export interface IExecutorEditState {
+  viewMode: boolean;
+  progress: boolean;
+  error?  : Error;
+}
+
 export interface ITasksModuleState {
   data: {
     tasks     : Task[];
@@ -24,8 +30,13 @@ export interface ITasksModuleState {
     executors : Executor[];
   },
   view?: {
-    loading? : boolean;
-    error?   : (Error|{});
+    loading?   : boolean;
+    error?     : (Error|{});
+    editState? : {
+      [taskId: number]: {
+        [executorId: number]: IExecutorEditState;
+      }
+    },
     [key: number]: (boolean | Error)
   }
 }

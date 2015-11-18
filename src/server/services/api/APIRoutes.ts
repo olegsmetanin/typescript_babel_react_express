@@ -31,6 +31,7 @@ export default class APIRoutes {
     webserver.post('/api/me', this.me.bind(this));
     webserver.post('/api/tasks/find', this.tasksList.bind(this));
     webserver.post('/api/tasks/executors', this.executorsList.bind(this));
+    webserver.post('/api/tasks/executors/update', this.updateExecutor.bind(this));
   }
 
   @wrapAsync
@@ -113,6 +114,25 @@ export default class APIRoutes {
     }, 1000);
   }
 
+  @wrapAsync
+  async updateExecutor(req: Request, res: Response) {
+    setTimeout(() => {
+      const {id, name} = req.body;
+
+      const executor = this.executors.find(e => e.id === id);
+      if (!executor) {
+        return res.status(500).send('Unknown executor');
+      }
+      if (id === 5) {
+        return res.status(500).send('Test api update error for executor #5');
+      }
+
+      executor.name = name;
+
+      res.json(executor);
+    }, 2000);
+  }
+
   tasks: Array<{id: number, title: string, status: number, executors?: number[]}>;
   executors: Array<{id: number, name: string, tasks?: number[]}>;
 
@@ -132,8 +152,8 @@ export default class APIRoutes {
       {id: 2, name: 'bobby patric', tasks: [6, 56, 77, 72]},
       {id: 3, name: 'genry south'},
       {id: 4, name: 'dobby potter', tasks: [98]},
-      {id: 5, name: 'jillian donnald', tasks: [6, 11, 22, 33, 44, 55, 66, 77, 88]},
-      {id: 6, name: 'may flower', tasks: [1, 4, 22, 54, 56, 77]},
+      {id: 5, name: 'jillian donnald', tasks: [1, 6, 11, 22, 33, 44, 55, 66, 77, 88]},
+      {id: 6, name: 'may flower', tasks: [4]},
     ];
     this.executors.forEach(executor => {
       if (Array.isArray(executor.tasks)) {
