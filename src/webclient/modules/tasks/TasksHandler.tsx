@@ -83,9 +83,9 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
     return (
       <div>
         <hr />
-        <TaskFilter onSearch={this.onSearch} loading={view.loading} />
+        <TaskFilter onSearch={this.onSearch} loading={view && view.loading === true} />
 
-        {view.loading === true && <div>Loading...</div>}
+        {view && view.loading === true && <div>Loading...</div>}
         {data.tasks.map((task: Task) =>
           <TaskItem key={task.id} task={task} executorsFn={() => this.mapExecutorsToModels(task)} onExpand={this.onExpandExecutors} />)}
 
