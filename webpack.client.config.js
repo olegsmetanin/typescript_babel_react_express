@@ -13,9 +13,9 @@ var config = {
     //about: './src/webclient/handlers/AboutHandler.tsx'
   },
   output: {
-    path: __dirname + '/build/webclient/assets/js',
+    path: __dirname + '/build/webpublic/static/js',
     filename: '[name].js',
-    publicPath: '/assets/js/'
+    publicPath: '/static/js/'
   },
   resolve: {
     modulesDirectories: ['node_modules'],
@@ -42,11 +42,11 @@ var config = {
   plugins: [
     new webpack.optimize.CommonsChunkPlugin("lib", 'lib.js'),
     new webpack.BannerPlugin('Build: '+new Date()),
-    new ExtractTextPlugin(__dirname + '/build/webclient/assets/css/app.css', {
-       publicPath: '/assets/css/',
+    new ExtractTextPlugin(__dirname + '/build/webpublic/static/css/app.css', {
+       publicPath: '/static/css/',
        allChunks: true
      })
-  ].concat(!process.env.NODE_ENV || process.env.NODE_ENV === 'production'
+  ].concat(process.env.NODE_ENV !== 'development'
     ? [new webpack.optimize.UglifyJsPlugin({
         compress: {
            warnings: false

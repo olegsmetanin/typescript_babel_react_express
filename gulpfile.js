@@ -18,67 +18,40 @@ gulp.task('webpublic', function() {
     ));
 });
 
-gulp.task("webpack", function() {
+gulp.task("build:webclient", function() {
   var config = require('./webpack.client.config.js');
   return gulp.src('src/webclient/index.ts')
     .pipe(webpack(config))
-    .pipe(gulp.dest('build/webpublic/assets/js'));
+    .pipe(gulp.dest('build/webpublic/static/js'));
 });
 
-gulp.task('build:webclient', ['webpack', 'webpublic']);
-
-gulp.task("webpack-watch", function() {
-  var config = require('./webpack.client.config.js');
-  config.watch = true;
-  return gulp.src('src/webclient/index.ts')
-    .pipe(webpack(config))
-    .pipe(gulp.dest('build/webpublic/assets/js'));
+gulp.task("webclient", ['webpublic', 'build:webclient'], function() {
+  gulp.watch(['src/webclient/**/*.{ts,tsx}'], ['build:webclient']);
+  gulp.watch(['src/webpublic/**'], ['webpublic']);
 });
-
-gulp.task('webclient', ['webpack-watch', 'webpublic']);
-
-var tsProject = ts.createProject('./tsconfig.json');
 
 gulp.task('build:server:resources', function() {
   gulp.src(['src/server/*.raml']).pipe(gulp.dest('build/server'
     ));
 });
 
-gulp.task('build:server', ['build:server:resources'], function() {
+gulp.task('build:server', function() {
   var config = require('./webpack.server.config.js');
   return gulp.src('src/server/index.ts')
     .pipe(webpack(config))
     .pipe(gulp.dest('build/server'));
 });
 
-// gulp.task('build:server', ['build:server:resources'], function() {
-//     return gulp.src(['src/**/*.ts', 'src/**/*.tsx'])
-//         .pipe(sourcemaps.init())
-//         .pipe(ts(tsProject))
-//         .pipe(babel())
-//         .pipe(sourcemaps.write('.'))
-//         .pipe(gulp.dest('build'));
-// });
+var server = gls(['./build/server/server.js'], {cwd: __dirname, env: {NODE_ENV: 'development'}}, 35729);
 
-var serverArgs = ['./build/server/server.js'];
-
-gulp.task('server', ['build:server'], function() {
-  var server = gls(serverArgs, {cwd: __dirname, env: {NODE_ENV: 'development'}}, 35729);
-  server.start();
-  gulp.watch('src/**/*.ts', ['build:server']);
-  gulp.watch(['src/**/*.ts'], function() {
-    server.start.bind(server)();
-  });
+gulp.task('watch:server', ['build:server'], function () {
+  server.start.bind(server)();
 });
 
-// gulp.task('server', ['build:server'], function() {
-//   var server = gls(serverArgs, {cwd: __dirname, env: {NODE_ENV: 'development'}}, 35729);
-//   server.start();
-//   gulp.watch('src/**/*.ts', ['build:server']);
-//   gulp.watch(['build/framework/**/*.js', 'build/server/**/*.js'], function() {
-//     server.start.bind(server)();
-//   });
-// });
+gulp.task('server', ['build:server:resources', 'build:server'], function() {
+  server.start();
+  gulp.watch('src/**/*.ts', ['watch:server']);
+});
 
 gulp.task('test', ['build:server'], function() {
   return gulp.src('build/test/**/*.js')
@@ -91,4 +64,4 @@ gulp.task('test', ['build:server'], function() {
     });
 });
 
-gulp.task('default', ['build:server', 'build:webclient']);
+gulp.task('default', ['webpublic', 'build:webclient', 'build:server:resources', 'build:server']);
