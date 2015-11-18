@@ -50,7 +50,7 @@ gulp.task('watch:server', ['build:server'], function () {
 
 gulp.task('server', ['build:server:resources', 'build:server'], function() {
   server.start();
-  gulp.watch('src/**/*.ts', ['watch:server']);
+  gulp.watch('src/**/*.{ts,tsx}', ['watch:server']);
 });
 
 gulp.task('test', ['build:server'], function() {
