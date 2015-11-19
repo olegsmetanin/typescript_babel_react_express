@@ -1,7 +1,7 @@
 /// <reference path="../../webclient.d.ts"/>
 
 import {handleAction, handleActions, Action} from 'redux-actions';
-
+import reduceReducers from 'reduce-reducers';
 import {Task, Executor, ITasksModuleState, IExecutorEditState} from './model';
 import {
   TASKS_REQUEST,
@@ -151,9 +151,6 @@ const handleUpdateActions = handleAction(TASKS_EXECUTOR_UPDATE_REQUEST, {
   }
 });
 
-export {
-  handleTaskActions,
-  handleExecutorsActions,
-  handleEditActions,
-  handleUpdateActions,
-}
+const tasksReducer = reduceReducers(handleTaskActions, handleExecutorsActions, handleEditActions, handleUpdateActions);
+
+export default tasksReducer

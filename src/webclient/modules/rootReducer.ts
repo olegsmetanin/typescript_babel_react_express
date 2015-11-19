@@ -3,10 +3,10 @@
 import {combineReducers} from 'redux';
 import reduceReducers from 'reduce-reducers';
 
-import {handleTaskActions, handleExecutorsActions, handleEditActions, handleUpdateActions} from './tasks/reducers';
+import tasksReducer from './tasks/reducers';
 
 const rootReducer = combineReducers({
-  tasks: reduceReducers(handleTaskActions, handleExecutorsActions, handleEditActions, handleUpdateActions)
+  tasks: tasksReducer
   //TODO other modules
 });
 
