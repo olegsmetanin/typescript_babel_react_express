@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {bindActionCreators, Store, Dispatch} from 'redux';
 import {connect} from 'react-redux';
-import {Task, Executor, ITasksModuleState} from './model';
+import {Task, Executor, IModuleState} from './model';
 import * as TasksActions from './actions';
 import IHTTPClient from "../../../framework/common/http/IHTTPClient";
 import TaskItem from './components/TaskItem';
@@ -14,7 +14,7 @@ interface ITasksHandlerContext {
 }
 
 interface ITasksHandlerProps {
-  state: ITasksModuleState;
+  state: IModuleState;
   dispatch: Dispatch;
 }
 
@@ -55,7 +55,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   }
 
   onExpandExecutors = (id: number) => {
-    const {state: {data:{tasks, executors}}} = this.props;
+    const {state: {tasks:{items:tasks}, details:{executors}}} = this.props;
     const task: Task = tasks.find((task: Task) => task.id === id);
     if (!task) return;
 
@@ -69,9 +69,9 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
 
   mapExecutorsToModels = (task: Task): (Executor[] | boolean | Error) => {
     //console.log('mapE2M called');
-    const {state: {view, data: {executors}}} = this.props;
-    if (view[task.id] === true || view[task.id] instanceof Error) {
-      return view[task.id];
+    const {state: {details, details: {executors, ui}}} = this.props;
+    if (ui[task.id] === true || ui[task.id] instanceof Error) {
+      return ui[task.id];
     }
 
     return Array.isArray(task.executors) ? task.executors.map(id => executors.find((e: Executor) => e.id === id)) : [];
@@ -90,18 +90,18 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   }
 
   render() {
-    const {state: {data, view}} = this.props;
+    const {state: {tasks: {items:tasks, ui}, editors}} = this.props;
 
     return (
       <div>
         <hr />
-        <TaskFilter onSearch={this.onSearch} loading={view && view.loading === true} />
+        <TaskFilter onSearch={this.onSearch} loading={ui.loading === true} />
 
-        {view && view.loading === true && <div>Loading...</div>}
-        {data.tasks.map((task: Task) => <TaskItem
+        {ui.loading === true && <div>Loading...</div>}
+        {tasks.map((task: Task) => <TaskItem
           key={task.id}
           task={task}
-          editState={view && view.editState && view.editState[task.id]}
+          editState={editors[task.id]}
           executorsFn={() => this.mapExecutorsToModels(task)} onExpand={this.onExpandExecutors}
           onEditExecutor={this.onEditExecutor}
           onSaveExecutor={this.onSaveExecutor}

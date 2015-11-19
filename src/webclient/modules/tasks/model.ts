@@ -23,20 +23,31 @@ export interface IExecutorEditState {
   error?  : Error;
 }
 
-export interface ITasksModuleState {
-  data: {
-    tasks     : Task[];
-    count     : number;
-    executors : Executor[];
-  },
-  view?: {
-    loading?   : boolean;
-    error?     : (Error|{});
-    editState? : {
-      [taskId: number]: {
-        [executorId: number]: IExecutorEditState;
-      }
-    },
-    [key: number]: (boolean | Error)
+//UI models (state in redux state tree)
+export interface ITasksState {
+  items: Task[];
+  count: number;
+  ui: {
+    loading: boolean;
+    error? : Error;
   }
+}
+
+export interface IExecutorsState {
+  executors: Executor[];
+  ui: {
+    [taskId: number]: (boolean | Error)
+  }
+}
+
+export interface IEditState {
+  [taskId: number]: {
+    [executorId: number]: IExecutorEditState;
+  }
+}
+
+export interface IModuleState {
+  tasks   : ITasksState;
+  details : IExecutorsState;
+  editors : IEditState;
 }

@@ -1,8 +1,9 @@
 /// <reference path="../../webclient.d.ts"/>
 
 import {handleAction, handleActions, Action} from 'redux-actions';
+import {combineReducers} from 'redux';
 import reduceReducers from 'reduce-reducers';
-import {Task, Executor, ITasksModuleState, IExecutorEditState} from './model';
+import {Task, Executor, IModuleState, ITasksState, IExecutorEditState, IExecutorsState, IEditState} from './model';
 import {
   TASKS_REQUEST,
   TASKS_REQUEST_SUCCESS,
@@ -14,109 +15,117 @@ import {
 } from './actionTypes';
 
 
-const initialState: ITasksModuleState = {
-  data: {
-    tasks: [],
+const initialState: IModuleState = {
+  tasks: {
+    items: [],
     count: 0,
+    ui: {
+      loading: false,
+    },
+  },
+  details: {
     executors: [],
-  }
+    ui: {},
+  },
+  editors: {},
 };
 
-const handleTaskActions = handleActions<ITasksModuleState>({
-  [TASKS_REQUEST]: (state: ITasksModuleState, action: Action) => {
-    const view = Object.assign({}, state.view, {loading: true});
-
-    return Object.assign({}, state, {view});
+const handleTaskActions = handleActions<ITasksState>({
+  [TASKS_REQUEST]: (state: ITasksState, action: Action) => {
+    const ui = Object.assign({}, state.ui, {loading: true});
+    return Object.assign({}, state, {ui});
   },
 
-  [TASKS_REQUEST_SUCCESS]: (state: ITasksModuleState, action: Action) => {
-    const data = Object.assign({}, state.data, {
-      tasks: action.payload.tasks,
+  [TASKS_REQUEST_SUCCESS]: (state: ITasksState, action: Action) => {
+    const ui = Object.assign({}, state.ui, {loading: false});
+    return Object.assign({}, state, {
+      items: action.payload.tasks,
       count: action.payload.count,
+      ui,
     });
-    const view = Object.assign({}, state.view, {
-      loading: false,
-    });
-
-    return Object.assign({}, state, {data, view});
   },
 
-  [TASKS_REQUEST_FAILURE]: (state: ITasksModuleState, action: Action) => {
-    const view = Object.assign({}, state.view, {
+  [TASKS_REQUEST_FAILURE]: (state: ITasksState, action: Action) => {
+    const ui = Object.assign({}, state.ui, {
       error: action.payload,
       loading: false,
     });
-
-    return Object.assign({}, state, {view});
+    return Object.assign({}, state, {ui});
   },
-}, initialState);
+}, initialState.tasks);
 
 //can't using FSA-action with error handling in handleActions (signature disallow reducer-map), so,
 //split this reducer into separate part and use reduceReducers in rootReducer for modules
 const handleExecutorsActions = handleAction(TASKS_TASK_EXECUTORS_REQUEST, {
 
-  ['next']: (state:ITasksModuleState, action:Action) => {
+  ['next']: (state:IExecutorsState, action:Action) => {
     switch (action.meta.stage) {
       case 'begin':
       {
-        const view = Object.assign({}, state.view, {[action.meta.id]: true});//mark loading started
-
-        return Object.assign({}, state, {view});
+        const ui = Object.assign({}, state.ui, {[action.meta.id]: true});//mark loading started
+        return Object.assign({}, state, {ui});
       }
       case 'success':
       {
-        const view = Object.assign({}, state.view, {[action.meta.id]: false});//mark loading completed
-        const data = Object.assign({}, state.data, {executors: [...state.data.executors, ...action.payload]});
-
-        return Object.assign({}, state, {data, view});
+        const ui = Object.assign({}, state.ui, {[action.meta.id]: false});
+        return Object.assign({}, state, {
+          executors: [...state.executors, ...action.payload],
+          ui,
+        });
       }
       default:
-        return state || initialState; //handleAction does not have possibilities to set default state
-                                      //and reducer signature can't set default value to first property only
-                                      //redux does't like undefined as reducer result
+        return state || initialState.details; //handleAction does not have possibilities to set default state
+                                              //and reducer signature can't set default value to first property only
+                                              //redux does't like undefined as reducer result
     }
   },
 
-  ['throw']: (state:ITasksModuleState, action:Action) => {
-    state = state || initialState; //handleAction does not have possibilities to set default state
-                                   //and reducer signature can't set default value to first property only
-                                   //redux does't like undefined as reducer result
-    const view = Object.assign({}, state.view, {[action.meta.id]: action.payload});//mark loading error
-
-    return Object.assign({}, state, {view});
+  ['throw']: (state:IExecutorsState, action:Action) => {
+    state = state || initialState.details; //see comment above
+    const ui = Object.assign({}, state.ui, {[action.meta.id]: action.payload});//mark loading error
+    return Object.assign({}, state, {ui});
   }
 });
 
-function mergeExecutorEditState(state: ITasksModuleState, taskId: number, executorId: number, estate: IExecutorEditState) {
-  const executorEditState = Object.assign({},
-    state.view && state.view.editState && state.view.editState[taskId] && state.view.editState[taskId][executorId],
-    estate
-  );
-  const taskExecutorEditState = Object.assign({},
-    state.view && state.view.editState && state.view.editState[taskId],
-    {[executorId]: executorEditState}
-  );
-  const editState = Object.assign({}, state.view && state.view.editState, {[taskId]: taskExecutorEditState});
-  const view = Object.assign({}, state.view, {editState});
+function mergeExecutorEditState(state: IEditState, taskId: number, executorId: number, value: IExecutorEditState) {
+  const executorEditState = Object.assign({}, state[taskId] && state[taskId][executorId], value);
+  const taskEditState = Object.assign({}, state[taskId], {[executorId]: executorEditState});
 
-  return Object.assign({}, state, {view});
+  return Object.assign({}, state, {[taskId]: taskEditState});
 }
 
-const handleEditActions = handleActions<ITasksModuleState>({
-  [TASKS_EXECUTOR_EDIT_MODE]: (state: ITasksModuleState, action: Action) => {
+const handleModeActions = handleActions<IEditState>({
+  [TASKS_EXECUTOR_EDIT_MODE]: (state: IEditState, action: Action) => {
     const {taskId, executorId} = action.payload;
     return mergeExecutorEditState(state, taskId, executorId, {viewMode: false, progress: false});
   },
 
-  [TASKS_EXECUTOR_VIEW_MODE]: (state: ITasksModuleState, action: Action) => {
+  [TASKS_EXECUTOR_VIEW_MODE]: (state: IEditState, action: Action) => {
     const {taskId, executorId} = action.payload;
     return mergeExecutorEditState(state, taskId, executorId, {viewMode: true, progress: false});
   },
-}, initialState);
+}, initialState.editors);
+
+const handleUpdateExecutor = handleAction<IExecutorsState>(TASKS_EXECUTOR_UPDATE_REQUEST, (state, action) => {
+  let newState = state || initialState.details;
+
+  if (action.meta.stage === 'success') {
+    const {taskId, executorId} = action.meta;
+
+    const executorIndex = newState.executors.findIndex(e => e.id === executorId);
+    if (executorIndex >= 0) {
+      newState = Object.assign({}, newState, {executors: [...newState.executors]});
+      //It's safe to mutate newState here
+      newState.executors.splice(executorIndex, 1, action.payload);
+    }
+  }
+
+  return newState;
+});
 
 const handleUpdateActions = handleAction(TASKS_EXECUTOR_UPDATE_REQUEST, {
 
-  ['next']: (state:ITasksModuleState, action:Action) => {
+  ['next']: (state:IEditState, action:Action) => {
     switch (action.meta.stage) {
       case 'begin':
       {
@@ -126,31 +135,28 @@ const handleUpdateActions = handleAction(TASKS_EXECUTOR_UPDATE_REQUEST, {
       case 'success':
       {
         const {taskId, executorId} = action.meta;
-        const newState = mergeExecutorEditState(state, taskId, executorId, {viewMode: true, progress: false});
-        //It's safe to mutate newState here
-        const executorIndex = newState.data.executors.findIndex(e => e.id === executorId);
-        if (executorIndex >= 0) {
-          newState.data.executors.splice(executorIndex, 1, action.payload);
-        }
-
-        return newState;
+        return mergeExecutorEditState(state, taskId, executorId, {viewMode: true, progress: false});
       }
       default:
-        return state || initialState; //handleAction does not have possibilities to set default state
+        return state || initialState.editors; //handleAction does not have possibilities to set default state
                                       //and reducer signature can't set default value to first property only
                                       //redux does't like undefined as reducer result
     }
   },
 
-  ['throw']: (state:ITasksModuleState, action:Action) => {
-    state = state || initialState; //handleAction does not have possibilities to set default state
-                                   //and reducer signature can't set default value to first property only
-                                   //redux does't like undefined as reducer result
+  ['throw']: (state:IEditState, action:Action) => {
+    state = state || initialState.editors;
+
     const {taskId, executorId} = action.meta;
     return mergeExecutorEditState(state, taskId, executorId, {viewMode: false, progress: false, error: action.payload});
   }
 });
 
-const tasksReducer = reduceReducers(handleTaskActions, handleExecutorsActions, handleEditActions, handleUpdateActions);
-
-export default tasksReducer
+export default combineReducers({
+  tasks: handleTaskActions,
+  details: (state, action) => {
+    //fix FSA no-default-state-for-handle-action
+    return reduceReducers(handleExecutorsActions, handleUpdateExecutor)(state, action) || initialState.details;
+  },
+  editors: reduceReducers(handleModeActions, handleUpdateActions)
+})
