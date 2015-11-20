@@ -7,7 +7,7 @@
     "tsd": "node node_modules/tsd/build/cli.js",
     "test": "node_modules/webpack/bin/webpack.js --config webpack.test.config.js && mocha ./build/test.js",
     "server": "node ./build/server/index.js",
-    "migration": "node ./build/server/index.js --migration"
+    "migration": "node ./build/server/server.js --migration"
   },
   "dependencies": {
     "autoprefixer-loader": "^3.1.0",
