@@ -2,7 +2,7 @@
 import * as React from 'react';
 var ReactRouter = require('react-router');
 var { IndexRoute, Route } = ReactRouter;
-import AppHandler from '../handlers/AppHandler';
+import Layout from '../modules/layout/Layout';
 import IndexHandler from '../handlers/IndexHandler';
 //import AboutHandler from '../handlers/AboutHandler';
 import CatchHandler from '../handlers/CatchHandler';
@@ -20,7 +20,7 @@ const loadContainerAsync = bundle => (location, cb) => {
 };
 
 let routes = <Route>
-  <Route path="/" component={AppHandler}>
+  <Route path="/" component={Layout}>
     <IndexRoute component={IndexHandler}/>
     <Route path="about" getComponent={loadContainerAsync(require('bundle?lazy&name=about!../handlers/AboutHandler'))} />
     <Route path="catch" component={CatchHandler} />

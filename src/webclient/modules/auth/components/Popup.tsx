@@ -1,13 +1,13 @@
 import * as React from 'react';
 var ReactRouter = require('react-router');
-import IEventBus from '../../framework/common/event/IEventBus';
-import IHTTPClient from "../../framework/common/http/IHTTPClient";
-import IInvoke from '../../framework/common/invoke/IInvoke';
-import AuthRequiredEvent from '../../framework/client/events/AuthRequired';
-import ConnectionBrokenEvent from '../../framework/client/events/ConnectionBroken';
-import BufferDropEvent from "../../framework/client/events/BufferDrop";
-import BufferRetryEvent from "../../framework/client/events/BufferRetry";
-import Login from "../commands/Login";
+import IEventBus from '../../../../framework/common/event/IEventBus';
+import IHTTPClient from "../../../../framework/common/http/IHTTPClient";
+import IInvoke from '../../../../framework/common/invoke/IInvoke';
+import AuthRequiredEvent from '../../../../framework/client/events/AuthRequired';
+import ConnectionBrokenEvent from '../../../../framework/client/events/ConnectionBroken';
+import BufferDropEvent from "../../../../framework/client/events/BufferDrop";
+import BufferRetryEvent from "../../../../framework/client/events/BufferRetry";
+import Login from "../../../commands/Login";
 
 interface IPopupState {
   open      : boolean;
