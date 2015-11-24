@@ -3,4 +3,5 @@ export default class User {
   slug: string;
   first_name: string;
   last_name: string;
+  picurl: string;
 }

@@ -50,6 +50,9 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
   componentDidMount() {
     this.handleResize(null);
     window.addEventListener('resize', this.handleResize.bind(this));
+    if (!window['loginCallBack']) {
+      window['loginCallBack'] = () => this.state.actions.requestMe(this.context.httpClient);
+    }
   }
 
   componentWillMount() {
@@ -76,14 +79,16 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
             ? 'md'
             : 'lg';
 
-    const {state: {me}} = this.props;
-
+    const {state:{auth}} = this.props;
     return (
 
       <div className={xstyle}>
         <Popup />
         <DocumentMeta title={'React-blog'} />
-        <Menu me={me}/>
+        <Menu
+          auth={auth}
+          onLogout={() => this.state.actions.logout(this.context.httpClient)}
+        />
 
         {this.props.children}
       </div>
@@ -93,7 +98,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
 }
 
 const mapStateToProps = state => ({
-  state: state.modules && state.modules.me
+  state: state.modules && state.modules.auth
 });
 
 export default connect(mapStateToProps)(Layout);

@@ -31,12 +31,13 @@ export default class AuthRoutes {
     passport.use(new FacebookStrategy({
         clientID: config.oauth.facebook.facebook_api_key,
         clientSecret: config.oauth.facebook.facebook_api_secret,
-        callbackURL: '/auth/facebook/callback'
+        callbackURL: '/auth/facebook/callback',
+        profileFields: ['id', 'email', 'displayName', 'name', 'gender', 'link', 'locale', 'timezone', 'photos']
       },
 
       function(accessToken, refreshToken, profile, done) {
 
-        console.log("fbuser:"+JSON.stringify(profile));
+        console.log("fbuser:"+JSON.stringify(profile, null, 2));
 
         var run = async () => {
           var user = await invoke(new GetUser({query: {provider: 'fb', provider_id: profile.id}, db}));
@@ -45,8 +46,8 @@ export default class AuthRoutes {
             return done(null, user);
           } else {
             console.log('Create new user');
-            user = await invoke(new NewUser({first_name: 'SOA', last_name: 'SOA', provider: 'fb', provider_id: profile.id, db, passwordUtils}));
-            console.log('New user:', user);
+            user = await invoke(new NewUser({first_name: profile.name.givenName, last_name: profile.name.familyName, picurl: profile.photos[0].value, provider: 'fb', provider_id: profile.id, db, passwordUtils}));
+            console.log('New user:', JSON.stringify(user, null, 2));
             return done(null, user)
           }
         }

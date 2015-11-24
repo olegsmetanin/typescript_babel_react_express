@@ -4,12 +4,17 @@ export interface IUser {
   first_name  : string;
   last_name   : string;
   provider    : string;
+  picurl      : string;
 }
 
-export interface IAuthState {
+export interface IUserState {
   me   : IUser;
   ui: {
     loading: boolean;
     error? : Error;
   }
+}
+
+export interface IAuthState {
+  auth   : IUserState;
 }

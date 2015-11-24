@@ -30,6 +30,31 @@ const requestMe = (httpClient: IHTTPClient) => (dispatch: Dispatch) => {
   ).then(() => console.log(`${new Date().toISOString()} me request finished`));
 }
 
+
+const logoutRequestBegin = createAction(ActionTypes.LOGOUT_REQUEST);
+
+const logoutRequestSuccess = createAction<any>(
+  ActionTypes.LOGOUT_REQUEST_SUCCESS,
+  (data) => data
+);
+
+const logoutRequestFailure = (e: Error) => {
+  const action = createAction(ActionTypes.LOGOUT_REQUEST_FAILURE, (e:Error) => e)(e);
+  action.error = true;
+  return action;
+}
+
+const requestLogout = (httpClient: IHTTPClient) => (dispatch: Dispatch) => {
+  console.log(`${new Date().toISOString()} logout request begin`)
+  dispatch(meRequestBegin());
+  const api = new AuthApi({httpClient});
+  return api.logout().then(
+    result => dispatch(logoutRequestSuccess(result)),
+    error => dispatch(logoutRequestFailure(error))
+  ).then(() => console.log(`${new Date().toISOString()} logout request finished`));
+}
+
 export {
-  requestMe
+  requestMe,
+  requestLogout
 }

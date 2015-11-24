@@ -14,6 +14,7 @@ interface INewUserOptions {
   provider_id: string;
   db: IDB;
   passwordUtils: PasswordUtils;
+  picurl: string;
 }
 
 export default class NewUser extends Command<Promise<User>> {
@@ -28,13 +29,13 @@ export default class NewUser extends Command<Promise<User>> {
   }
 
   async execute() {
-    const {first_name, last_name, provider, provider_id, db, passwordUtils} = this.options;
+    const {first_name, last_name, provider, provider_id, picurl, db, passwordUtils} = this.options;
 
     const trx = await db.begin();
     try {
       let id:string = uuid.v4();
 
-      const sqlInsUser = queryBuilder.insert({id, slug: id, first_name, last_name}).into('users').toString();
+      const sqlInsUser = queryBuilder.insert({id, slug: id, first_name, last_name, picurl}).into('users').toString();
       await trx.query(sqlInsUser);
 
       const sqlInsAuth = queryBuilder.insert({id, provider, provider_id}).into('userauth').toString();

@@ -3,7 +3,7 @@
 import {handleAction, handleActions, Action} from 'redux-actions';
 import {combineReducers} from 'redux';
 import reduceReducers from 'reduce-reducers';
-import {IUser, IAuthState} from './model';
+import {IUser, IUserState} from './model';
 import {
   ME_REQUEST,
   ME_REQUEST_SUCCESS,
@@ -11,28 +11,28 @@ import {
 } from './actionTypes';
 
 
-const initialState: IAuthState = {
+const initialState: IUserState = {
   me: undefined,
   ui: {
     loading: false,
-  },
+  }
 };
 
-const handleMeActions = handleActions<IAuthState>({
-  [ME_REQUEST]: (state: IAuthState, action: Action) => {
+const handleAuthActions = handleActions<IUserState>({
+  [ME_REQUEST]: (state: IUserState, action: Action) => {
     const ui = Object.assign({}, state.ui, {loading: true});
     return Object.assign({}, state, {ui});
   },
 
-  [ME_REQUEST_SUCCESS]: (state: IAuthState, action: Action) => {
+  [ME_REQUEST_SUCCESS]: (state: IUserState, action: Action) => {
     const ui = Object.assign({}, state.ui, {loading: false});
     return Object.assign({}, state, {
-      me: action.payload,
-      ui,
+        me: (Object.keys(action.payload).length > 0 ? action.payload : null),
+        ui
     });
   },
 
-  [ME_REQUEST_FAILURE]: (state: IAuthState, action: Action) => {
+  [ME_REQUEST_FAILURE]: (state: IUserState, action: Action) => {
     const ui = Object.assign({}, state.ui, {
       error: action.payload,
       loading: false,
@@ -42,5 +42,5 @@ const handleMeActions = handleActions<IAuthState>({
 }, initialState);
 
 export default combineReducers({
-  me: handleMeActions
+  auth: handleAuthActions
 })

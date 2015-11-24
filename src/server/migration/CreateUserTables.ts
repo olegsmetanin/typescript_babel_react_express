@@ -22,6 +22,7 @@ export default class CreateUserTables {
       slug varchar(255) not null,
       first_name varchar(255) not null,
       last_name varchar(255) not null,
+      picurl varchar(255) not null,
       email varchar(50) null,
       email_confirmed boolean not null default(false),
       phone varchar(20) null,

@@ -3,8 +3,6 @@ var webpack = require('webpack');
 var fs = require('fs');
 //https://github.com/keokilee/react-typescript-boilerplate
 
-process.env.NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV: 'production';
-
 var nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(function(x) {
@@ -53,11 +51,14 @@ var config = {
     new webpack.NormalModuleReplacementPlugin(/^bundle\?.*$/, function (result) {
       result.request = result.request.replace(/^bundle\?lazy&[^\!]*\!(.*)$/, "$1");
     }),
-    // new webpack.DefinePlugin({
-    //   "process.env": {
-    //     NODE_ENV: JSON.stringify(typeof(process.env.NODE_ENV) === 'undefined' ? 'production' : process.env.NODE_ENV)
-    //   }
-    // })
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV !== 'undefined'
+          ? process.env.NODE_ENV
+          : 'production'
+        )
+      }
+    })
   ]
 }
 

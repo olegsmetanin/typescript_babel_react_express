@@ -28,6 +28,7 @@ export default class APIRoutes {
     webserver.post('/api/throw', this.throwApiError.bind(this));
     webserver.post('/api/authonly', this.authonly.bind(this));
     webserver.post('/api/login', this.login.bind(this));
+    webserver.post('/api/logout', this.logout.bind(this));    
     webserver.post('/api/me', this.me.bind(this));
     webserver.post('/api/tasks/find', this.tasksList.bind(this));
     webserver.post('/api/tasks/executors', this.executorsList.bind(this));
@@ -76,16 +77,30 @@ export default class APIRoutes {
   }
 
   @wrapAsync
+  async logout(req: Request, res: Response) {
+    res.clearCookie('user');
+    res.clearCookie('authprovider');
+    res.status(200).end();
+  }
+
+  @wrapAsync
   async me(req: Request, res: Response) {
     if (!req.signedCookies || !req.signedCookies.user) {
       return res.json({});
     }
     var { db } = this.settings;
     let user_id = req.signedCookies.user;
-    let user = await invoke(new GetUser({query: {id: user_id}, db}));
-    let u: any = user;
-    u.provider = req.signedCookies.authprovider;
-    return res.json(u);
+    try {
+      let user = await invoke(new GetUser({query: {id: user_id}, db}));
+      let u: any = user;
+      u.provider = req.signedCookies.authprovider;
+      return res.json(u);
+    } catch (e) {
+      console.log('Invalid user cookie');
+      res.clearCookie('user');
+      res.clearCookie('authprovider');
+      res.json({});
+    }
   }
 
   @wrapAsync

@@ -4,11 +4,11 @@ import {combineReducers} from 'redux';
 import reduceReducers from 'reduce-reducers';
 
 import tasksReducer from './tasks/reducers';
-import meReducer from './auth/reducers';
+import authReducer from './auth/reducers';
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
-  me: meReducer
+  auth: authReducer
   //TODO other modules
 });
 

@@ -25,5 +25,10 @@ export default class AuthApi {
   me() {
     return this._post('/api/me', null);
   }
-  
+
+  @deduplicate
+  logout() {
+    return this._post('/api/logout', null);
+  }
+
 }
