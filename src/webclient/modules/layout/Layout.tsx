@@ -87,7 +87,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         <DocumentMeta title={'React-blog'} />
         <Menu
           auth={auth}
-          onLogout={() => this.state.actions.logout(this.context.httpClient)}
+          onLogout={() => this.state.actions.requestLogout(this.context.httpClient)}
         />
 
         {this.props.children}

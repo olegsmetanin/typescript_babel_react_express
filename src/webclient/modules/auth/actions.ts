@@ -46,7 +46,7 @@ const logoutRequestFailure = (e: Error) => {
 
 const requestLogout = (httpClient: IHTTPClient) => (dispatch: Dispatch) => {
   console.log(`${new Date().toISOString()} logout request begin`)
-  dispatch(meRequestBegin());
+  dispatch(logoutRequestBegin());
   const api = new AuthApi({httpClient});
   return api.logout().then(
     result => dispatch(logoutRequestSuccess(result)),

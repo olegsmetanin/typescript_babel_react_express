@@ -7,7 +7,10 @@ import {IUser, IUserState} from './model';
 import {
   ME_REQUEST,
   ME_REQUEST_SUCCESS,
-  ME_REQUEST_FAILURE
+  ME_REQUEST_FAILURE,
+  LOGOUT_REQUEST,
+  LOGOUT_REQUEST_SUCCESS,
+  LOGOUT_REQUEST_FAILURE
 } from './actionTypes';
 
 
@@ -39,6 +42,11 @@ const handleAuthActions = handleActions<IUserState>({
     });
     return Object.assign({}, state, {ui});
   },
+
+  [LOGOUT_REQUEST_SUCCESS]: (state: IUserState, action: Action) => {
+    return initialState
+  },
+
 }, initialState);
 
 export default combineReducers({
