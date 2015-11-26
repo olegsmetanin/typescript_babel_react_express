@@ -13,6 +13,7 @@ import {
 import {connect, Provider} from 'react-redux';
 import { Action } from 'redux-actions';
 import thunk from 'redux-thunk';
+const promiseMiddleware = require('redux-promise-middleware');
 
 import invoke from '../../../framework/server/invoke/invoke';
 import Context from '../../../framework/common/react/Context';
@@ -36,7 +37,8 @@ export default async function reactServerRender(url, siteroot: string, req, res)
     modules: modulesRootReducer
   });
   const finalCreateStore = compose(
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
+    applyMiddleware(promiseMiddleware({promiseTypeSuffixes: ['BEGIN', 'SUCCESS', 'FAILURE']}))
     //TODO redux-react-router???
   )(createStore);
   const store: Store = finalCreateStore(rootReducer, initialState);

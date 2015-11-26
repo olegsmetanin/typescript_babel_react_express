@@ -18,6 +18,7 @@ import {
 } from 'react-redux';
 import { Action } from 'redux-actions';
 import thunk from 'redux-thunk';
+const promiseMiddleware = require('redux-promise-middleware');
 
 import routes from './routes/index';
 import Context from '../framework/common/react/Context';
@@ -44,7 +45,8 @@ window['app'] = (options: any) => {
     modules: modulesRootReducer
   });
   const finalCreateStore = compose(
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
+    applyMiddleware(promiseMiddleware({promiseTypeSuffixes: ['BEGIN', 'SUCCESS', 'FAILURE']}))
     //TODO redux-react-router???
   )(createStore);
   const store = finalCreateStore(rootReducer, initialState);
