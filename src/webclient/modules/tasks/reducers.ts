@@ -6,8 +6,6 @@ import reduceReducers from 'reduce-reducers';
 import {Task, Executor, IModuleState, ITasksState, IExecutorEditState, IExecutorsState, IEditState} from './model';
 import {
   TASKS_REQUEST,
-  TASKS_REQUEST_SUCCESS,
-  TASKS_REQUEST_FAILURE,
   TASKS_TASK_EXECUTORS_REQUEST,
   TASKS_EXECUTOR_EDIT_MODE,
   TASKS_EXECUTOR_VIEW_MODE,
@@ -30,14 +28,14 @@ const initialState: IModuleState = {
   editors: {},
 };
 
-const handleTaskActions = handleActions<ITasksState>({
-  [TASKS_REQUEST]: (state: ITasksState, action: Action) => {
+const handleTasksLoad = handleActions<ITasksState>({
+  [`${TASKS_REQUEST}_BEGIN`]: (state) => {
     const ui = Object.assign({}, state.ui, {loading: true});
     return Object.assign({}, state, {ui});
   },
 
-  [TASKS_REQUEST_SUCCESS]: (state: ITasksState, action: Action) => {
-    const ui = Object.assign({}, state.ui, {loading: false});
+  [`${TASKS_REQUEST}_SUCCESS`]: (state, action) => {
+    const ui = Object.assign({}, state.ui, {loading: false, error: undefined});
     return Object.assign({}, state, {
       items: action.payload.tasks,
       count: action.payload.count,
@@ -45,7 +43,7 @@ const handleTaskActions = handleActions<ITasksState>({
     });
   },
 
-  [TASKS_REQUEST_FAILURE]: (state: ITasksState, action: Action) => {
+  [`${TASKS_REQUEST}_FAILURE`]: (state, action) => {
     const ui = Object.assign({}, state.ui, {
       error: action.payload,
       loading: false,
@@ -54,38 +52,27 @@ const handleTaskActions = handleActions<ITasksState>({
   },
 }, initialState.tasks);
 
-//can't using FSA-action with error handling in handleActions (signature disallow reducer-map), so,
-//split this reducer into separate part and use reduceReducers in rootReducer for modules
-const handleExecutorsActions = handleAction(TASKS_TASK_EXECUTORS_REQUEST, {
 
-  ['next']: (state:IExecutorsState, action:Action) => {
-    switch (action.meta.stage) {
-      case 'begin':
-      {
-        const ui = Object.assign({}, state.ui, {[action.meta.id]: true});//mark loading started
-        return Object.assign({}, state, {ui});
-      }
-      case 'success':
-      {
-        const ui = Object.assign({}, state.ui, {[action.meta.id]: false});
-        return Object.assign({}, state, {
-          executors: [...state.executors, ...action.payload],
-          ui,
-        });
-      }
-      default:
-        return state || initialState.details; //handleAction does not have possibilities to set default state
-                                              //and reducer signature can't set default value to first property only
-                                              //redux does't like undefined as reducer result
-    }
+const handleExecutorsLoad = handleActions<IExecutorsState>({
+
+  [`${TASKS_TASK_EXECUTORS_REQUEST}_BEGIN`]: (state, action) => {
+    const ui = Object.assign({}, state.ui, {[action.meta.id]: true});//mark loading started
+    return Object.assign({}, state, {ui});
   },
 
-  ['throw']: (state:IExecutorsState, action:Action) => {
-    state = state || initialState.details; //see comment above
+  [`${TASKS_TASK_EXECUTORS_REQUEST}_SUCCESS`]: (state, action) => {
+    const ui = Object.assign({}, state.ui, {[action.meta.id]: false});
+    return Object.assign({}, state, {
+      executors: [...state.executors, ...action.payload],
+      ui,
+    });
+  },
+
+  [`${TASKS_TASK_EXECUTORS_REQUEST}_FAILURE`]: (state, action) => {
     const ui = Object.assign({}, state.ui, {[action.meta.id]: action.payload});//mark loading error
     return Object.assign({}, state, {ui});
   }
-});
+}, initialState.details);
 
 function mergeExecutorEditState(state: IEditState, taskId: number, executorId: number, value: IExecutorEditState) {
   const executorEditState = Object.assign({}, state[taskId] && state[taskId][executorId], value);
@@ -153,10 +140,10 @@ const handleUpdateActions = handleAction(TASKS_EXECUTOR_UPDATE_REQUEST, {
 });
 
 export default combineReducers({
-  tasks: handleTaskActions,
+  tasks: handleTasksLoad,
   details: (state, action) => {
     //fix FSA no-default-state-for-handle-action
-    return reduceReducers(handleExecutorsActions, handleUpdateExecutor)(state, action) || initialState.details;
+    return reduceReducers(handleExecutorsLoad, handleUpdateExecutor)(state, action) || initialState.details;
   },
   editors: reduceReducers(handleModeActions, handleUpdateActions)
 })

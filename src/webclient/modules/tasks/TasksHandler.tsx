@@ -98,6 +98,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
         <TaskFilter onSearch={this.onSearch} loading={ui.loading === true} />
 
         {ui.loading === true && <div>Loading...</div>}
+        {ui.error && <div style={{color: 'red'}}>{JSON.stringify(ui.error)}</div>}
         {tasks.map((task: Task) => <TaskItem
           key={task.id}
           task={task}

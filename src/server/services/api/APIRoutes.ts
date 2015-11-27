@@ -107,6 +107,10 @@ export default class APIRoutes {
   async tasksList(req: Request, res: Response) {
     setTimeout(() => {
       const {search} = req.body;
+      if (search === 'fail') {
+        return res.status(500).send('Test api error for search [fail]');
+      }
+
       const terms = (search || '').split(' ');
       const matchedTasks = !terms.length ? this.tasks :
         this.tasks.filter(task => terms.some(term => task.id.toString() === term || task.title.indexOf(term) >= 0));
