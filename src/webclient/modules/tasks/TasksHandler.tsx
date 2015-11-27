@@ -4,10 +4,11 @@ import * as React from 'react';
 import {bindActionCreators, Store, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import {Task, Executor, IModuleState} from './model';
-import * as TasksActions from './actions';
+import TasksActionsFactory from './actions';
 import IHTTPClient from "../../../framework/common/http/IHTTPClient";
 import TaskItem from './components/TaskItem';
 import TaskFilter from './components/TaskFilter';
+import TaskApi from './api';
 
 interface ITasksHandlerContext {
   httpClient: IHTTPClient;
@@ -31,27 +32,32 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   };
 
   static async composeState(dispatch: Dispatch, httpClient: IHTTPClient) {
-    await dispatch(TasksActions.requestTasks('server filter 1 3 4 6', httpClient));
+    const api = new TaskApi({httpClient});
+    await dispatch(TasksActionsFactory({api}).requestTasks('server filter 1 3 4 6'));
   }
 
   constructor(props, context) {
     super(props, context);
+
+    const {httpClient} = context;
+    const api = new TaskApi({httpClient});
+    this.state = {
+      actions: bindActionCreators(TasksActionsFactory({api}), this.props.dispatch),
+    };
   }
 
-  state: ITasksHandlerState = {
-    actions: bindActionCreators(TasksActions, this.props.dispatch),
-  }
+  state: ITasksHandlerState;
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
       console.log(`${new Date().toISOString()} dispatching action requestTasks`);
-      this.state.actions.requestTasks('client filter 1 3 4 6', this.context.httpClient);
+      this.state.actions.requestTasks('client filter 1 3 4 6');
       console.log(`${new Date().toISOString()} dispatched action requestTasks`);
     }
   }
 
   onSearch = (filter: {search: string}) => {
-    this.state.actions.requestTasks(filter.search, this.context.httpClient);
+    this.state.actions.requestTasks(filter.search);
   }
 
   onExpandExecutors = (id: number) => {
@@ -64,12 +70,12 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
     let toLoad: number[] = eids.map(eid => executors.some(e => e.id === eid) ? null : eid).filter(eid => !!eid);
     if (!toLoad.length) return;
 
-    this.state.actions.requestTaskExecutors(id, toLoad, this.context.httpClient);
+    this.state.actions.requestTaskExecutors(id, toLoad);
   }
 
   mapExecutorsToModels = (task: Task): (Executor[] | boolean | Error) => {
     //console.log('mapE2M called');
-    const {state: {details, details: {executors, ui}}} = this.props;
+    const {state: {details: {executors, ui}}} = this.props;
     if (ui[task.id] === true || ui[task.id] instanceof Error) {
       return ui[task.id];
     }
@@ -86,7 +92,7 @@ class TasksHandler extends React.Component<ITasksHandlerProps, ITasksHandlerStat
   }
 
   onSaveExecutor = (taskId: number, executorId: number, name: string) => {
-    this.state.actions.saveExecutor(taskId, executorId, name, this.context.httpClient);
+    this.state.actions.saveExecutor(taskId, executorId, name);
   }
 
   render() {
