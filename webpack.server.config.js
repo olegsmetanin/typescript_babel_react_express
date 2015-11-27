@@ -40,6 +40,9 @@ var config = {
     }, {
       test: /\.json$/,
       loader: "json-loader"
+    }, {
+      test: /\.svg$/,
+      loader: require.resolve('./webpacksvg-loader')
     }]
   },
   ts: {
