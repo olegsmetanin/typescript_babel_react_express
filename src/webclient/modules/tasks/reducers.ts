@@ -1,6 +1,4 @@
-/// <reference path="../../webclient.d.ts"/>
-
-import {handleAction, handleActions, Action} from 'redux-actions';
+import {handleActions} from 'redux-actions';
 import {combineReducers} from 'redux';
 import reduceReducers from 'reduce-reducers';
 import {Task, Executor, IModuleState, ITasksState, IExecutorEditState, IExecutorsState, IEditState} from './model';
@@ -27,6 +25,7 @@ const initialState: IModuleState = {
   },
   editors: {},
 };
+
 
 const handleTasksLoad = handleActions<ITasksState>({
   [`${TASKS_REQUEST}_BEGIN`]: (state) => {
@@ -74,6 +73,7 @@ const handleExecutorsLoad = handleActions<IExecutorsState>({
   }
 }, initialState.details);
 
+
 function mergeExecutorEditState(state: IEditState, taskId: number, executorId: number, value: IExecutorEditState) {
   const executorEditState = Object.assign({}, state[taskId] && state[taskId][executorId], value);
   const taskEditState = Object.assign({}, state[taskId], {[executorId]: executorEditState});
@@ -82,68 +82,53 @@ function mergeExecutorEditState(state: IEditState, taskId: number, executorId: n
 }
 
 const handleModeActions = handleActions<IEditState>({
-  [TASKS_EXECUTOR_EDIT_MODE]: (state: IEditState, action: Action) => {
+  [TASKS_EXECUTOR_EDIT_MODE]: (state, action) => {
     const {taskId, executorId} = action.payload;
     return mergeExecutorEditState(state, taskId, executorId, {viewMode: false, progress: false});
   },
 
-  [TASKS_EXECUTOR_VIEW_MODE]: (state: IEditState, action: Action) => {
+  [TASKS_EXECUTOR_VIEW_MODE]: (state, action) => {
     const {taskId, executorId} = action.payload;
     return mergeExecutorEditState(state, taskId, executorId, {viewMode: true, progress: false});
   },
 }, initialState.editors);
 
-const handleUpdateExecutor = handleAction<IExecutorsState>(TASKS_EXECUTOR_UPDATE_REQUEST, (state, action) => {
-  let newState = state || initialState.details;
-
-  if (action.meta.stage === 'success') {
+const handleEditActions = handleActions<IEditState>({
+  [`${TASKS_EXECUTOR_UPDATE_REQUEST}_BEGIN`]: (state, action) => {
     const {taskId, executorId} = action.meta;
-
-    const executorIndex = newState.executors.findIndex(e => e.id === executorId);
-    if (executorIndex >= 0) {
-      newState = Object.assign({}, newState, {executors: [...newState.executors]});
-      //It's safe to mutate newState here
-      newState.executors.splice(executorIndex, 1, action.payload);
-    }
-  }
-
-  return newState;
-});
-
-const handleUpdateActions = handleAction(TASKS_EXECUTOR_UPDATE_REQUEST, {
-
-  ['next']: (state:IEditState, action:Action) => {
-    switch (action.meta.stage) {
-      case 'begin':
-      {
-        const {taskId, executorId} = action.meta;
-        return mergeExecutorEditState(state, taskId, executorId, {viewMode: false, progress: true});
-      }
-      case 'success':
-      {
-        const {taskId, executorId} = action.meta;
-        return mergeExecutorEditState(state, taskId, executorId, {viewMode: true, progress: false});
-      }
-      default:
-        return state || initialState.editors; //handleAction does not have possibilities to set default state
-                                      //and reducer signature can't set default value to first property only
-                                      //redux does't like undefined as reducer result
-    }
+    return mergeExecutorEditState(state, taskId, executorId, {viewMode: false, progress: true});
   },
 
-  ['throw']: (state:IEditState, action:Action) => {
-    state = state || initialState.editors;
+  [`${TASKS_EXECUTOR_UPDATE_REQUEST}_SUCCESS`]: (state, action) => {
+    const {taskId, executorId} = action.meta;
+    return mergeExecutorEditState(state, taskId, executorId, {viewMode: true, progress: false, error: undefined});
+  },
 
+  [`${TASKS_EXECUTOR_UPDATE_REQUEST}_FAILURE`]: (state, action) => {
     const {taskId, executorId} = action.meta;
     return mergeExecutorEditState(state, taskId, executorId, {viewMode: false, progress: false, error: action.payload});
   }
-});
+}, initialState.editors);
+
+
+const handleExecutorUpdate = handleActions<IExecutorsState>({
+  [`${TASKS_EXECUTOR_UPDATE_REQUEST}_SUCCESS`]: (state, action) => {
+    const {executorId} = action.meta;
+
+    const newState = Object.assign({}, state, {executors: [...state.executors]});
+    const executorIndex = state.executors.findIndex(e => e.id === executorId);
+    if (executorIndex >= 0) {
+      //It's safe to mutate newState here
+      newState.executors.splice(executorIndex, 1, action.payload);
+    }
+
+    return newState;
+  }
+}, initialState.details);
+
 
 export default combineReducers({
   tasks: handleTasksLoad,
-  details: (state, action) => {
-    //fix FSA no-default-state-for-handle-action
-    return reduceReducers(handleExecutorsLoad, handleUpdateExecutor)(state, action) || initialState.details;
-  },
-  editors: reduceReducers(handleModeActions, handleUpdateActions)
+  details: reduceReducers(handleExecutorsLoad, handleExecutorUpdate),
+  editors: reduceReducers(handleModeActions, handleEditActions),
 })
