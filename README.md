@@ -20,3 +20,7 @@ $ npm run migration init
 $ gulp webclient
 
 $ gulp server
+
+ps: redux-actions must be patched manually for error reducers may work (bug fixed in repo, but new release not deployed to npm yet)
+node_modules\redux-actions\lib\handleActions.js:21
+reducers.next = reducers.throw = reducers;
