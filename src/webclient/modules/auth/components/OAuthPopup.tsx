@@ -35,7 +35,7 @@ export default class OAuthPopup extends React.Component<OAuthPopupProps, {}> {
 
   render() {
     //var {type} = this.props;
-    return <div onClick={this.openPopup}>{this.props.children}</div>;
+    return <button onClick={this.openPopup}>{this.props.children}</button>;
   }
 
 }

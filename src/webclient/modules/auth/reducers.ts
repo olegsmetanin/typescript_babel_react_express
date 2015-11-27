@@ -17,7 +17,7 @@ import {
 const initialState: IUserState = {
   me: undefined,
   ui: {
-    loading: false,
+    loading: true,
   }
 };
 
@@ -44,7 +44,12 @@ const handleAuthActions = handleActions<IUserState>({
   },
 
   [LOGOUT_REQUEST_SUCCESS]: (state: IUserState, action: Action) => {
-    return initialState
+    return {
+      me: undefined,
+      ui: {
+        loading: false,
+      }
+    }
   },
 
 }, initialState);

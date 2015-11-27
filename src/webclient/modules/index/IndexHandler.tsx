@@ -1,9 +1,9 @@
 import * as React from 'react';
 var ReactRouter = require('react-router');
 const { Link } = ReactRouter;
-import GetData from '../commands/GetData';
-import IHTTPClient from '../../framework/common/http/IHTTPClient';
-import IInvoke from '../../framework/common/invoke/IInvoke';
+import GetData from '../../commands/GetData';
+import IHTTPClient from '../../../framework/common/http/IHTTPClient';
+import IInvoke from '../../../framework/common/invoke/IInvoke';
 var DocumentMeta = require('react-document-meta');
 
 interface IIndexHandlerContext {
@@ -59,7 +59,18 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
       <DocumentMeta
         title={'React-blog: Home'}
       />
-      Home content. State: {JSON.stringify(this.state)}
+
+      <ul>
+        <li>
+          <Link to="/about">About</Link>
+        </li>
+        <li>
+          <Link to="/catch">Catch server error</Link>
+        </li>
+        <li>
+          <Link to="/tasks">Master-details example</Link>
+        </li>
+      </ul>
     </div>;
   }
 

@@ -1,0 +1,84 @@
+@import 'styles/mixins';
+
+// .logo {
+//   z-index: 110;
+//   position: absolute;
+//   left: 50%;
+//   margin: 6px 0px 0px -36px;
+// }
+
+.menu {
+  color: #66757f;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 46px;
+  background: rgba(255,255,255,0.6);
+  position: fixed;
+  transition: background 0.5s;
+  transform: translateZ(0px);
+  display: block;
+  &:hover {
+    background: rgba(255,255,255,0.9);
+  }
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.navbar-nav {
+  &-left {
+    float: left;
+    margin-left: 6px;
+    & > li {
+      padding-right: 10px;
+    }
+
+  }
+  &-right {
+    float: right;
+    margin-right: 6px;
+    & > li {
+      padding-left: 10px;
+    }
+  }
+  @include clearfix();
+}
+
+.navbar-nav > li {
+  float: left;
+  position: relative;
+  display: block;
+
+  &:hover {
+    //color: #1a90db;
+  }
+}
+
+.navbar-nav {
+  .username {
+    margin-top: 7px;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .userpic {
+    margin-top: 7px;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+}
+
+.navbar-nav li>a {
+  color: #66757f;
+  text-decoration: none;
+}
+
+.navbar-nav li svg {
+  fill: currentColor;
+  margin-top: 7px;
+}

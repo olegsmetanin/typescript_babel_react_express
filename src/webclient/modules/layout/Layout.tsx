@@ -90,7 +90,10 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
           onLogout={() => this.state.actions.requestLogout(this.context.httpClient)}
         />
 
-        {this.props.children}
+        <div className="main_content">
+          {this.props.children}
+        </div>
+        
       </div>
     )
   }

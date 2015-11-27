@@ -1,0 +1,29 @@
+
+$fg-breakpoints: (xx, xs, sm, md, lg) !default;
+$fg-breakpoints-width: (0px, 400px, 768px, 992px, 1200px) !default;
+
+/*
+            xx  xs  sm  md  lg
+visible-xx  x   x   x   x   x
+visible-xs      x   x   x   x
+visible-sm          x   x   x
+visible-md              x   x
+visible-lg                  x
+
+*/
+
+@for $i from 1 through length($fg-breakpoints) {
+  $wi: nth($fg-breakpoints, $i);
+  @for $j from 1 through length($fg-breakpoints) {
+    $wj: nth($fg-breakpoints, $j);
+
+    @if $i < $j {
+      .#{$wi} {
+        .visible-#{$wj} {
+          display: none;
+        }
+      }
+    }
+
+  }
+}

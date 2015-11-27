@@ -26,7 +26,7 @@ gulp.task("build:webclient", function() {
 });
 
 gulp.task("webclient", ['webpublic', 'build:webclient'], function() {
-  gulp.watch(['src/webclient/**/*.{ts,tsx}', 'src/framework/client/**/*.{ts,tsx}', 'src/framework/common/**/*.{ts,tsx}'], ['build:webclient']);
+  gulp.watch(['src/webclient/**/*.{ts,tsx,scss}', 'src/framework/client/**/*.{ts,tsx}', 'src/framework/common/**/*.{ts,tsx}'], ['build:webclient']);
   gulp.watch(['src/webpublic/**'], ['webpublic']);
 });
 

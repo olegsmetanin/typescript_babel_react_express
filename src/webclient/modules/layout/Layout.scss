@@ -1,3 +1,12 @@
-.test {
-  color: red;
+@import 'reset';
+@import 'base';
+@import 'font';
+@import 'grid';
+
+.main_content {
+  margin-top: 50px;
+}
+
+body {
+  background-color: rgb(245, 248, 250);
 }

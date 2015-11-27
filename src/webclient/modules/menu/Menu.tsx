@@ -3,53 +3,58 @@
 import * as React from 'react';
 const ReactRouter = require('react-router');
 const { Link } = ReactRouter;
+import {IUserState} from './../auth/model';
 import OAuthPopup from './../auth/components/OAuthPopup';
-import {bindActionCreators, Store, Dispatch} from 'redux';
-import {connect} from 'react-redux';
-import {IUser, IUserState} from './../auth/model';
-import * as MeActions from './../auth/actions';
-import IHTTPClient from "../../../framework/common/http/IHTTPClient";
-import UserMenuItem from './components/UserMenuItem';
-
-interface IMenuContext {
-}
+var LogoIcon = require('./icons/logo.svg');
+var MenuIcon = require('./icons/menu.svg');
+var LoginIcon = require('./icons/login.svg');
+var LodingIcon = require('./icons/loading.svg');
+var LogoutIcon = require('./icons/logout.svg');
 
 interface IMenuProps {
   auth: IUserState;
   onLogout: () => void;
 }
 
-interface IMenuState {
-}
-
-export default class Menu extends React.Component<IMenuProps, IMenuState> {
-
-  context: IMenuContext;
-
-  constructor(props, context) {
-    super(props, context);
-  }
-
-  state: IMenuState = {
-  }
+export default class Menu extends React.Component<IMenuProps, {}> {
 
   render() {
-
     let {auth} = this.props;
-
+    let {me, ui} = auth;
     return (
-      <div>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/catch">Catch server error</Link>
-        <br/>
-        <Link to="/tasks">Master-details example</Link>
-        <div>
-          <UserMenuItem
-            auth={auth}
-            onLogout={this.props.onLogout}
-          />
+      <div className="menu">
+        {/*<div className="logo">
+          {LogoIcon}
         </div>
+        */}
+        <ul className="navbar-nav navbar-nav-left">
+          <li>
+            <Link to="/">{MenuIcon}</Link>
+          </li>
+          </ul>
+        <ul className="navbar-nav navbar-nav-right">
+          <li>
+            {(me && !!me.id)
+              ? <Link to="/profile">
+                  <div className="username">{me.first_name + ' ' + me.last_name}</div>
+                  <img className="userpic" src={me.picurl}/>
+                </Link>
+              : !ui.loading
+                ? <Link to="/login">
+                    {LoginIcon}
+                  </Link>
+                : <div>{LodingIcon}</div>
+            }
+          </li>
+          {(me && !!me.id)
+            ? <li>
+                <a href="/logout" onClick={(e) => {e.preventDefault(); this.props.onLogout()}}>
+                  {LogoutIcon}
+                </a>
+              </li>
+            : null
+          }
+        </ul>
       </div>
     )
   }
