@@ -22,6 +22,7 @@ interface ILayoutState {
 
 interface ILayoutContext {
   httpClient: IHTTPClient;
+  history: any;
 }
 
 class Layout extends React.Component<ILayoutProps, ILayoutState> {
@@ -34,6 +35,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
 
   static contextTypes: React.ValidationMap<any> = {
     httpClient: React.PropTypes.object.isRequired,
+    history: React.PropTypes.object.isRequired
   };
 
   state: ILayoutState = {
@@ -42,9 +44,9 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
   }
 
   handleResize(e) {
-    // if (document) {
-    //   this.setState({clientWidth: document.getElementById('app').clientWidth});
-    // }
+    if (document) {
+      this.setState({clientWidth: document.getElementById('app').clientWidth, actions: this.state.actions});
+    }
   }
 
   componentDidMount() {
@@ -88,12 +90,13 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         <Menu
           auth={auth}
           onLogout={() => this.state.actions.requestLogout(this.context.httpClient)}
+          onGoBack={() => this.context.history.goBack()}
         />
 
         <div className="main_content">
           {this.props.children}
         </div>
-        
+
       </div>
     )
   }

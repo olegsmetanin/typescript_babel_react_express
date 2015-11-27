@@ -10,10 +10,12 @@ var MenuIcon = require('./icons/menu.svg');
 var LoginIcon = require('./icons/login.svg');
 var LodingIcon = require('./icons/loading.svg');
 var LogoutIcon = require('./icons/logout.svg');
+var BackIcon = require('./icons/back.svg');
 
 interface IMenuProps {
   auth: IUserState;
   onLogout: () => void;
+  onGoBack: () => void;
 }
 
 export default class Menu extends React.Component<IMenuProps, {}> {
@@ -30,6 +32,9 @@ export default class Menu extends React.Component<IMenuProps, {}> {
         <ul className="navbar-nav navbar-nav-left">
           <li>
             <Link to="/">{MenuIcon}</Link>
+          </li>
+          <li>
+            <a href="/goback" onClick={(e) => { e.preventDefault(); this.props.onGoBack();}}>{BackIcon}</a>
           </li>
           </ul>
         <ul className="navbar-nav navbar-nav-right">
