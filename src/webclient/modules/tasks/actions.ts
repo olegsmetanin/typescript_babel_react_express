@@ -1,32 +1,35 @@
 import {createAction} from 'redux-actions';
 import IHTTPClient from '../../../framework/common/http/IHTTPClient';
 import * as ActionTypes from './actionTypes';
-import TasksApi from './api';
+import {ITasksApi} from './api';
+import {LoadTasks} from './actions/LoadTasks';
+import {LoadExecutors} from './actions/LoadExecutors';
+
 
 declare type ExecutorModeChange = {taskId: number, executorId: number};
 
-function factory(options: {api: TasksApi}) {
+function factory(options: {api: ITasksApi}) {
 
   const {api} = options;
 
-  const requestTasks = (search:string) => {
-    return {
-      type: ActionTypes.TASKS_REQUEST,
-      payload: {
-        promise: api.find({search})
-      }
-    };
-  };
+  //const requestTasks = (search:string) => {
+  //  return {
+  //    type: ActionTypes.TASKS_REQUEST,
+  //    payload: {
+  //      promise: api.find({search})
+  //    }
+  //  };
+  //};
 
-  const requestExecutors = (id:number, ids:number[]) => {
-    return {
-      type: ActionTypes.TASKS_TASK_EXECUTORS_REQUEST,
-      payload: {
-        promise: api.executors({ids})
-      },
-      meta: {id}
-    };
-  };
+  //const requestExecutors = (id:number, ids:number[]) => {
+  //  return {
+  //    type: ActionTypes.TASKS_TASK_EXECUTORS_REQUEST,
+  //    payload: {
+  //      promise: api.executors({ids})
+  //    },
+  //    meta: {id}
+  //  };
+  //};
 
   const editExecutor = createAction<ExecutorModeChange>(ActionTypes.TASKS_EXECUTOR_EDIT_MODE,
     (taskId:number, executorId:number):ExecutorModeChange => ({taskId, executorId}));
@@ -45,8 +48,10 @@ function factory(options: {api: TasksApi}) {
   };
 
   return {
-    requestTasks,
-    requestTaskExecutors: requestExecutors,
+    //requestTasks,
+    requestTasks: new LoadTasks({api, defaultState: null}).send,
+    //requestTaskExecutors: requestExecutors,
+    requestTaskExecutors: new LoadExecutors({api, defaultState: null}).send,
     editExecutor,
     cancelExecutor,
     saveExecutor,

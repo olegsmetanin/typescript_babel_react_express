@@ -1,7 +1,13 @@
 import IHTTPClient from '../../../framework/common/http/IHTTPClient';
 import deduplicate from '../../../framework/client/invoke/deduplicate';
 
-export default class TasksApi {
+export interface ITasksApi {
+  find(options: {search: string});
+  executors(options: {ids: number[]});
+  updateExecutor(options: {id: number, name: string});
+}
+
+export default class TasksApi implements ITasksApi {
 
   httpClient: IHTTPClient;
 

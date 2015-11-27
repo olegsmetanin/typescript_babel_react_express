@@ -9,9 +9,11 @@ import {
   TASKS_EXECUTOR_VIEW_MODE,
   TASKS_EXECUTOR_UPDATE_REQUEST
 } from './actionTypes';
+import {LoadTasks} from './actions/LoadTasks';
+import {LoadExecutors} from './actions/LoadExecutors';
 
 
-const initialState: IModuleState = {
+export const initialState: IModuleState = {
   tasks: {
     items: [],
     count: 0,
@@ -27,51 +29,51 @@ const initialState: IModuleState = {
 };
 
 
-const handleTasksLoad = handleActions<ITasksState>({
-  [`${TASKS_REQUEST}_BEGIN`]: (state) => {
-    const ui = Object.assign({}, state.ui, {loading: true});
-    return Object.assign({}, state, {ui});
-  },
+//const handleTasksLoad = handleActions<ITasksState>({
+//  [`${TASKS_REQUEST}_BEGIN`]: (state) => {
+//    const ui = Object.assign({}, state.ui, {loading: true});
+//    return Object.assign({}, state, {ui});
+//  },
+//
+//  [`${TASKS_REQUEST}_SUCCESS`]: (state, action) => {
+//    const ui = Object.assign({}, state.ui, {loading: false, error: undefined});
+//    return Object.assign({}, state, {
+//      items: action.payload.tasks,
+//      count: action.payload.count,
+//      ui,
+//    });
+//  },
+//
+//  [`${TASKS_REQUEST}_FAILURE`]: (state, action) => {
+//    const ui = Object.assign({}, state.ui, {
+//      error: action.payload,
+//      loading: false,
+//    });
+//    return Object.assign({}, state, {ui});
+//  },
+//}, initialState.tasks);
 
-  [`${TASKS_REQUEST}_SUCCESS`]: (state, action) => {
-    const ui = Object.assign({}, state.ui, {loading: false, error: undefined});
-    return Object.assign({}, state, {
-      items: action.payload.tasks,
-      count: action.payload.count,
-      ui,
-    });
-  },
 
-  [`${TASKS_REQUEST}_FAILURE`]: (state, action) => {
-    const ui = Object.assign({}, state.ui, {
-      error: action.payload,
-      loading: false,
-    });
-    return Object.assign({}, state, {ui});
-  },
-}, initialState.tasks);
-
-
-const handleExecutorsLoad = handleActions<IExecutorsState>({
-
-  [`${TASKS_TASK_EXECUTORS_REQUEST}_BEGIN`]: (state, action) => {
-    const ui = Object.assign({}, state.ui, {[action.meta.id]: true});//mark loading started
-    return Object.assign({}, state, {ui});
-  },
-
-  [`${TASKS_TASK_EXECUTORS_REQUEST}_SUCCESS`]: (state, action) => {
-    const ui = Object.assign({}, state.ui, {[action.meta.id]: false});
-    return Object.assign({}, state, {
-      executors: [...state.executors, ...action.payload],
-      ui,
-    });
-  },
-
-  [`${TASKS_TASK_EXECUTORS_REQUEST}_FAILURE`]: (state, action) => {
-    const ui = Object.assign({}, state.ui, {[action.meta.id]: action.payload});//mark loading error
-    return Object.assign({}, state, {ui});
-  }
-}, initialState.details);
+//const handleExecutorsLoad = handleActions<IExecutorsState>({
+//
+//  [`${TASKS_TASK_EXECUTORS_REQUEST}_BEGIN`]: (state, action) => {
+//    const ui = Object.assign({}, state.ui, {[action.meta.id]: true});//mark loading started
+//    return Object.assign({}, state, {ui});
+//  },
+//
+//  [`${TASKS_TASK_EXECUTORS_REQUEST}_SUCCESS`]: (state, action) => {
+//    const ui = Object.assign({}, state.ui, {[action.meta.id]: false});
+//    return Object.assign({}, state, {
+//      executors: [...state.executors, ...action.payload],
+//      ui,
+//    });
+//  },
+//
+//  [`${TASKS_TASK_EXECUTORS_REQUEST}_FAILURE`]: (state, action) => {
+//    const ui = Object.assign({}, state.ui, {[action.meta.id]: action.payload});//mark loading error
+//    return Object.assign({}, state, {ui});
+//  }
+//}, initialState.details);
 
 
 function mergeExecutorEditState(state: IEditState, taskId: number, executorId: number, value: IExecutorEditState) {
@@ -128,7 +130,9 @@ const handleExecutorUpdate = handleActions<IExecutorsState>({
 
 
 export default combineReducers({
-  tasks: handleTasksLoad,
-  details: reduceReducers(handleExecutorsLoad, handleExecutorUpdate),
+  //tasks: handleTasksLoad,
+  tasks: new LoadTasks({api: null, defaultState: initialState.tasks}).reducer,
+  //details: reduceReducers(handleExecutorsLoad, handleExecutorUpdate),
+  details: reduceReducers(new LoadExecutors({api: null, defaultState: initialState.details}).reducer, handleExecutorUpdate),
   editors: reduceReducers(handleModeActions, handleEditActions),
 })
