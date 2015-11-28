@@ -9,7 +9,7 @@ import LoginHandler from '../modules/auth/LoginHandler';
 import CatchHandler from '../handlers/CatchHandler';
 import NotFoundHandler from '../handlers/NotFoundHandler';
 //import TasksHandler from '../modules/tasks/TasksHandler';
-
+import NotImplementedHandler from '../handlers/NotImplementedHandler';
 const loadContainerAsync = bundle => (location, cb) => {
   if (typeof window !== 'undefined') {
     bundle(component => {
@@ -25,6 +25,7 @@ let routes = <Route>
     <IndexRoute component={IndexHandler}/>
     <Route path="login" component={LoginHandler} />
     <Route path="about" getComponent={loadContainerAsync(require('bundle?lazy&name=about!../handlers/AboutHandler'))} />
+    <Route path="notimplemented" component={NotImplementedHandler} />
     <Route path="catch" component={CatchHandler} />
     <Route path="tasks" getComponent={loadContainerAsync(require('bundle?lazy&name=tasks!../modules/tasks/TasksHandler'))}  />
   </Route>
