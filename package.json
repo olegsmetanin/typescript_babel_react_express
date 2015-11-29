@@ -22,6 +22,7 @@
     "component-css-loader": "barbuza/component-css-loader",
     "cookie-parser": "^1.4.0",
     "css-loader": "^0.21.0",
+    "es6-shim": "^0.33.13",
     "eventemitter3": "^1.1.1",
     "express": "^4.13.3",
     "extract-text-webpack-plugin": "^0.8.2",

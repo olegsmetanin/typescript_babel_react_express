@@ -1,4 +1,7 @@
 /// <reference path="webclient.d.ts"/>
+
+require('es6-shim');
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 //waiting for actual d.ts
