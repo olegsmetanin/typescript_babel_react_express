@@ -20,7 +20,7 @@ visible-lg                  x
     @if $i < $j {
       .#{$wi} {
         .visible-#{$wj} {
-          display: none;
+          display: none !important;
         }
       }
     }
