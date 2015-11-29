@@ -13,6 +13,7 @@ var LogoutIcon = require('./icons/logout.svg');
 var BackIcon = require('./icons/back.svg');
 var CartIcon = require('./icons/cart.svg');
 var NotifyIcon = require('./icons/notify.svg');
+var CardIcon = require('./icons/card.svg');
 
 interface IMenuProps {
   auth: IUserState;
@@ -44,12 +45,15 @@ export default class Menu extends React.Component<IMenuProps, {}> {
             <Link to="notimplemented">{NotifyIcon}</Link>
           </li>
           <li>
+            <Link to="notimplemented">{CardIcon}</Link>
+          </li>
+          <li>
             <Link to="notimplemented">{CartIcon}</Link>
           </li>
           <li>
             {(me && !!me.id)
               ? <Link to="/notimplemented">
-                  <div className="username">{me.first_name + ' ' + me.last_name}</div>
+                  <div className="username visible-sm">{me.first_name + ' ' + me.last_name}</div>
                   <img className="userpic" src={me.picurl}/>
                 </Link>
               : !ui.loading
