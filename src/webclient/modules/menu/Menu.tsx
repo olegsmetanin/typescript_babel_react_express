@@ -28,10 +28,9 @@ export default class Menu extends React.Component<IMenuProps, {}> {
     let {me, ui} = auth;
     return (
       <div className="menu">
-        {/*<div className="logo">
+        <div className="logo visible-md">
           {LogoIcon}
         </div>
-        */}
         <ul className="navbar-nav navbar-nav-left">
           <li>
             <Link to="/">{MenuIcon}</Link>
