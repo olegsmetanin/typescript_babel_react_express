@@ -30,6 +30,9 @@
     margin-left: 6px;
     & > li {
       padding-right: 10px;
+      svg {
+        margin-top: 7px;
+      }
     }
 
   }
@@ -38,6 +41,9 @@
     margin-right: 6px;
     & > li {
       padding-left: 10px;
+      svg {
+        margin-top: 14px;
+      }
     }
   }
   @include clearfix();
@@ -55,7 +61,7 @@
 
 .navbar-nav {
   .username {
-    margin-top: 7px;
+    margin-top: 12px;
     margin-left: 2px;
     margin-right: 6px;
     display: inline-block;
@@ -78,11 +84,12 @@
   }
 
   .account {
-    font-size: 20px;
-    margin-top: 7px;
+    font-size: 18px;
+    margin-top: 12px;
     margin-right: 6px;
     display: inline-block;
     vertical-align: middle;
+    -webkit-font-smoothing: antialiased;
   }
 
 }
@@ -94,7 +101,6 @@
 
 .navbar-nav li svg {
   fill: currentColor;
-  margin-top: 7px;
 }
 
 .navbar-nav .badge {
