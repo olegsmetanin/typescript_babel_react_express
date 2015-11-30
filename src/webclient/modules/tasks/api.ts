@@ -1,37 +1,24 @@
-import IHTTPClient from '../../../framework/common/http/IHTTPClient';
-import deduplicate from '../../../framework/client/invoke/deduplicate';
+import ApiCaller from '../../../framework/client/invoke/api';
 
-export default class TasksApi {
+export interface ITasksApi {
 
-  httpClient: IHTTPClient;
+  find(options: {search: string}): Promise<any>;
 
-  constructor(options: {httpClient: IHTTPClient}) {
-    this.httpClient = options.httpClient;
-  }
+  executors(options: {ids: number[]}): Promise<any>;
 
-  private _post(url, data) {
-    return this.httpClient.send({
-      method: 'post',
-      url,
-      data,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-  }
+  updateExecutor(options: {id: number, name: string}): Promise<any>;
+}
 
-  @deduplicate
+export default class TasksApi extends ApiCaller implements ITasksApi {
+
   find(options: {search: string}) {
     return this._post('/api/tasks/find', options);
   }
 
-  @deduplicate
   executors(options: {ids: number[]}) {
     return this._post('/api/tasks/executors', options);
   }
 
-  @deduplicate
   updateExecutor(options: {id: number, name: string}) {
     return this._post('/api/tasks/executors/update', options);
   }

@@ -1,11 +1,11 @@
 import {createAction} from 'redux-actions';
 import IHTTPClient from '../../../framework/common/http/IHTTPClient';
 import * as ActionTypes from './actionTypes';
-import TasksApi from './api';
+import {ITasksApi} from './api';
 
 declare type ExecutorModeChange = {taskId: number, executorId: number};
 
-function factory(options: {api: TasksApi}) {
+function factory(options: {api: ITasksApi}) {
 
   const {api} = options;
 
