@@ -8,7 +8,7 @@ import OAuthPopup from './../auth/components/OAuthPopup';
 var LogoIcon = require('./icons/logo.svg');
 var MenuIcon = require('./icons/menu.svg');
 var LoginIcon = require('./icons/login.svg');
-var LodingIcon = require('./icons/loading.svg');
+var LoadingIcon = require('./icons/loading.svg');
 var LogoutIcon = require('./icons/logout.svg');
 var BackIcon = require('./icons/back.svg');
 var CartIcon = require('./icons/cart.svg');
@@ -67,7 +67,7 @@ export default class Menu extends React.Component<IMenuProps, {}> {
                 ? <Link to="/login">
                     {LoginIcon}
                   </Link>
-                : <div>{LodingIcon}</div>
+                : <div>{LoadingIcon}</div>
             }
           </li>
           {(me && !!me.id)

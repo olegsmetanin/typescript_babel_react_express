@@ -1,17 +1,7 @@
-/// <reference path="../../webclient.d.ts"/>
-
-import {handleAction, handleActions, Action} from 'redux-actions';
+import {handleActions} from 'redux-actions';
 import {combineReducers} from 'redux';
-import reduceReducers from 'reduce-reducers';
-import {IUser, IUserState} from './model';
-import {
-  ME_REQUEST,
-  ME_REQUEST_SUCCESS,
-  ME_REQUEST_FAILURE,
-  LOGOUT_REQUEST,
-  LOGOUT_REQUEST_SUCCESS,
-  LOGOUT_REQUEST_FAILURE
-} from './actionTypes';
+import {IUserState} from './model';
+import {ME_REQUEST, LOGOUT_REQUEST} from './actionTypes';
 
 
 const initialState: IUserState = {
@@ -22,20 +12,19 @@ const initialState: IUserState = {
 };
 
 const handleAuthActions = handleActions<IUserState>({
-  [ME_REQUEST]: (state: IUserState, action: Action) => {
+  [`${ME_REQUEST}_BEGIN`]: (state) => {
     const ui = Object.assign({}, state.ui, {loading: true});
     return Object.assign({}, state, {ui});
   },
 
-  [ME_REQUEST_SUCCESS]: (state: IUserState, action: Action) => {
+  [`${ME_REQUEST}_SUCCESS`]: (state, action) => {
     const ui = Object.assign({}, state.ui, {loading: false});
-    return Object.assign({}, state, {
-        me: (Object.keys(action.payload).length > 0 ? action.payload : null),
-        ui
-    });
+    const me = (Object.keys(action.payload).length > 0 ? action.payload : null);
+
+    return Object.assign({}, state, {me, ui});
   },
 
-  [ME_REQUEST_FAILURE]: (state: IUserState, action: Action) => {
+  [`${ME_REQUEST}_FAILURE`]: (state, action) => {
     const ui = Object.assign({}, state.ui, {
       error: action.payload,
       loading: false,
@@ -43,7 +32,7 @@ const handleAuthActions = handleActions<IUserState>({
     return Object.assign({}, state, {ui});
   },
 
-  [LOGOUT_REQUEST_SUCCESS]: (state: IUserState, action: Action) => {
+  [`${LOGOUT_REQUEST}_SUCCESS`]: () => {
     return {
       me: undefined,
       ui: {

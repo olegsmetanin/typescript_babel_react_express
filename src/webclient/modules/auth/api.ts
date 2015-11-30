@@ -1,32 +1,19 @@
-import IHTTPClient from '../../../framework/common/http/IHTTPClient';
-import deduplicate from '../../../framework/client/invoke/deduplicate';
+import ApiCaller from '../../../framework/client/invoke/api';
+import {IUser} from './model';
 
-export default class AuthApi {
+export interface IAuthApi {
 
-  httpClient: IHTTPClient;
+  me(): Promise<IUser>;
 
-  constructor(options: {httpClient: IHTTPClient}) {
-    this.httpClient = options.httpClient;
-  }
+  logout(): Promise<void>;
+}
 
-  private _post(url, data) {
-    return this.httpClient.send({
-      method: 'post',
-      url,
-      data,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-  }
+export default class AuthApi extends ApiCaller implements IAuthApi {
 
-  @deduplicate
   me() {
     return this._post('/api/me', null);
   }
 
-  @deduplicate
   logout() {
     return this._post('/api/logout', null);
   }

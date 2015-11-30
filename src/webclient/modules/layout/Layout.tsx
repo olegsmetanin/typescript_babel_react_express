@@ -1,51 +1,52 @@
 import * as React from 'react';
+const DocumentMeta = require('react-document-meta');
 const ReactRouter = require('react-router');
 const { Link } = ReactRouter;
 import {bindActionCreators, Store, Dispatch} from 'redux';
+import {connect} from 'react-redux';
+import IHTTPClient from "../../../framework/common/http/IHTTPClient";
 import Popup from './../auth/components/Popup';
-const DocumentMeta = require('react-document-meta');
 import Menu from '../menu/Menu';
 import {IUser, IAuthState} from './../auth/model';
-import * as MeActions from './../auth/actions';
-import IHTTPClient from "../../../framework/common/http/IHTTPClient";
-import {connect} from 'react-redux';
+import authActionsFactory from './../auth/actions';
+import AuthApi from './../auth/api';
 
 interface ILayoutProps extends React.Props<any> {
-  state: IAuthState;
-  dispatch: Dispatch;
+  state    : IAuthState;
+  dispatch : Dispatch;
 }
 
 interface ILayoutState {
   clientWidth : number;
-  actions: any
 }
 
 interface ILayoutContext {
-  httpClient: IHTTPClient;
-  history: any;
+  httpClient : IHTTPClient;
+  history    : any;
 }
 
 class Layout extends React.Component<ILayoutProps, ILayoutState> {
-
-  constructor(props, context) {
-    super(props, context);
-  }
-
-  context: ILayoutContext;
 
   static contextTypes: React.ValidationMap<any> = {
     httpClient: React.PropTypes.object.isRequired,
     history: React.PropTypes.object.isRequired
   };
 
-  state: ILayoutState = {
-    actions: bindActionCreators(MeActions, this.props.dispatch),
-    clientWidth: 400
+  constructor(props, context) {
+    super(props, context);
+
+    const {httpClient} = context;
+    const api = new AuthApi({httpClient});
+    this.actions =  bindActionCreators(authActionsFactory({api}), props.dispatch);
   }
+
+  context: ILayoutContext;
+  actions: any;
+  state: ILayoutState = { clientWidth: 400 };
 
   handleResize(e) {
     if (document) {
-      this.setState({clientWidth: document.getElementById('app').clientWidth, actions: this.state.actions});
+      this.setState({clientWidth: document.getElementById('app').clientWidth});
     }
   }
 
@@ -53,14 +54,14 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
     this.handleResize(null);
     window.addEventListener('resize', this.handleResize.bind(this));
     if (!window['loginCallBack']) {
-      window['loginCallBack'] = () => this.state.actions.requestMe(this.context.httpClient);
+      window['loginCallBack'] = () => this.actions.requestMe();
     }
   }
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
       console.log(`${new Date().toISOString()} dispatching action requestMe`);
-      this.state.actions.requestMe(this.context.httpClient);
+      this.actions.requestMe(this.context.httpClient);
       console.log(`${new Date().toISOString()} dispatched action requestMe`);
     }
   }
@@ -89,7 +90,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         <DocumentMeta title={'React-blog'} />
         <Menu
           auth={auth}
-          onLogout={() => this.state.actions.requestLogout(this.context.httpClient)}
+          onLogout={() => this.actions.requestLogout(this.context.httpClient)}
           onGoBack={() => this.context.history.goBack()}
         />
 
