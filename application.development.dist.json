@@ -12,6 +12,9 @@
     "url": "amqp://guest:guest@192.168.99.100:5672?heartbeat=5",
     "socketOptions": {}
   },
+  "socket-io": {
+    "path": "/socket.io"
+  },
   "front": {
     "siteroot": "http://localhost:3000"
   },

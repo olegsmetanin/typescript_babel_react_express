@@ -7,6 +7,7 @@ import wrapAsync from './../../../framework/server/express/wrapAsync';
 interface AppServiceSettings {
   webserver: any;
   siteroot: string;
+  socketPath: string;
 }
 
 export default class AppService implements IService {
@@ -28,7 +29,7 @@ export default class AppService implements IService {
 
 @wrapAsync
 async render(req: Request, res: Response) {
-  await reactServerRender(req.url, this.settings.siteroot, req, res);
+  await reactServerRender(req.url, this.settings.siteroot, this.settings.socketPath, req, res);
 }
 
 async stop() {

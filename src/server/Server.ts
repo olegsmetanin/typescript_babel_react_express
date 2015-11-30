@@ -2,9 +2,12 @@
 /// <reference path="../../typings/express/express.d.ts"/>
 
 import IService from './../framework/server/interfaces/IService'
+import IEventBus from '../framework/common/event/IEventBus';
+import EventBus from '../framework/common/event/EventBus';
 import APIService from './services/api/APIService';
 import AppService from './services/app/AppService';
 import AuthService from './services/auth/AuthService';
+import SocketIOService from './services/socket/SocketIOService';
 import PG from './../framework/server/database/PG';
 import PasswordUtils from './../framework/server/password/PasswordUtils';
 
@@ -12,7 +15,7 @@ import PasswordUtils from './../framework/server/password/PasswordUtils';
 //import * as express from 'express';
 
 import * as bodyParser from 'body-parser';
-import {Request, Response} from "express";
+import {Request, Response} from 'express';
 
 interface IServerOptions {
   config: any;
@@ -23,9 +26,11 @@ export default class Server {
 
   webserver: any;
 
+  eventBus: IEventBus;
   authService: IService;
   apiService: IService;
   appService: IService;
+  socketService: IService;
 
   config: any;
   options: IServerOptions;
@@ -41,16 +46,21 @@ export default class Server {
     //   console.log('Error parsing: ' + error);
     // });
 
+    this.eventBus = new EventBus({});
+
     var express = require('express');
+    var http = require('http');
     const cookieParser = require('cookie-parser');
+    const cookieParserMiddleware = cookieParser(this.config.back.cookieSignature);
     var webserver = express();
     webserver.use(bodyParser.json());
-    webserver.use(cookieParser(this.config.back.cookieSignature));
+    webserver.use(cookieParserMiddleware);
     webserver.use(express.static('build/webpublic'));
 
     let config = this.config;
     let db = new PG({ connectionString: this.config.db.main });
-    let siteroot = this.config.front.siteroot;
+    const {front: {siteroot}} = this.config;
+    const {path:socketPath} = this.config['socket-io'];
     let passwordUtils = new PasswordUtils();
 
     this.authService = new AuthService({ webserver, config, db, passwordUtils });
@@ -58,7 +68,16 @@ export default class Server {
     // this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
     this.apiService = new APIService({ webserver, db });
 
-    this.appService = new AppService({ webserver, siteroot });
+    this.appService = new AppService({ webserver, siteroot, socketPath });
+
+    var ss = http.Server(webserver);
+    //console.log('webserver', webserver, 'ss', ss);
+    this.socketService = new SocketIOService({
+      eventBus: this.eventBus,
+      socketPath,
+      server: ss,
+      cookieParser: cookieParserMiddleware,
+    });
 
     this.webserver = webserver;
   }
@@ -68,6 +87,7 @@ export default class Server {
   try {
     await this.authService.start();
     await this.apiService.start();
+    await this.socketService.start();
     // at last!
     await this.appService.start();
 
@@ -90,6 +110,7 @@ export default class Server {
 
 async stop() {
   await this.appService.stop();
+  await this.socketService.stop();
   await this.apiService.stop();
   await this.authService.stop();
   //this.webserver.stop();

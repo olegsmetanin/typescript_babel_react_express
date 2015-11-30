@@ -10,7 +10,8 @@ var APP_DIR = path.join(__dirname, 'src');
 var config = {
   entry: {
     main: './src/webclient/index.tsx',
-    lib: ['react', 'react-router', 'redux', 'react-redux', 'redux-actions', 'redux-thunk', 'redux-promise-middleware', 'react-document-meta'],
+    lib: ['es6-shim', 'react', 'react-router', 'redux', 'react-redux', 'redux-actions', 'redux-thunk',
+      'redux-promise-middleware', 'react-document-meta', 'socket.io-client'],
     //about: './src/webclient/handlers/AboutHandler.tsx'
   },
   output: {

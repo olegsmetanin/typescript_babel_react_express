@@ -25,7 +25,7 @@ import EventBus from "../../../framework/common/event/EventBus";
 import HTMLStab from './HTMLStab';
 var DocumentMeta = require('react-document-meta');
 
-export default async function reactServerRender(url, siteroot: string, req, res) {
+export default async function reactServerRender(url, siteroot: string, socketPath: string, req, res) {
 
   const cache = new Cache();
   const httpClient = new HTTPClient(siteroot);
@@ -89,14 +89,14 @@ export default async function reactServerRender(url, siteroot: string, req, res)
           let cachedump = cache.dump();
           const state = store.getState();
 
-          res.status(200).send(HTMLStab({content, head, cachedump, state}));
+          res.status(200).send(HTMLStab({content, head, cachedump, state, socketPath}));
         } catch(e) {
           console.log('React render error: ', e);
-          res.status(500).send(HTMLStab({content:e.toString(), head: 'Error'}))
+          res.status(500).send(HTMLStab({content:e.toString(), head: 'Error', socketPath}))
         }
       }
     } else {
-      res.status(404).send(HTMLStab({content:'Not found', head: 'Not found', cachedump: []}));
+      res.status(404).send(HTMLStab({content:'Not found', head: 'Not found', cachedump: [], socketPath}));
     }
   });
 }
