@@ -15,6 +15,7 @@ var CartIcon = require('./icons/cart.svg');
 var NotifyIcon = require('./icons/notify.svg');
 var CardIcon = require('./icons/card.svg');
 var CurrencyRubIcon = require('./icons/currency-rub.svg');
+var FBIcon = require('./icons/fb.svg');
 
 interface IMenuProps {
   auth: IUserState;
@@ -54,8 +55,13 @@ export default class Menu extends React.Component<IMenuProps, {}> {
           <li>
             {(me && !!me.id)
               ? <Link to="/notimplemented">
+                  {me.provider == 'fb'
+                    ? <span className="provider">{FBIcon}</span>
+                    : null
+                  }
                   <img className="userpic" src={me.picurl}/>
-                  <div className="username visible-sm">{me.first_name + ' ' + me.last_name}</div>
+                  {/*<div className="username visible-sm">{me.first_name + ' ' + me.last_name}</div>
+                  */}
                 </Link>
               : !ui.loading
                 ? <Link to="/login">
