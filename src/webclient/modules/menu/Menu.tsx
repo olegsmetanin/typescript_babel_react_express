@@ -42,13 +42,13 @@ export default class Menu extends React.Component<IMenuProps, {}> {
           </ul>
         <ul className="navbar-nav navbar-nav-right">
           <li>
-            <Link to="notimplemented">{NotifyIcon}</Link>
+            <Link to="notimplemented">{NotifyIcon}<span className="badge">9+</span></Link>
           </li>
           <li>
-            <Link to="notimplemented">{CardIcon}</Link>
+            <Link to="notimplemented">{CardIcon}<span className="badge">123k</span></Link>
           </li>
           <li>
-            <Link to="notimplemented">{CartIcon}</Link>
+            <Link to="notimplemented">{CartIcon}<span className="badge">9+</span></Link>
           </li>
           <li>
             {(me && !!me.id)

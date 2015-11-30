@@ -82,3 +82,17 @@
   fill: currentColor;
   margin-top: 7px;
 }
+
+.navbar-nav .badge {
+  position: absolute;
+  font-size: 10px;
+  right: -5px;
+  width: auto;
+  top: 2px;
+  background-color: #f44336;
+  color: #fff;
+  border-radius: 10px;
+  padding: 2px 4px 3px;
+  box-shadow: 0 0 1px rgba(0,0,0,0.5);
+  -webkit-font-smoothing: antialiased;
+}
