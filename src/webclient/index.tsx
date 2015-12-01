@@ -8,16 +8,16 @@ import * as ReactDOM from 'react-dom';
 const ReactRouter = require('react-router');
 const Router = ReactRouter.Router;
 import {
-  Store,
-  compose,
-  createStore,
-  bindActionCreators,
-  combineReducers,
-  applyMiddleware
+Store,
+compose,
+createStore,
+bindActionCreators,
+combineReducers,
+applyMiddleware
 } from 'redux';
 import {
-  connect,
-  Provider
+connect,
+Provider
 } from 'react-redux';
 import { Action } from 'redux-actions';
 import thunk from 'redux-thunk';
@@ -31,6 +31,7 @@ import HTTPBuffer from '../framework/client/http/HTTPBuffer';
 import Cache from '../framework/common/cache/Cache';
 import EventBus from '../framework/common/event/EventBus';
 import SocketIOBridge from '../framework/client/socket-io/SocketIOBridge';
+import PongEvent from '../common/events/PongEvent';
 import {rootReducer as modulesRootReducer} from './modules/rootReducer';
 
 window['app'] = (options: any) => {
@@ -46,6 +47,9 @@ window['app'] = (options: any) => {
     endpoint: '//:3000',
     path: socketPath || '/socket.io',
     eventBus,
+    map: {
+      [PongEvent.type]: (data) => new PongEvent(data)
+    }
   });
   socketIO.start();//TODO where to call socketIO.stop()?? window.unload?
 

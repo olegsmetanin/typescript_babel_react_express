@@ -5,10 +5,12 @@ import reduceReducers from 'reduce-reducers';
 
 import tasksReducer from './tasks/reducers';
 import authReducer from './auth/reducers';
+import pingpongReducer from './pingpong/reducers';
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
-  auth: authReducer
+  auth: authReducer,
+  pingpong: pingpongReducer,
   //TODO other modules
 });
 

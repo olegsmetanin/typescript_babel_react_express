@@ -70,6 +70,9 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
         <li>
           <Link to="/tasks">Master-details example</Link>
         </li>
+        <li>
+          <Link to="/pingpong">Socket.io ping-pong</Link>
+        </li>
       </ul>
     </div>;
   }
