@@ -36,7 +36,6 @@ export default class SocketIOService implements IService {
 
     //check if we know current user after cookieParser work
     iosrv.use((socket, next) => {
-      console.log('second use');
       if (!socket.request.signedCookies || !socket.request.signedCookies.user) {
         //no user - no socket.io
         //https://github.com/socketio/socket.io/issues/1720
