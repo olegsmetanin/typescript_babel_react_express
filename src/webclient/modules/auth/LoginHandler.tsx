@@ -3,14 +3,14 @@ var ReactRouter = require('react-router');
 var DocumentMeta = require('react-document-meta');
 import OAuthPopup from './components/OAuthPopup';
 import {connect} from 'react-redux';
-import {IAuthState} from './../auth/model';
+import {IUser} from '../../../common/model';
 
 interface ILoginHandlerContext {
   history: any;
 }
 
 interface ILoginHandlerProps {
-  state: IAuthState;
+  me: IUser;
 }
 
 class LoginHandler extends React.Component<ILoginHandlerProps, {}> {
@@ -22,8 +22,8 @@ class LoginHandler extends React.Component<ILoginHandlerProps, {}> {
   }
 
 componentWillReceiveProps(next: ILoginHandlerProps) {
-  const {state:{auth:{me}}} = next;
-  if (me) {
+  const {me} = next;
+  if (me && me.id) {
     this.context.history.pushState(null, '/');
   }
 }
@@ -48,7 +48,7 @@ componentWillReceiveProps(next: ILoginHandlerProps) {
 }
 
 const mapStateToProps = state => ({
-  state: state.modules && state.modules.auth
+  me: state.modules && state.modules.auth && state.modules.auth.me
 });
 
 export default connect(mapStateToProps)(LoginHandler);

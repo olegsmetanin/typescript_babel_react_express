@@ -1,5 +1,5 @@
 import ApiCaller from '../../../framework/client/invoke/api';
-import {IUser} from './model';
+import {IUser} from './../../../common/model';
 
 export interface IAuthApi {
 

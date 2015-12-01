@@ -10,12 +10,12 @@ import SigninEvent from '../../../framework/client/events/Signin';
 import SignoutEvent from '../../../framework/client/events/Signout';
 import Popup from './../auth/components/Popup';
 import Menu from '../menu/Menu';
-import {IUser, IAuthState} from './../auth/model';
+import {IUserState} from './../auth/model';
 import authActionsFactory from './../auth/actions';
 import AuthApi from './../auth/api';
 
 interface ILayoutProps extends React.Props<any> {
-  state    : IAuthState;
+  state    : IUserState;
   dispatch : Dispatch;
 }
 
@@ -93,14 +93,14 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
             ? 'md'
             : 'lg';
 
-    const {state:{auth}} = this.props;
+    const {state} = this.props;
     return (
 
       <div className={xstyle}>
         <Popup />
         <DocumentMeta title={'React-blog'} />
         <Menu
-          auth={auth}
+          auth={state}
           onLogout={this.onLogout}
           onGoBack={() => this.context.history.goBack()}
         />

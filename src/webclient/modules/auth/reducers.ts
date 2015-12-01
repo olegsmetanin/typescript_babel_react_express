@@ -43,6 +43,4 @@ const handleAuthActions = handleActions<IUserState>({
 
 }, initialState);
 
-export default combineReducers({
-  auth: handleAuthActions
-})
+export default handleAuthActions
