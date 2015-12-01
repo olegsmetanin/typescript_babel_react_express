@@ -61,10 +61,10 @@ export default class SocketIOService implements IService {
       this.userSockets[user] = this.userSockets[user] || [];
       this.userSockets[user].push(socket);
 
-      socket.on('toServer', function (data) {
-        console.log('toServer', data);
+      socket.on('toServer', function (evt) {
+        //console.log('toServer', evt);
 
-        this.eventBus.emit(data);
+        eventBus.emit(evt.data);
       });
       //now we support only client -> toServer -> server events
       //socket.on('toUser', function (data) {
@@ -79,12 +79,17 @@ export default class SocketIOService implements IService {
           if (!socks.length) delete this.userSockets[user];
         }
       });
+
+      socket.on('error', (e) => {
+        console.error(`${new Date().toISOString()} ${e.message}`);
+        console.error(e);
+      })
     });
 
     //main server->client logic
     eventBus.on<ToUserEvent>(ToUserEvent.type, (evt: ToUserEvent) => {
       try {
-        if (evt.user && evt.user.length) {
+        if (!evt.user || !evt.user.length) {
           //this is broadcast message to all users
           iosrv.emit('notify', evt.data);
           return;
@@ -99,7 +104,7 @@ export default class SocketIOService implements IService {
         }
 
         for(let i = 0; i < this.userSockets[user].length; ++i) {
-          this.userSockets[user][i].emit('notify', evt);
+          this.userSockets[user][i].emit('notify', evt.data);
         }
       } catch(err) {
         console.log('Socket service. Error emit msg to user', evt);
