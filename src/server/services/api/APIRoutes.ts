@@ -138,7 +138,7 @@ export default class APIRoutes {
     setTimeout(() => {
       const {id, name} = req.body;
 
-      const executor = this.executors.find(e => e.id === id);
+      const executor: any = this.executors.find(e => e.id === id);
       if (!executor) {
         return res.status(500).send('Unknown executor');
       }
@@ -177,7 +177,7 @@ export default class APIRoutes {
     this.executors.forEach(executor => {
       if (Array.isArray(executor.tasks)) {
         executor.tasks.forEach(id => {
-          const task = this.tasks.find(t => t.id === id);
+          const task: any = this.tasks.find(t => t.id === id);
           task.executors = task.executors || [];
           task.executors.push(executor.id);
         })
