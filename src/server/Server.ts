@@ -25,6 +25,7 @@ interface IServerOptions {
 export default class Server {
 
   webserver: any;
+  httpServer: any;
 
   eventBus: IEventBus;
   authService: IService;
@@ -70,16 +71,16 @@ export default class Server {
 
     this.appService = new AppService({ webserver, siteroot, socketPath });
 
-    var ss = http.Server(webserver);
-    //console.log('webserver', webserver, 'ss', ss);
+    const server = http.Server(webserver);
     this.socketService = new SocketIOService({
       eventBus: this.eventBus,
       socketPath,
-      server: ss,
+      server,
       cookieParser: cookieParserMiddleware,
     });
 
     this.webserver = webserver;
+    this.httpServer = server;
   }
 
   async start() {
@@ -102,7 +103,8 @@ export default class Server {
       next();
     });
 
-    this.webserver.listen(this.config.back.port);
+    //this.webserver.listen(this.config.back.port);
+    this.httpServer.listen(this.config.back.port);
   } catch (e) {
     console.log(e);
   }

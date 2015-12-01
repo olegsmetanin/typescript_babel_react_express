@@ -21,19 +21,16 @@ export default class SocketIOService implements IService {
 
   constructor(settings: ISocketIOServiceSettings) {
     this.settings = settings;
-    console.log('settings', settings);
     this.userSockets = {};
   }
 
   async start() {
     const {server, cookieParser, eventBus, socketPath} = this.settings;
-    //console.log('io.default', io.default);
     const iosrv: SocketIO.Server = io(server, {path: socketPath});
     this.iosrv = iosrv;
 
     //use parser for signed cookies from our express server
     iosrv.use((socket, next) => {
-      console.log('first use');
       cookieParser(socket.request, null, next);
     });
 
