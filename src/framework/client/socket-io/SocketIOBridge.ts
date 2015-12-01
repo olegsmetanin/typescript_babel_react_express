@@ -7,7 +7,7 @@ import EBEvent from '../../common/event/EBEvent';
 import SigninEvent from '../events/Signin';
 import SignoutEvent from '../events/Signout';
 
-declare type EventTypeFactories = {[eventType: string]: <T extends EBEvent>() => T};
+declare type EventTypeFactories = {[eventType: string]: <T extends EBEvent>(data: any) => T};
 
 interface ISocketIOBridgeOptions {
   endpoint : string;
@@ -55,7 +55,7 @@ export default class SocketIOBridge {
 
   _emitToServer = (data: any) => {
     if (this.socket) {
-      this.socket.emit('toUser', data);
+      this.socket.emit('toServer', data);
     }
   }
 
@@ -72,10 +72,9 @@ export default class SocketIOBridge {
         const evt = new EBEvent();
         evt.type = 'socket:notify';
       } else {
-        evt = this.map[msg.type]();
+        evt = this.map[msg.type](msg.data);
       }
 
-      evt.data = msg.data;
       this.eventBus.emit(evt);
     });
     socket.on('error', (err) => {
