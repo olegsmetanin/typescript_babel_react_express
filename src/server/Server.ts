@@ -67,7 +67,7 @@ export default class Server {
     this.authService = new AuthService({ webserver, config, db, passwordUtils });
 
     // this.apiService = new APIService({ name: 'API Service', webserver: webserver, db: new PG({ connectionString: 'postgres://postgres:123@localhost/postgres' }) });
-    this.apiService = new APIService({ webserver, db });
+    this.apiService = new APIService({ webserver, db, eventBus: this.eventBus });
 
     this.appService = new AppService({ webserver, siteroot, socketPath });
 
