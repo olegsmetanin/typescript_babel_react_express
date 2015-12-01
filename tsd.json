@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "785c18f0c897c44ea7fa1a47f3bcb48110658520"
+      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
     },
     "mime/mime.d.ts": {
       "commit": "785c18f0c897c44ea7fa1a47f3bcb48110658520"
@@ -61,6 +61,12 @@
     },
     "redux-thunk/redux-thunk.d.ts": {
       "commit": "0fd13ee0d5d5aa4b70380be3fcba2bdedf77d5c1"
+    },
+    "socket.io-client/socket.io-client.d.ts": {
+      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
+    },
+    "socket.io/socket.io.d.ts": {
+      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
     }
   }
 }

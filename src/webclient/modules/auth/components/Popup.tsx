@@ -7,6 +7,7 @@ import AuthRequiredEvent from '../../../../framework/client/events/AuthRequired'
 import ConnectionBrokenEvent from '../../../../framework/client/events/ConnectionBroken';
 import BufferDropEvent from "../../../../framework/client/events/BufferDrop";
 import BufferRetryEvent from "../../../../framework/client/events/BufferRetry";
+import SigninEvent from '../../../../framework/client/events/Signin';
 import Login from "../../../commands/Login";
 
 interface IPopupState {
@@ -81,6 +82,7 @@ export default class Popup extends React.Component<{}, IPopupState> {
       await invoke(new Login({httpClient}));
       this.setState({open: false, auth: false, reconnect: false});
       eventBus.emit(new BufferRetryEvent());
+      eventBus.emit(new SigninEvent());
     } catch(e) {
       this.state.errors = e.errors;
       this.setState(this.state);

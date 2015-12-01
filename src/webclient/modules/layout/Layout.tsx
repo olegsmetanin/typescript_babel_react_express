@@ -4,7 +4,10 @@ const ReactRouter = require('react-router');
 const { Link } = ReactRouter;
 import {bindActionCreators, Store, Dispatch} from 'redux';
 import {connect} from 'react-redux';
-import IHTTPClient from "../../../framework/common/http/IHTTPClient";
+import IEventBus from '../../../framework/common/event/IEventBus';
+import IHTTPClient from '../../../framework/common/http/IHTTPClient';
+import SigninEvent from '../../../framework/client/events/Signin';
+import SignoutEvent from '../../../framework/client/events/Signout';
 import Popup from './../auth/components/Popup';
 import Menu from '../menu/Menu';
 import {IUser, IAuthState} from './../auth/model';
@@ -22,14 +25,16 @@ interface ILayoutState {
 
 interface ILayoutContext {
   httpClient : IHTTPClient;
+  eventBus   : IEventBus;
   history    : any;
 }
 
 class Layout extends React.Component<ILayoutProps, ILayoutState> {
 
   static contextTypes: React.ValidationMap<any> = {
-    httpClient: React.PropTypes.object.isRequired,
-    history: React.PropTypes.object.isRequired
+    httpClient : React.PropTypes.object.isRequired,
+    eventBus   : React.PropTypes.object.isRequired,
+    history    : React.PropTypes.object.isRequired,
   };
 
   constructor(props, context) {
@@ -54,21 +59,27 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
     this.handleResize(null);
     window.addEventListener('resize', this.handleResize.bind(this));
     if (!window['loginCallBack']) {
-      window['loginCallBack'] = () => this.actions.requestMe();
+      window['loginCallBack'] = () => {
+        this.actions.requestMe();
+        this.context.eventBus.emit(new SigninEvent());
+      }
     }
   }
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
-      console.log(`${new Date().toISOString()} dispatching action requestMe`);
-      this.actions.requestMe(this.context.httpClient);
-      console.log(`${new Date().toISOString()} dispatched action requestMe`);
+      this.actions.requestMe();
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize.bind(this));
   }
+
+  onLogout = () => {
+    this.actions.requestLogout();//no await is intentionally
+    this.context.eventBus.emit(new SignoutEvent());
+  };
 
   render() {
     var w = this.state.clientWidth;
@@ -90,7 +101,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
         <DocumentMeta title={'React-blog'} />
         <Menu
           auth={auth}
-          onLogout={() => this.actions.requestLogout(this.context.httpClient)}
+          onLogout={this.onLogout}
           onGoBack={() => this.context.history.goBack()}
         />
 

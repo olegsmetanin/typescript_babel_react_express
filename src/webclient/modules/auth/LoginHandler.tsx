@@ -1,6 +1,5 @@
 import * as React from 'react';
 var ReactRouter = require('react-router');
-const { History } = ReactRouter;
 var DocumentMeta = require('react-document-meta');
 import OAuthPopup from './components/OAuthPopup';
 import {connect} from 'react-redux';

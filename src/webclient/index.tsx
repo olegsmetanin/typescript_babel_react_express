@@ -30,10 +30,11 @@ import HTTPClient from '../framework/client/http/HTTPClient';
 import HTTPBuffer from '../framework/client/http/HTTPBuffer';
 import Cache from '../framework/common/cache/Cache';
 import EventBus from '../framework/common/event/EventBus';
+import SocketIOBridge from '../framework/client/socket-io/SocketIOBridge';
 import {rootReducer as modulesRootReducer} from './modules/rootReducer';
 
 window['app'] = (options: any) => {
-  const {el, cachedump, state} = options;
+  const {el, cachedump, state, socketPath} = options;
 
   const cache = new Cache();
   cache.load(cachedump);
@@ -41,6 +42,12 @@ window['app'] = (options: any) => {
   const eventBus = new EventBus({});
   const httpClient = new HTTPClient({});
   const httpBuffer = new HTTPBuffer({httpClient, eventBus});
+  const socketIO = new SocketIOBridge({
+    endpoint: '//:3000',
+    path: socketPath || '/socket.io',
+    eventBus,
+  });
+  socketIO.start();//TODO where to call socketIO.stop()?? window.unload?
 
   const initialState: any = state;//TODO typed and dehidrated from server (instead of cache)
   const rootReducer = combineReducers({

@@ -1,7 +1,8 @@
 export default (options) => {
-  const {head = '', content = '', cachedump = {}, state = {}} = options || {};
+  const {head = '', content = '', cachedump = {}, state = {}, socketPath} = options || {};
   const cachedumpJSON = JSON.stringify(cachedump);
   const stateJSON = JSON.stringify(state);
+  const socketPathJSON = socketPath ? `'${socketPath}'` : 'undefined';
 
   return `<!DOCTYPE html>
     <html>
@@ -20,7 +21,12 @@ export default (options) => {
         <script src="/static/js/main.js"></script>
         <div id="app">${content}</div>
         <script>
-          app({el:document.getElementById('app'), cachedump: ${cachedumpJSON}, state: ${stateJSON}});
+          app({
+            el:document.getElementById('app'),
+            cachedump: ${cachedumpJSON},
+            state: ${stateJSON},
+            socketPath: ${socketPathJSON}
+          });
         </script>
 
       </body>
