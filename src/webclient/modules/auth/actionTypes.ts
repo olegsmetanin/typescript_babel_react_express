@@ -1,2 +1,4 @@
 export const ME_REQUEST = 'ME_REQUEST';
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const POPUP_MODE_CHANGE = 'POPUP_MODE_CHANGE';

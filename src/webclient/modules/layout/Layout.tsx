@@ -97,7 +97,7 @@ class Layout extends React.Component<ILayoutProps, ILayoutState> {
     return (
 
       <div className={xstyle}>
-        <Popup />
+        <Popup state={state && state.popup} actions={this.actions} />
         <DocumentMeta title={'React-blog'} />
         <Menu
           auth={state}

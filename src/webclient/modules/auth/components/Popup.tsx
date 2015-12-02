@@ -1,49 +1,32 @@
 import * as React from 'react';
 var ReactRouter = require('react-router');
 import IEventBus from '../../../../framework/common/event/IEventBus';
-import IHTTPClient from "../../../../framework/common/http/IHTTPClient";
-import IInvoke from '../../../../framework/common/invoke/IInvoke';
 import AuthRequiredEvent from '../../../../framework/client/events/AuthRequired';
 import ConnectionBrokenEvent from '../../../../framework/client/events/ConnectionBroken';
 import BufferDropEvent from "../../../../framework/client/events/BufferDrop";
 import BufferRetryEvent from "../../../../framework/client/events/BufferRetry";
 import SigninEvent from '../../../../framework/client/events/Signin';
-import Login from "../../../commands/Login";
+import {IPopupState} from '../model';
 
-interface IPopupState {
-  open      : boolean;
-  auth      : boolean;
-  reconnect : boolean;
-  errors?   : any;
+
+interface IPopupProps extends React.Props<Popup> {
+  state    : IPopupState;
+  actions  : any;
 }
 
 interface IPopupContext {
   history    : any;
-  httpClient : IHTTPClient;
   eventBus   : IEventBus;
-  invoke     : IInvoke;
 }
 
-export default class Popup extends React.Component<{}, IPopupState> {
+export default class Popup extends React.Component<IPopupProps, {}> {
 
   static contextTypes: React.ValidationMap<any> = {
     history    : React.PropTypes.object.isRequired,
-    httpClient : React.PropTypes.object.isRequired,
     eventBus   : React.PropTypes.object.isRequired,
-    invoke     : React.PropTypes.func.isRequired,
-  }
+  };
 
   context: IPopupContext;
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      open: false,
-      auth: false,
-      reconnect: false,
-    };
-  }
 
   componentWillMount() {
     this.context.eventBus.on<AuthRequiredEvent>(AuthRequiredEvent.type, this.onAuthRequired);
@@ -56,46 +39,41 @@ export default class Popup extends React.Component<{}, IPopupState> {
   }
 
   onAuthRequired = () => {
-    const {open} = this.state;
+    const {open} = this.props.state;
     if (open) return;
 
-    this.setState({open: true, auth: true, reconnect: false});
-  }
+    this.props.actions.popupModeChange({open: true, auth: true, reconnect: false});
+  };
 
   onConnectionBroken = () => {
-    const {open} = this.state;
+    const {open} = this.props.state;
     if (open) return;
 
-    this.setState({open: true, auth: false, reconnect: true});
-  }
+    this.props.actions.popupModeChange({open: true, auth: false, reconnect: true});
+  };
 
   cancel = () => {
-    this.setState({open: false, auth: false, reconnect: false});
+    this.props.actions.popupModeChange({open: false, auth: false, reconnect: false});
+
     this.context.eventBus.emit(new BufferDropEvent('User cancel pending requests'));
-    //this.context.router.transitionTo("home"); router 0.13
     this.context.history.pushState(null, '/');
-  }
+  };
 
   login = async () => {
-    const {httpClient, eventBus, invoke} = this.context;
-    try {
-      await invoke(new Login({httpClient}));
-      this.setState({open: false, auth: false, reconnect: false});
-      eventBus.emit(new BufferRetryEvent());
-      eventBus.emit(new SigninEvent());
-    } catch(e) {
-      this.state.errors = e.errors;
-      this.setState(this.state);
-    }
-  }
+    await this.props.actions.requestLogin();
+
+    this.context.eventBus.emit(new BufferRetryEvent());
+    this.context.eventBus.emit(new SigninEvent());
+  };
 
   retry = () => {
-    this.setState({open: false, auth: false, reconnect: false});
+    this.props.actions.popupModeChange({open: false, auth: false, reconnect: false});
+
     this.context.eventBus.emit(new BufferRetryEvent());
-  }
+  };
 
   render() {
-    const {open, auth, reconnect, errors} = this.state;
+    const {open, auth, reconnect, errors} = this.props.state;
 
     return !open ? null : (
       <div className="popup" style={{width: '40%', height: '200px', position: 'absolute', left: '30%', backgroundColor: '#eee'}}>
