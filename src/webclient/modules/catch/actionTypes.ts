@@ -1,0 +1,2 @@
+export const THROW_REQUEST = 'THROW_REQUEST';
+export const AUTH_ONLY_REQUEST = 'AUTH_ONLY_REQUEST';

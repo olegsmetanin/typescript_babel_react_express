@@ -6,7 +6,7 @@ import Layout from '../modules/layout/Layout';
 import IndexHandler from '../modules/index/IndexHandler';
 import LoginHandler from '../modules/auth/LoginHandler';
 //import AboutHandler from '../handlers/AboutHandler';
-import CatchHandler from '../handlers/CatchHandler';
+import CatchHandler from '../modules/catch/CatchHandler';
 import NotFoundHandler from '../handlers/NotFoundHandler';
 //import TasksHandler from '../modules/tasks/TasksHandler';
 import NotImplementedHandler from '../handlers/NotImplementedHandler';
