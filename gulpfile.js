@@ -25,8 +25,15 @@ gulp.task("build:webclient", function() {
     .pipe(gulp.dest('build/webpublic/static/js'));
 });
 
-gulp.task("webclient", ['webpublic', 'build:webclient'], function() {
-  gulp.watch(['src/webclient/**/*.{ts,tsx,scss}', 'src/framework/client/**/*.{ts,tsx}', 'src/framework/common/**/*.{ts,tsx}'], ['build:webclient']);
+gulp.task("watch:webclient", function() {
+  var config = require('./webpack.client.config.js');
+  config.watch = true;
+  return gulp.src('src/webclient/index.ts')
+    .pipe(webpack(config))
+    .pipe(gulp.dest('build/webpublic/static/js'));
+});
+
+gulp.task("webclient", ['webpublic', 'watch:webclient'], function() {
   gulp.watch(['src/webpublic/**'], ['webpublic']);
 });
 
