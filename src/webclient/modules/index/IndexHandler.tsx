@@ -1,64 +1,61 @@
 import * as React from 'react';
 var ReactRouter = require('react-router');
 const { Link } = ReactRouter;
-import GetData from '../../commands/GetData';
-import IHTTPClient from '../../../framework/common/http/IHTTPClient';
-import IInvoke from '../../../framework/common/invoke/IInvoke';
 var DocumentMeta = require('react-document-meta');
+import {bindActionCreators, Dispatch} from 'redux';
+import {connect} from 'react-redux';
+import IHTTPClient from '../../../framework/common/http/IHTTPClient';
+import {IModuleState} from './model';
+import IndexApi from './api';
+import actionsFactory from './actions';
+
 
 interface IIndexHandlerContext {
   httpClient: IHTTPClient;
-  invoke: IInvoke;
-  cache: any;
 }
 
 interface IIndexHandlerProps {
+  state    : IModuleState;
+  dispatch : Dispatch;
 }
 
-export default class IndexHandler extends React.Component<IIndexHandlerProps, {}> {
-
-  context: IIndexHandlerContext;
+class IndexHandler extends React.Component<IIndexHandlerProps, {}> {
 
   static contextTypes: React.ValidationMap<any> = {
     httpClient: React.PropTypes.object.isRequired,
-    invoke: React.PropTypes.func.isRequired,
-    cache: React.PropTypes.object.isRequired,
-    //router: React.PropTypes.func.isRequired
+  };
+
+  static async composeState(dispatch: Dispatch, httpClient: IHTTPClient) {
+    const api = new IndexApi({httpClient});
+    await dispatch(actionsFactory({api}).requestData({a: 'a'}));
   }
 
-  static async fillCache(cache, invoke, httpClient) {
-    var data = await invoke(new GetData({
-      data: {a: 'a'},
-      httpClient
-    }));
 
-    cache.set('index', data);
+  context: IIndexHandlerContext;
+  actions: any;
 
+  constructor(props, context) {
+    super(props, context);
+
+    const api = new IndexApi({httpClient: context.httpClient});
+    this.actions = bindActionCreators(actionsFactory({api}), props.dispatch);
   }
 
   componentWillMount() {
-    var data = this.context.cache.get('index');
-    if (data) {
-      this.setState(data);
-    }
-  }
-
-  async componentDidMount() {
-    let { invoke, httpClient } = this.context;
-    var data = await invoke(new GetData({
-      data: {a: 'a'},
-      httpClient
-    }));
-    if (typeof data !== 'undefined') {
-      this.setState(data);
+    if (typeof window !== 'undefined' && !this.props.state.data) {
+      this.actions.requestData({a: 'a'});
     }
   }
 
   render() {
+    const {data} = this.props.state;
+
     return <div>
       <DocumentMeta
         title={'React-blog: Home'}
       />
+
+      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
 
       <ul>
         <li>
@@ -78,3 +75,9 @@ export default class IndexHandler extends React.Component<IIndexHandlerProps, {}
   }
 
 }
+
+const mapStateToProps = (state) => ({
+  state: state.modules && state.modules.index
+});
+
+export default connect(mapStateToProps)(IndexHandler);
