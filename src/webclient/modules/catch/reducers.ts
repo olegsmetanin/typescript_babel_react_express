@@ -9,17 +9,14 @@ const initialState: IModuleState = {
 const reducers = handleActions({
 
   [`${THROW_REQUEST}_BEGIN`]: (state, action) => {
-    console.log('begin', state, action);
     return Object.assign({}, state, {callNumber: action.payload });
   },
 
   [`${THROW_REQUEST}_SUCCESS`]: (state) => {
-    console.log('success', state);
     return Object.assign({}, state, {errors: {general: 'Error not catched!!!'} });
   },
 
   [`${THROW_REQUEST}_FAILURE`]: (state, action) => {
-    console.log('fail', state, action);
     return Object.assign({}, state, {errors: action.payload.errors });
   },
 

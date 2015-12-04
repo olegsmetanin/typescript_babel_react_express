@@ -25,7 +25,6 @@ const promiseMiddleware = require('redux-promise-middleware');
 
 import routes from './routes/index';
 import Context from '../framework/common/react/Context';
-import invoke from '../framework/client/invoke/invoke';
 import HTTPClient from '../framework/client/http/HTTPClient';
 import HTTPBuffer from '../framework/client/http/HTTPBuffer';
 import Cache from '../framework/common/cache/Cache';
@@ -71,7 +70,6 @@ window['app'] = (options: any) => {
   ReactDOM.render(
     <Provider store={store}>
       <Context
-        invoke={invoke}
         cache={cache}
         httpClient={httpBuffer}
         eventBus={eventBus}

@@ -15,7 +15,6 @@ import { Action } from 'redux-actions';
 import thunk from 'redux-thunk';
 const promiseMiddleware = require('redux-promise-middleware');
 
-import invoke from '../../../framework/server/invoke/invoke';
 import Context from '../../../framework/common/react/Context';
 import routes from '../../../webclient/routes/index';
 import {rootReducer as modulesRootReducer} from '../../../webclient/modules/rootReducer';
@@ -44,7 +43,7 @@ export default async function reactServerRender(url, siteroot: string, socketPat
   const store: Store = finalCreateStore(rootReducer, initialState);
 
   //preload data for rendering
-  async function fillCache(routes, methodName, ...args) {
+  async function composeState(routes, methodName, ...args) {
     return Promise.all(routes
       .filter(route => !!route)
       .map(route => route[methodName])
@@ -70,13 +69,11 @@ export default async function reactServerRender(url, siteroot: string, socketPat
       } else {
         try {
           //renderProps.components contains route handlers itself (first elm always undefined, why?)
-          await fillCache(renderProps.components, 'fillCache', cache, invoke, httpClient);
-          await fillCache(renderProps.components, 'composeState', store.dispatch, httpClient);
+          await composeState(renderProps.components, 'composeState', store.dispatch, httpClient);
 
           let content = renderToString(
             <Provider store={store}>
               <Context
-                invoke={invoke}
                 cache={cache}
                 httpClient={httpClient}
                 eventBus={eventBus}
