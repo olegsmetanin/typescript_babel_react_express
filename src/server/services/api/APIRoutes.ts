@@ -28,7 +28,7 @@ export default class APIRoutes {
     webserver.post('/api/throw', this.throwApiError.bind(this));
     webserver.post('/api/authonly', this.authonly.bind(this));
     webserver.post('/api/login', this.login.bind(this));
-    webserver.post('/api/logout', this.logout.bind(this));    
+    webserver.post('/api/logout', this.logout.bind(this));
     webserver.post('/api/me', this.me.bind(this));
     webserver.post('/api/tasks/find', this.tasksList.bind(this));
     webserver.post('/api/tasks/executors', this.executorsList.bind(this));
@@ -197,7 +197,7 @@ export default class APIRoutes {
         id,
         name: 'Some form',
         description: 'Example editable form with description',
-        validTill: new Date('2015-06-12'),
+        validTill: (new Date()).toISOString(),
         typeCode: 'EFF',
         enabled: true,
       };

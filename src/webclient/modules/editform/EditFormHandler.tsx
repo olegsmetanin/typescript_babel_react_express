@@ -72,11 +72,11 @@ class EditFormHandler extends React.Component<IProps, {}> {
   };
 
   update = () => {
-    const form = {
-      id          : ReactDOM.findDOMNode<HTMLInputElement>(this.refs["id"]).value,
+    const form: FormData = {
+      id          : + ReactDOM.findDOMNode<HTMLInputElement>(this.refs["id"]).value,
       name        : ReactDOM.findDOMNode<HTMLInputElement>(this.refs["name"]).value,
       description : ReactDOM.findDOMNode<HTMLInputElement>(this.refs["description"]).value,
-      validTill   : ReactDOM.findDOMNode<HTMLInputElement>(this.refs["validTill"]).value,
+      validTill   : (new Date(ReactDOM.findDOMNode<HTMLInputElement>(this.refs["validTill"]).value)).toISOString(),
       typeCode    : ReactDOM.findDOMNode<HTMLInputElement>(this.refs["typeCode"]).value,
       enabled     : ReactDOM.findDOMNode<HTMLInputElement>(this.refs["enabled"]).checked
     };

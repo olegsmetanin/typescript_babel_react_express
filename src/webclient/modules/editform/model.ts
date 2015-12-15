@@ -2,7 +2,7 @@ export class FormData {
   id          : number;
   name        : string;
   description : string;
-  validTill   : Date;
+  validTill   : string;
   typeCode    : string;
   enabled     : boolean;
 }

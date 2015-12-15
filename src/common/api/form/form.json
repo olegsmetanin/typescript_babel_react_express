@@ -22,8 +22,8 @@
     },
     "validTill": {
       "type": "string",
-      "format": "date",
-      "example": "2015-09-09"
+      "format": "date-time",
+      "example": "2015-12-15T20:15:27.699Z"
     },
     "typeCode": {
       "type": "string",
