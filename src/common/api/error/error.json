@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "required": [
+    "global",
+    "errors"
+  ],
+  "properties": {
+    "general": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "errors": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

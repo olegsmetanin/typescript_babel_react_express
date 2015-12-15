@@ -34,6 +34,9 @@ var config = {
       loaders: ['component-css?ext=scss','babel'],
       include: APP_DIR
     }, {
+      test: /\.json$/,
+      loaders: ['json'],
+    }, {
       test: /\.scss$/,
       loader: ExtractTextPlugin.extract("style", "css!postcss!resolve-url!sass")
     }, {

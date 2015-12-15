@@ -1,0 +1,84 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Specification",
+    "description": "A sample swagger-2.0-compatible API",
+    "termsOfService": "http://helloreverb.com/terms/",
+    "contact": {
+      "name": "API Team",
+      "email": "foo@example.com",
+      "url": "http://oleg.smeta.in"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/form/load": {
+      "post": {
+        "description": "Load form.\n",
+        "operationId": "loadForm",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "body",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "$ref": "id/id.json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "form",
+            "schema": {
+              "$ref": "form/form.json"
+            }
+          }
+        }
+      }
+    },
+    "/form/save": {
+      "post": {
+        "description": "Save form.\n",
+        "operationId": "saveForm",
+        "parameters": [
+          {
+            "name": "form",
+            "in": "body",
+            "description": "form to the store",
+            "required": true,
+            "schema": {
+              "$ref": "form/form.json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "form"
+          },
+          "400": {
+            "description": "invalid form",
+            "schema": {
+              "$ref": "error/error.json"
+            }
+          }
+        }
+      }
+    }
+  }
+}

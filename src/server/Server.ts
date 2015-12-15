@@ -57,6 +57,7 @@ export default class Server {
     webserver.use(bodyParser.json());
     webserver.use(cookieParserMiddleware);
     webserver.use(express.static('build/webpublic'));
+    webserver.use('/api-doc', express.static('node_modules/swagger-ui/dist'));
 
     let config = this.config;
     let db = new PG({ connectionString: this.config.db.main });

@@ -39,7 +39,7 @@ var config = {
       include: APP_DIR
     }, {
       test: /\.json$/,
-      loader: "json-loader"
+      loader: "json"
     }, {
       test: /\.svg$/,
       loader: require.resolve('./webpacksvg-loader')

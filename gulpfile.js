@@ -4,6 +4,7 @@ var ts = require('gulp-typescript');
 var babel = require('gulp-babel');
 var mocha = require('gulp-mocha');
 var webpack = require('webpack-stream');
+var fs = require('fs');
 
 
 
@@ -38,9 +39,41 @@ gulp.task("webclient", ['webpublic', 'watch:webclient'], function() {
 });
 
 gulp.task('build:server:resources', function() {
-  gulp.src(['src/server/*.raml']).pipe(gulp.dest('build/server'
-    ));
+  // gulp.src(['src/server/*.raml']).pipe(gulp.dest('build/server'
+  //   ));
 });
+
+gulp.task('build:server:resources:api', function(done) {
+  var swaggerDoc = require('./src/common/api/api.json');
+
+  function flattenRefs(obj, defs) {
+    for(var key in obj) {
+      if (obj.hasOwnProperty(key) && key === '$ref' && typeof obj[key] === 'string') {
+        var path = obj[key];
+        //console.log('path', path);
+        if (!path || path.indexOf('#/definitions') === 0) continue;
+
+        var prefix = './src/common/api/';
+        var dotpath = path.replace('/', '.');
+        defs[dotpath] = require(prefix + path);
+        obj[key] = '#/definitions/' + dotpath;
+      }
+
+      if (typeof obj[key] === 'object') {
+        flattenRefs(obj[key], defs);
+      }
+    }
+  }
+
+  swaggerDoc.definitions = swaggerDoc.definitions || {};
+  flattenRefs(swaggerDoc, swaggerDoc.definitions);
+  flattenRefs(swaggerDoc.definitions, swaggerDoc.definitions);
+
+  //console.log(JSON.stringify(swaggerDoc, null, 2));
+  fs.writeFileSync('./build/webpublic/static/api.json', JSON.stringify(swaggerDoc, null, 2), 'utf-8');
+  done();
+});
+
 
 gulp.task('build:server', function() {
   var config = require('./webpack.server.config.js');
@@ -55,9 +88,11 @@ gulp.task('watch:server', ['build:server'], function () {
   server.start.bind(server)();
 });
 
-gulp.task('server', ['build:server:resources', 'build:server'], function() {
+gulp.task('server', ['build:server:resources', 'build:server:resources:api', 'build:server'], function() {
   server.start();
   gulp.watch('src/**/*.{ts,tsx}', ['watch:server']);
+  gulp.watch('src/common/api/**/*.{json}', ['build:server:resources:api']);
+
 });
 
 gulp.task('test', ['build:server'], function() {
@@ -71,4 +106,4 @@ gulp.task('test', ['build:server'], function() {
     });
 });
 
-gulp.task('default', ['webpublic', 'build:webclient', 'build:server:resources', 'build:server']);
+gulp.task('default', ['webpublic', 'build:webclient', 'build:server:resources:api', 'build:server']);
