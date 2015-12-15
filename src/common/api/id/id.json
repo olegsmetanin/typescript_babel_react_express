@@ -1,15 +1,10 @@
 {
-  "name": "id",
-  "in": "body",
-  "required": true,
-  "schema": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "string",
-        "description": "id",
-        "example": "123"
-      }
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "id",
+      "example": "123"
     }
   }
 }
