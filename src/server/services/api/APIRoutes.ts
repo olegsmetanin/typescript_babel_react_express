@@ -33,6 +33,8 @@ export default class APIRoutes {
     webserver.post('/api/tasks/find', this.tasksList.bind(this));
     webserver.post('/api/tasks/executors', this.executorsList.bind(this));
     webserver.post('/api/tasks/executors/update', this.updateExecutor.bind(this));
+    webserver.post('/api/form/load', this.loadForm.bind(this));
+    webserver.post('/api/form/save', this.saveForm.bind(this));
   }
 
   @wrapAsync
@@ -183,6 +185,35 @@ export default class APIRoutes {
         })
       }
     });
+  }
+
+  @wrapAsync
+  async loadForm(req: Request, res: Response) {
+    setTimeout(() => {
+      const {id} = req.body;
+      console.log(`Requested edit form ${id}`);
+
+      const form = {
+        id,
+        name: 'Some form',
+        description: 'Example editable form with description',
+        validTill: new Date('2015-06-12'),
+        typeCode: 'EFF',
+        enabled: true,
+      };
+
+      res.json(form);
+    }, 1000);
+  }
+
+  @wrapAsync
+  async saveForm(req: Request, res: Response) {
+    setTimeout(() => {
+      const form = req.body;
+      console.log(`Form to save: ${JSON.stringify(form, null, 2)}`);
+
+      res.status(200).end();
+    }, 1000);
   }
 
 }

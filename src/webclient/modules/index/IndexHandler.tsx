@@ -70,6 +70,9 @@ class IndexHandler extends React.Component<IIndexHandlerProps, {}> {
         <li>
           <Link to="/pingpong">Socket.io ping-pong</Link>
         </li>
+        <li>
+          <Link to="/editform">Edit form validation</Link>
+        </li>
       </ul>
     </div>;
   }
