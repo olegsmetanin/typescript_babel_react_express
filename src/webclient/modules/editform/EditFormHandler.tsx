@@ -47,7 +47,28 @@ class EditFormHandler extends React.Component<IProps, {}> {
   }
 
   save = () => {
-    this.actions.saveForm(this.props.state.data);
+    var Validator = require('jsonschema').Validator;
+    var v = new Validator();
+    var formSchema = require('../../../common/api/form/form.json');
+    v.addSchema(formSchema, '/form.json');
+
+    function importNextSchema() {
+      var nextSchema = v.unresolvedRefs.shift();
+      if (!nextSchema) {
+        return;
+      }
+      v.addSchema(require('../../../common/api' + nextSchema), nextSchema);
+      importNextSchema();
+    }
+    importNextSchema();
+
+    var result = v.validate(this.props.state.data, formSchema);
+    if (result.errors.length) {
+      console.log('Validation errors!', result);
+      this.actions.validateForm(result.errors);
+    } else {
+      this.actions.saveForm(this.props.state.data);
+    }
   };
 
   update = () => {
@@ -109,9 +130,14 @@ class EditFormHandler extends React.Component<IProps, {}> {
       )
     };
 
+    const renderErrors = () => {
+      return <div style={{color: 'red'}}>{JSON.stringify(ui.errors)}</div>;
+    }
+
     return (
       <div>
         {ui.loading && renderLoading()}
+        {ui.errors && renderErrors()}
         {(data && data.id) && renderForm()}
         {!ui.loading && !data && <div>No data to show</div>}
       </div>

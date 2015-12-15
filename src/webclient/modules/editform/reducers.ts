@@ -1,6 +1,6 @@
 import {handleActions} from 'redux-actions';
 import {FormData, IModuleState} from './model';
-import {LOAD_FORM, SAVE_FORM, UPDATE_FORM} from './actionTypes';
+import {LOAD_FORM, SAVE_FORM, UPDATE_FORM, VALIDATE_FORM} from './actionTypes';
 
 const initialState: IModuleState = {
   data: null,
@@ -30,6 +30,11 @@ export default handleActions<IModuleState>({
 
   [UPDATE_FORM]: (state, action) => {
     return Object.assign({}, state, {data: action.payload});
+  },
+
+  [VALIDATE_FORM]: (state, action) => {
+    const ui = Object.assign({}, state.ui, {errors: action.payload});
+    return Object.assign({}, state, {ui});
   },
 
 

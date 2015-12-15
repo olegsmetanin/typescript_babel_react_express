@@ -3,15 +3,14 @@
   "required": [
     "id",
     "name",
-    "description",
     "validTill",
     "typeCode",
     "enabled"
   ],
   "properties": {
     "id": {
-      "type": "string",
-      "example": "123"
+      "type": "integer",
+      "example": 123
     },
     "name": {
       "type": "string",
@@ -24,11 +23,12 @@
     "validTill": {
       "type": "string",
       "format": "date",
-      "example": "20150909"
+      "example": "2015-09-09"
     },
     "typeCode": {
-      "type": "integer",
-      "example": "123"
+      "type": "string",
+      "pattern": "^FF(E|D)$",
+      "example": "FFE"
     },
     "enabled": {
       "type": "boolean",
