@@ -1,8 +1,10 @@
+import {Action} from 'redux-actions';
+import {IValidator, ValidationResult} from '../../../framework/client/validation/IValidator';
 import {LOAD_FORM, SAVE_FORM, EDIT_FORM, VALIDATE_FORM} from './actionTypes';
 import {IEditFormApi} from './api';
 import {FormData} from './model';
 
-function factory(options: {api: IEditFormApi}) {
+function factory(options: {api: IEditFormApi, validator: IValidator}) {
 
   const {api} = options;
 
@@ -15,14 +17,24 @@ function factory(options: {api: IEditFormApi}) {
     }
   };
 
-  const saveForm = (form: FormData) => {
+  const saveForm = (form: FormData): Action => {
+    const vr = options.validator.validate(form);
+    if (!vr.valid) {
+      //form has validation errors
+      return {
+        type: VALIDATE_FORM,
+        payload: vr.errors
+      }
+    }
+
+    //run saving via api
     return {
       type: SAVE_FORM,
       payload: {
         promise: api.save(form),
         data: form
       }
-    }
+    };
   };
 
   const editForm = () => {
@@ -31,18 +43,10 @@ function factory(options: {api: IEditFormApi}) {
     }
   };
 
-  const validateForm = (errors: any[]) => {
-    return {
-      type: VALIDATE_FORM,
-      payload: errors
-    }
-  };
-
   return {
     loadForm,
     saveForm,
     editForm,
-    validateForm,
   };
 }
 

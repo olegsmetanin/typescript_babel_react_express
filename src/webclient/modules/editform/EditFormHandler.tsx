@@ -5,11 +5,14 @@ import * as ReactDOM from 'react-dom';
 import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import IHTTPClient from '../../../framework/common/http/IHTTPClient';
+import Validator from '../../../framework/client/validation/Validator';
 import {FormData, IModuleState} from './model';
 import actionsFactory from './actions';
 import EditFormApi from './api';
 import ViewForm from './components/ViewForm';
 import EditForm from './components/EditForm';
+
+const formValidationSchema = require('../../../common/api/form/form.json');
 
 interface IContext {
   httpClient: IHTTPClient;
@@ -28,7 +31,7 @@ class EditFormHandler extends React.Component<IProps, {}> {
 
   static async composeState(dispatch: Dispatch, httpClient: IHTTPClient) {
     const api = new EditFormApi({httpClient});
-    const actions = actionsFactory({api});
+    const actions = actionsFactory({api, validator: null});
     await dispatch(actions.loadForm(1));//TODO get id from route params
   }
 
@@ -39,7 +42,8 @@ class EditFormHandler extends React.Component<IProps, {}> {
     super(props, context);
 
     const api = new EditFormApi({httpClient: context.httpClient});
-    this.actions = bindActionCreators(actionsFactory({api}), props.dispatch);
+    const validator = new Validator(formValidationSchema);
+    this.actions = bindActionCreators(actionsFactory({api, validator}), props.dispatch);
   }
 
   componentWillMount() {
@@ -47,32 +51,6 @@ class EditFormHandler extends React.Component<IProps, {}> {
       this.actions.loadForm(1);//TODO get id from route params
     }
   }
-
-  save = (data: FormData) => {
-    var Validator = require('jsonschema').Validator;
-    var v = new Validator();
-    var formSchema = require('../../../common/api/form/form.json');
-    v.addSchema(formSchema, '/form.json');
-
-    function importNextSchema() {
-      var nextSchema = v.unresolvedRefs.shift();
-      console.log('nextSchema', nextSchema);
-      if (!nextSchema) {
-        return;
-      }
-      v.addSchema(require('../../../common/api' + nextSchema), nextSchema);
-      importNextSchema();
-    }
-    importNextSchema();
-//console.log('data to save', data);
-    var result = v.validate(data, formSchema);
-    if (result.errors.length) {
-      console.log('Validation errors!', result);
-      this.actions.validateForm(result.errors);
-    } else {
-      this.actions.saveForm(data);
-    }
-  };
 
   render() {
     const {state: {data, ui}} = this.props;
@@ -93,7 +71,7 @@ class EditFormHandler extends React.Component<IProps, {}> {
         {data && (
           !ui.editMode
             ? <ViewForm data={data} onEdit={() => this.actions.editForm()} />
-            : <EditForm data={data} saving={ui.saving} onSave={changedData => this.save(changedData)} />
+            : <EditForm data={data} saving={ui.saving} onSave={changedData => this.actions.saveForm(changedData)} />
           )
         }
 
