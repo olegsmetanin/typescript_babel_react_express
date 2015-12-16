@@ -74,12 +74,8 @@ class EditFormHandler extends React.Component<IProps, IState> {
       console.log('Validation errors!', result);
       this.actions.validateForm(result.errors);
     } else {
-      try {
-        await this.actions.saveForm(data);
-        this.setState({editMode: false});
-      } catch(e) {
-        console.error(e);
-      }
+      await this.actions.saveForm(data);
+      this.setState({editMode: false});
     }
   };
 
@@ -97,7 +93,7 @@ class EditFormHandler extends React.Component<IProps, IState> {
 
     const renderErrors = () => {
       return <div style={{color: 'red'}}>{JSON.stringify(ui.errors)}</div>;
-    }
+    };
 
     return (
       <div>
