@@ -51,6 +51,7 @@ var config = {
     compiler: 'typescript'
   },
   plugins: [
+    new webpack.IgnorePlugin(new RegExp("./api/api.json")),
     new webpack.optimize.CommonsChunkPlugin("lib", 'lib.js'),
     new webpack.BannerPlugin('Build: '+new Date()),
     new ExtractTextPlugin(__dirname + '/build/webpublic/static/css/app.css', {
