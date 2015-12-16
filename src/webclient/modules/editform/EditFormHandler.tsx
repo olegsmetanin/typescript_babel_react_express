@@ -71,7 +71,7 @@ class EditFormHandler extends React.Component<IProps, {}> {
         {data && (
           !ui.editMode
             ? <ViewForm data={data} onEdit={() => this.actions.editForm()} />
-            : <EditForm data={data} saving={ui.saving} onSave={changedData => this.actions.saveForm(changedData)} />
+            : <EditForm errors={ui.errors} data={data} saving={ui.saving} onSave={changedData => this.actions.saveForm(changedData)} />
           )
         }
 

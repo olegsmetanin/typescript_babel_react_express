@@ -12,6 +12,7 @@ interface IProps extends React.Props<EditForm> {
   data   : FormData;
   saving : boolean;
   onSave : (data: FormData) => void;
+  errors : any;
 }
 
 interface IState extends FormData {
@@ -31,13 +32,17 @@ export default class EditForm extends React.Component<IProps, IState> implements
   };
 
   render() {
-    const {saving} = this.props;
+    const {saving, errors} = this.props;
 
     return (
       <div className="form">
         <div>
           <label>Id:</label>
           <input type="number" valueLink={this.linkState<number>('id')} />
+          {errors && errors['instance.id']
+            ? <div>{errors['instance.id'].map(e => e.msg).join(', ')}</div>
+            : null
+          }
         </div>
         <div>
           <label>Name:</label>
@@ -54,6 +59,10 @@ export default class EditForm extends React.Component<IProps, IState> implements
         <div>
           <label>Type code:</label>
           <input type="text" valueLink={this.linkState<string>('typeCode')} />
+          {errors && errors['instance.typeCode']
+            ? <div>{errors['instance.typeCode'].map(e => e.msg).join(', ')}</div>
+            : null
+          }
         </div>
         <div>
           <label>Enabled:</label>
@@ -64,6 +73,10 @@ export default class EditForm extends React.Component<IProps, IState> implements
             {!saving ? 'Save' : 'Saving...'}
           </button>
         </div>
+        {errors && errors['general']
+          ? errors['general'].map(e => e.msg).join(', ')
+          : null
+        }
       </div>
     )
 
