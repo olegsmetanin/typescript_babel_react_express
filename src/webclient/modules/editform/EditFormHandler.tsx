@@ -20,11 +20,7 @@ interface IProps extends React.Props<EditFormHandler> {
   dispatch : Dispatch;
 }
 
-interface IState {
-  editMode: boolean;
-}
-
-class EditFormHandler extends React.Component<IProps, IState> {
+class EditFormHandler extends React.Component<IProps, {}> {
 
   static contextTypes: React.ValidationMap<any> = {
     httpClient: React.PropTypes.object.isRequired,
@@ -38,7 +34,6 @@ class EditFormHandler extends React.Component<IProps, IState> {
 
   actions: any;
   context: IContext;
-  state: IState = {editMode: false};
 
   constructor(props, context) {
     super(props, context);
@@ -53,7 +48,7 @@ class EditFormHandler extends React.Component<IProps, IState> {
     }
   }
 
-  save = async (data: FormData) => {
+  save = (data: FormData) => {
     var Validator = require('jsonschema').Validator;
     var v = new Validator();
     var formSchema = require('../../../common/api/form/form.json');
@@ -61,6 +56,7 @@ class EditFormHandler extends React.Component<IProps, IState> {
 
     function importNextSchema() {
       var nextSchema = v.unresolvedRefs.shift();
+      console.log('nextSchema', nextSchema);
       if (!nextSchema) {
         return;
       }
@@ -74,17 +70,11 @@ class EditFormHandler extends React.Component<IProps, IState> {
       console.log('Validation errors!', result);
       this.actions.validateForm(result.errors);
     } else {
-      await this.actions.saveForm(data);
-      this.setState({editMode: false});
+      this.actions.saveForm(data);
     }
   };
 
-  startEdit = () => {
-    this.setState({editMode: true});
-  };
-
   render() {
-    const {editMode} = this.state;
     const {state: {data, ui}} = this.props;
 
     const renderLoading = () => {
@@ -101,8 +91,8 @@ class EditFormHandler extends React.Component<IProps, IState> {
         {ui.errors && renderErrors()}
 
         {data && (
-          !editMode
-            ? <ViewForm data={data} onEdit={this.startEdit} />
+          !ui.editMode
+            ? <ViewForm data={data} onEdit={() => this.actions.editForm()} />
             : <EditForm data={data} saving={ui.saving} onSave={changedData => this.save(changedData)} />
           )
         }

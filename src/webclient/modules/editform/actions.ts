@@ -1,4 +1,4 @@
-import {LOAD_FORM, SAVE_FORM, VALIDATE_FORM} from './actionTypes';
+import {LOAD_FORM, SAVE_FORM, EDIT_FORM, VALIDATE_FORM} from './actionTypes';
 import {IEditFormApi} from './api';
 import {FormData} from './model';
 
@@ -25,6 +25,12 @@ function factory(options: {api: IEditFormApi}) {
     }
   };
 
+  const editForm = () => {
+    return {
+      type: EDIT_FORM
+    }
+  };
+
   const validateForm = (errors: any[]) => {
     return {
       type: VALIDATE_FORM,
@@ -35,6 +41,7 @@ function factory(options: {api: IEditFormApi}) {
   return {
     loadForm,
     saveForm,
+    editForm,
     validateForm,
   };
 }

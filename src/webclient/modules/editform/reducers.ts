@@ -1,10 +1,11 @@
 import {handleActions} from 'redux-actions';
 import {FormData, IModuleState} from './model';
-import {LOAD_FORM, SAVE_FORM, VALIDATE_FORM} from './actionTypes';
+import {LOAD_FORM, SAVE_FORM, EDIT_FORM, VALIDATE_FORM} from './actionTypes';
 
 const initialState: IModuleState = {
   data: null,
   ui: {
+    editMode: false,
     loading: false,
     saving: false
   }
@@ -28,6 +29,11 @@ export default handleActions<IModuleState>({
   },
 
 
+  [EDIT_FORM]: (state) => {
+    const ui = Object.assign({}, state.ui, {editMode: true});
+    return Object.assign({}, state, {ui});
+  },
+
   [VALIDATE_FORM]: (state, action) => {
     const ui = Object.assign({}, state.ui, {errors: action.payload});
     return Object.assign({}, state, {ui});
@@ -40,12 +46,12 @@ export default handleActions<IModuleState>({
   },
 
   [`${SAVE_FORM}_SUCCESS`]: (state) => {
-    const ui = Object.assign({}, state.ui, {saving: false, errors: undefined});
+    const ui = Object.assign({}, state.ui, {saving: false, editMode: false, errors: undefined});
     return Object.assign({}, state, {ui});
   },
 
   [`${SAVE_FORM}_FAILURE`]: (state, action) => {
-    const ui = Object.assign({}, state.ui, {saving: false, errors: action.payload});
+    const ui = Object.assign({}, state.ui, {saving: false, editMode: false, errors: action.payload});
     return Object.assign({}, state, {ui});
   },
 

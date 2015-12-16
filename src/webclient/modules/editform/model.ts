@@ -10,8 +10,9 @@ export class FormData {
 export interface IModuleState {
   data : FormData;
   ui   : {
-    loading : boolean;
-    saving  : boolean;
-    errors? : Error;
+    editMode : boolean;
+    loading  : boolean;
+    saving   : boolean;
+    errors?  : Error;
   }
 }
