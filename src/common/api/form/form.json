@@ -1,38 +1,37 @@
 {
   "type": "object",
   "required": [
-    "id",
     "name",
     "validTill",
     "typeCode",
     "enabled"
   ],
-  "properties": {
-    "id": {
-      "type": "integer",
-      "example": 123
-    },
-    "name": {
-      "type": "string",
-      "example": "Name"
-    },
-    "description": {
-      "type": "string",
-      "example": "description"
-    },
-    "validTill": {
-      "type": "string",
-      "format": "date-time",
-      "example": "2015-12-15T20:15:27.699Z"
-    },
-    "typeCode": {
-      "type": "string",
-      "pattern": "^FF(E|D)$",
-      "example": "FFE"
-    },
-    "enabled": {
-      "type": "boolean",
-      "example": true
+  "allOf": [{
+    "$ref": "id/id.json"
+  }, {
+    "properties": {
+      "name": {
+        "type": "string",
+        "example": "Name"
+      },
+      "description": {
+        "type": "string",
+        "example": "description"
+      },
+      "validTill": {
+        "type": "string",
+        "format": "date-time",
+        "example": "2015-12-15T20:15:27.699Z"
+      },
+      "typeCode": {
+        "type": "string",
+        "pattern": "^FF(E|D)$",
+        "example": "FFE"
+      },
+      "enabled": {
+        "type": "boolean",
+        "example": true
+      }
     }
-  }
+  }]
 }

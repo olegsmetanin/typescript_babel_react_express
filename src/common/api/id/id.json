@@ -2,9 +2,9 @@
   "type": "object",
   "properties": {
     "id": {
-      "type": "string",
+      "type": "integer",
       "description": "id",
-      "example": "123"
+      "example": 123
     }
   }
 }
