@@ -1,0 +1,72 @@
+/// <reference path="../../../webclient.d.ts"/>
+
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as reactMixin from 'react-mixin';
+
+import {FormData} from '../model';
+import * as LinkedStateMixin from "react-addons-linked-state-mixin";
+
+
+interface IProps extends React.Props<EditForm> {
+  data   : FormData;
+  saving : boolean;
+  onSave : (data: FormData) => void;
+}
+
+interface IState extends FormData {
+}
+
+@reactMixin.decorate(LinkedStateMixin)
+export default class EditForm extends React.Component<IProps, IState> implements React.LinkedStateMixin {
+
+  state: IState = this.props.data;
+
+  //injected with mixin
+  linkState: <T>(key: string) => React.ReactLink<T>;
+
+  save = () => {
+    const data = Object.assign({}, this.state, {id: Number(this.state.id)});//convert string id to number
+    this.props.onSave(data);
+  };
+
+  render() {
+    const {saving} = this.props;
+
+    return (
+      <div className="form">
+        <div>
+          <label>Id:</label>
+          <input type="number" valueLink={this.linkState<number>('id')} />
+        </div>
+        <div>
+          <label>Name:</label>
+          <input type="text" valueLink={this.linkState<string>('name')} />
+        </div>
+        <div>
+          <label>Descriptions:</label>
+          <textarea valueLink={this.linkState<string>('description')} rows={3} />
+        </div>
+        <div>
+          <label>Valid till:</label>
+          <input type="text" valueLink={this.linkState<string>('validTill')} />
+        </div>
+        <div>
+          <label>Type code:</label>
+          <input type="text" valueLink={this.linkState<string>('typeCode')} />
+        </div>
+        <div>
+          <label>Enabled:</label>
+          <input type="checkbox" checkedLink={this.linkState<boolean>('enabled')} />
+        </div>
+        <div>
+          <button type="button" disabled={saving} onClick={this.save}>
+            {!saving ? 'Save' : 'Saving...'}
+          </button>
+        </div>
+      </div>
+    )
+
+  }
+
+}

@@ -198,7 +198,7 @@ export default class APIRoutes {
         name: 'Some form',
         description: 'Example editable form with description',
         validTill: (new Date()).toISOString(),
-        typeCode: 'EFF',
+        typeCode: 'FFE',
         enabled: true,
       };
 

@@ -1,4 +1,4 @@
-import {LOAD_FORM, SAVE_FORM, UPDATE_FORM, VALIDATE_FORM} from './actionTypes';
+import {LOAD_FORM, SAVE_FORM, VALIDATE_FORM} from './actionTypes';
 import {IEditFormApi} from './api';
 import {FormData} from './model';
 
@@ -19,15 +19,9 @@ function factory(options: {api: IEditFormApi}) {
     return {
       type: SAVE_FORM,
       payload: {
-        promise: api.save(form)
+        promise: api.save(form),
+        data: form
       }
-    }
-  };
-
-  const updateForm = (form: FormData) => {
-    return {
-      type: UPDATE_FORM,
-      payload: form
     }
   };
 
@@ -41,7 +35,6 @@ function factory(options: {api: IEditFormApi}) {
   return {
     loadForm,
     saveForm,
-    updateForm,
     validateForm,
   };
 }
