@@ -68,7 +68,7 @@ class EditFormHandler extends React.Component<IProps, IState> {
       importNextSchema();
     }
     importNextSchema();
-
+//console.log('data to save', data);
     var result = v.validate(data, formSchema);
     if (result.errors.length) {
       console.log('Validation errors!', result);
@@ -100,7 +100,7 @@ class EditFormHandler extends React.Component<IProps, IState> {
         {ui.loading && renderLoading()}
         {ui.errors && renderErrors()}
 
-        {(data && data.id) && (
+        {data && (
           !editMode
             ? <ViewForm data={data} onEdit={this.startEdit} />
             : <EditForm data={data} saving={ui.saving} onSave={changedData => this.save(changedData)} />
