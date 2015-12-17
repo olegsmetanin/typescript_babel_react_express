@@ -60,13 +60,12 @@ class EditFormHandler extends React.Component<IProps, {}> {
     };
 
     const renderErrors = () => {
-      return <div style={{color: 'red'}}>{JSON.stringify(ui.errors)}</div>;
+      return <div>Validation errors: <span className="error">{JSON.stringify(ui.errors)}</span></div>;
     };
 
     return (
       <div>
         {ui.loading && renderLoading()}
-        {ui.errors && renderErrors()}
 
         {data && (
           !ui.editMode
@@ -76,6 +75,9 @@ class EditFormHandler extends React.Component<IProps, {}> {
         }
 
         {!ui.loading && !data && <div>No data to show</div>}
+
+        {ui.errors && renderErrors()}
+
       </div>
     )
 

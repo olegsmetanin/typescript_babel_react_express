@@ -35,12 +35,12 @@ export default class EditForm extends React.Component<IProps, IState> implements
     const {saving, errors} = this.props;
 
     return (
-      <div className="form">
+      <div className="editform">
         <div>
           <label>Id:</label>
           <input type="number" valueLink={this.linkState<number>('id')} />
           {errors && errors['instance.id']
-            ? <div>{errors['instance.id'].map(e => e.msg).join(', ')}</div>
+            ? <div className="error">{errors['instance.id'].map(e => e.msg).join(', ')}</div>
             : null
           }
         </div>
@@ -60,7 +60,7 @@ export default class EditForm extends React.Component<IProps, IState> implements
           <label>Type code:</label>
           <input type="text" valueLink={this.linkState<string>('typeCode')} />
           {errors && errors['instance.typeCode']
-            ? <div>{errors['instance.typeCode'].map(e => e.msg).join(', ')}</div>
+            ? <div className="error">{errors['instance.typeCode'].map(e => e.msg).join(', ')}</div>
             : null
           }
         </div>
@@ -74,7 +74,7 @@ export default class EditForm extends React.Component<IProps, IState> implements
           </button>
         </div>
         {errors && errors['general']
-          ? errors['general'].map(e => e.msg).join(', ')
+          ? <div className="error">{errors['general'].map(e => e.msg).join(', ')}</div>
           : null
         }
       </div>
