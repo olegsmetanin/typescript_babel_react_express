@@ -7,6 +7,8 @@ import * as reactMixin from 'react-mixin';
 import {FormData} from '../model';
 import * as LinkedStateMixin from "react-addons-linked-state-mixin";
 
+import Error from './Error';
+
 
 interface IProps extends React.Props<EditForm> {
   data   : FormData;
@@ -38,45 +40,40 @@ export default class EditForm extends React.Component<IProps, IState> implements
       <div className="editform">
         <div>
           <label>Id:</label>
-          <input type="number" valueLink={this.linkState<number>('id')} />
-          {errors && errors['instance.id']
-            ? <div className="error">{errors['instance.id'].map(e => e.msg).join(', ')}</div>
-            : null
-          }
+          <input type="text" valueLink={this.linkState<number>('id')} />
+          <Error propPath="instance.id" errors={errors} />
         </div>
         <div>
           <label>Name:</label>
           <input type="text" valueLink={this.linkState<string>('name')} />
+          <Error propPath="instance.name" errors={errors} />
         </div>
         <div>
           <label>Descriptions:</label>
           <textarea valueLink={this.linkState<string>('description')} rows={3} />
+          <Error propPath="instance.description" errors={errors} />
         </div>
         <div>
           <label>Valid till:</label>
           <input type="text" valueLink={this.linkState<string>('validTill')} />
+          <Error propPath="instance.validTill" errors={errors} />
         </div>
         <div>
           <label>Type code:</label>
           <input type="text" valueLink={this.linkState<string>('typeCode')} />
-          {errors && errors['instance.typeCode']
-            ? <div className="error">{errors['instance.typeCode'].map(e => e.msg).join(', ')}</div>
-            : null
-          }
+          <Error propPath="instance.typeCode" errors={errors} />
         </div>
         <div>
           <label>Enabled:</label>
           <input type="checkbox" checkedLink={this.linkState<boolean>('enabled')} />
+          <Error propPath="instance.enabled" errors={errors} />
         </div>
         <div>
           <button type="button" disabled={saving} onClick={this.save}>
             {!saving ? 'Save' : 'Saving...'}
           </button>
         </div>
-        {errors && errors['general']
-          ? <div className="error">{errors['general'].map(e => e.msg).join(', ')}</div>
-          : null
-        }
+        <Error errors={errors} />
       </div>
     )
 

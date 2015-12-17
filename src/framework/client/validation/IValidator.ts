@@ -8,6 +8,6 @@ export class ValidationResult {
   valid  : boolean;
   errors : {
     general?: ErrorDescription[];
-    [field: string]: ErrorDescription[];
+    [propPath: string]: ErrorDescription[];
   };
 }

@@ -13,6 +13,7 @@ import ViewForm from './components/ViewForm';
 import EditForm from './components/EditForm';
 
 const formValidationSchema = require('../../../common/api/form/form.json');
+const validationMessages = require('./validation_messages.ru');
 
 interface IContext {
   httpClient: IHTTPClient;
@@ -42,7 +43,7 @@ class EditFormHandler extends React.Component<IProps, {}> {
     super(props, context);
 
     const api = new EditFormApi({httpClient: context.httpClient});
-    const validator = new Validator(formValidationSchema);
+    const validator = new Validator(formValidationSchema, validationMessages);
     this.actions = bindActionCreators(actionsFactory({api, validator}), props.dispatch);
   }
 
@@ -59,10 +60,6 @@ class EditFormHandler extends React.Component<IProps, {}> {
       return <div>Loading form data...</div>
     };
 
-    const renderErrors = () => {
-      return <div>Validation errors: <span className="error">{JSON.stringify(ui.errors)}</span></div>;
-    };
-
     return (
       <div>
         {ui.loading && renderLoading()}
@@ -75,9 +72,6 @@ class EditFormHandler extends React.Component<IProps, {}> {
         }
 
         {!ui.loading && !data && <div>No data to show</div>}
-
-        {ui.errors && renderErrors()}
-
       </div>
     )
 
