@@ -7,9 +7,9 @@ import IndexHandler from '../modules/index/IndexHandler';
 import LoginHandler from '../modules/auth/LoginHandler';
 //import AboutHandler from '../handlers/AboutHandler';
 import CatchHandler from '../modules/catch/CatchHandler';
-import NotFoundHandler from '../handlers/NotFoundHandler';
+import NotFoundHandler from '../modules/notfound/NotFoundHandler';
 //import TasksHandler from '../modules/tasks/TasksHandler';
-import NotImplementedHandler from '../handlers/NotImplementedHandler';
+import NotImplementedHandler from '../modules/notimplemented/NotImplementedHandler';
 import PingPongHandler from '../modules/pingpong/PingPongHandler';
 import EditFormHandler from '../modules/editform/EditFormHandler';
 
@@ -27,7 +27,7 @@ let routes = <Route>
   <Route path="/" component={Layout}>
     <IndexRoute component={IndexHandler}/>
     <Route path="login" component={LoginHandler} />
-    <Route path="about" getComponent={loadContainerAsync(require('bundle?lazy&name=about!../handlers/AboutHandler'))} />
+    <Route path="about" getComponent={loadContainerAsync(require('bundle?lazy&name=about!../modules/about/AboutHandler'))} />
     <Route path="notimplemented" component={NotImplementedHandler} />
     <Route path="catch" component={CatchHandler} />
     <Route path="tasks" getComponent={loadContainerAsync(require('bundle?lazy&name=tasks!../modules/tasks/TasksHandler'))}  />
