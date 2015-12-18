@@ -270,15 +270,20 @@ export default class APIRoutes {
 
   @wrapAsync
   async getListItem(req: Request, res: Response) {
+
     setTimeout(() => {
-      const {id} = req.body;
+      try {
+        const {id} = req.body;
+        const result = this.listItems.find(li => li.id === Number(id));
+        if (!result) {
+          return res.status(404).end();
+        }
 
-      const result = this.listItems.find(li => li.id === id);
-      if (!result) {
-        return res.status(404);
+        res.json(result);
+      } catch(e) {
+        console.error(e);
+        res.status(500).end();
       }
-
-      res.json(result);
     }, 1000);
   }
 

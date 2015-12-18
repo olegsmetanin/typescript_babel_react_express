@@ -69,7 +69,7 @@ export default async function reactServerRender(url, siteroot: string, socketPat
       } else {
         try {
           //renderProps.components contains route handlers itself (first elm always undefined, why?)
-          await composeState(renderProps.components, 'composeState', store.dispatch, httpClient);
+          await composeState(renderProps.components, 'composeState', store.dispatch, httpClient, renderProps);
 
           let content = renderToString(
             <Provider store={store}>

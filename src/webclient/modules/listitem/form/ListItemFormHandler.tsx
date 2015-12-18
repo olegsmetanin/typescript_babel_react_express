@@ -23,6 +23,7 @@ interface IContext {
 interface IProps extends React.Props<ListItemFormHandler> {
   state    : IFormState;
   dispatch : Dispatch;
+  params   : {id: number}
 }
 
 
@@ -32,10 +33,11 @@ class ListItemFormHandler extends React.Component<IProps, {}> {
     httpClient: React.PropTypes.object.isRequired,
   };
 
-  static async composeState(dispatch: Dispatch, httpClient: IHTTPClient) {
+  static async composeState(dispatch: Dispatch, httpClient: IHTTPClient, props: any) {
     const api = new FormApi({httpClient});
     const actions = actionsFactory({api, validator: null});
-    await dispatch(actions.loadForm(1));//TODO get id from route params
+    const id = Number(props.params.id);
+    await dispatch(actions.loadForm(id));
   }
 
   actions: any;
@@ -51,7 +53,11 @@ class ListItemFormHandler extends React.Component<IProps, {}> {
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
-      this.actions.loadForm(1);//TODO get id from route params
+      const id = Number(this.props.params.id);
+      const {item} = this.props.state;
+      if (!item || item.id !== id) {
+        this.actions.loadForm(id);
+      }
     }
   }
 
