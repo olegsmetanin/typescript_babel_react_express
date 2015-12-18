@@ -203,7 +203,7 @@ export default class APIRoutes {
     const descSuffixes = ['nice description', 'not so nice description', 'very long text', 'very small, but muted message'];
     const typeCodes    = ['FFE', 'FFD'];
     this.listItems = [];
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 27; ++i) {
       this.listItems.push({
         id: i,
         name: `${randomString(namePrefixes)} ${randomString(nameSuffixes)}`,
@@ -258,9 +258,9 @@ export default class APIRoutes {
         : this.listItems;
 
       const fromIndex = Math.max(0, Math.min(offset, found.length - 1));
-      const toIndex = Math.min(fromIndex + 10, found.length - 1);
+      const toIndex = Math.min(fromIndex + 5, found.length - 1);
       const result: IListItemsResponse = {
-        items: found.slice(fromIndex, toIndex),
+        items: found.slice(fromIndex, toIndex + 1),
         count: found.length,
       };
 

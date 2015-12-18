@@ -41,6 +41,11 @@ class ListItemListHandler extends React.Component<IProps, {}> {
     }
   }
 
+  loadMore = () => {
+    const {filter, items} = this.props.state;
+    this.actions.search(filter, items.length);
+  };
+
   render() {
     const {filter, items, count, ui} = this.props.state;
 
@@ -52,6 +57,14 @@ class ListItemListHandler extends React.Component<IProps, {}> {
       return <div className="listform__items">
         {items.map(item => <ListItem key={item.id} item={item} />)}
         {items.length <= 0 && <div>No list items found</div>}
+      </div>
+    };
+
+    const renderNextBtn = () => {
+      return <div className="listform__more" onClick={this.loadMore}>
+        <button type="button" className="listform__morebtn" disabled={ui.loading}>
+          Load more
+        </button>
       </div>
     };
 
@@ -68,6 +81,8 @@ class ListItemListHandler extends React.Component<IProps, {}> {
         {renderItems()}
 
         {ui.loading === true && renderLoading()}
+
+        {count > items.length && renderNextBtn()}
       </div>
     )
   }
