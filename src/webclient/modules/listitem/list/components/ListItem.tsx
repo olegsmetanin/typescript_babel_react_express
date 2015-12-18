@@ -1,8 +1,8 @@
-/// <reference path="../../../webclient.d.ts"/>
+/// <reference path="../../../../webclient.d.ts"/>
 
 import * as React from 'react';
 import {Link} from 'react-router';
-import {IListItem} from '../model';
+import {IListItem} from '../../model';
 
 
 interface IProps extends React.Props<ListItem> {

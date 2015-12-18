@@ -13,8 +13,8 @@ import NotImplementedHandler from '../modules/notimplemented/NotImplementedHandl
 import PingPongHandler from '../modules/pingpong/PingPongHandler';
 import EditFormHandler from '../modules/editform/EditFormHandler';
 
-import ListItemListHandler from '../modules/list/ListItemListHandler';
-import ListItemFormHandler from '../modules/list/ListItemFormHandler';
+import ListItemListHandler from '../modules/listitem/list/ListItemListHandler';
+import ListItemFormHandler from '../modules/listitem/form/ListItemFormHandler';
 
 const loadContainerAsync = bundle => (location, cb) => {
   if (typeof window !== 'undefined') {

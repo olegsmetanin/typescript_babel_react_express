@@ -1,9 +1,9 @@
-/// <reference path="../../webclient.d.ts"/>
+/// <reference path="../../../webclient.d.ts"/>
 
 import * as React from 'react';
 import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
-import IHTTPClient from '../../../framework/common/http/IHTTPClient';
+import IHTTPClient from '../../../../framework/common/http/IHTTPClient';
 import {IListState} from './model';
 import ListFormApi from './api';
 import actionsFactory from './actions';
@@ -37,7 +37,10 @@ class ListItemListHandler extends React.Component<IProps, {}> {
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
-      this.actions.search({search: ''});
+      const {filter, items} = this.props.state;
+      if (!filter.search && !items.length) {
+        this.actions.search({search: ''});
+      }
     }
   }
 
@@ -90,7 +93,7 @@ class ListItemListHandler extends React.Component<IProps, {}> {
 }
 
 const mapStateToProps = state => ({
-  state: state && state.modules && state.modules.listform && state.modules.listform.list
+  state: state && state.modules && state.modules.listitem && state.modules.listitem.list
 });
 
 export default connect(mapStateToProps)(ListItemListHandler);

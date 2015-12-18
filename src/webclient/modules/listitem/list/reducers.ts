@@ -1,21 +1,18 @@
 import {handleActions} from 'redux-actions';
 import {combineReducers} from 'redux';
-import {IModuleState, IListItemsResponse} from './model';
-import {
-  LISTFORM_SEARCH
-} from './actionTypes';
+import {IListState} from './model';
+import {IListItemsResponse} from './model';
+import {LISTFORM_SEARCH} from './actionTypes';
 
-const initialState: IModuleState = {
-  list: {
-    items: [],
-    count: 0,
-    filter: {search: ''},
+const initialState: IListState = {
+  items: [],
+  count: 0,
+  filter: {search: ''},
 
-    ui: {loading: false},
-  },
+  ui: {loading: false},
 };
 
-const listReducers = handleActions({
+export default handleActions({
 
   [`${LISTFORM_SEARCH}_BEGIN`]: (state, action) => {
     const ui = Object.assign({}, state.ui, {loading: true});
@@ -38,8 +35,5 @@ const listReducers = handleActions({
     return Object.assign({}, state, {ui});
   }
 
-}, initialState.list);
+}, initialState);
 
-export default combineReducers({
-  list: listReducers
-});

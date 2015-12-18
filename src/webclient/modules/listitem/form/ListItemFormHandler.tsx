@@ -1,4 +1,4 @@
-/// <reference path="../../webclient.d.ts"/>
+/// <reference path="../../../webclient.d.ts"/>
 
 import * as React from 'react';
 import {bindActionCreators, Store, Dispatch} from 'redux';

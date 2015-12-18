@@ -1,4 +1,4 @@
-import {IListItemsFilter} from '../../../common/api';
+import {IListItemsFilter} from './model';
 import {IListFormApi} from './api';
 import * as ActionTypes from './actionTypes';
 
