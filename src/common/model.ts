@@ -6,3 +6,12 @@ export interface IUser {
   provider    : string;
   picurl      : string;
 }
+
+export interface IListItem {
+  id          : number;
+  name        : string;
+  description : string;
+  validTill   : string;
+  typeCode    : string;
+  enabled     : boolean;
+}

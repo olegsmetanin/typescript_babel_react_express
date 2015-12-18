@@ -4,6 +4,7 @@ import invoke from './../../../framework/server/invoke/invoke';
 import Delay from './../../../framework/common/commands/Delay';
 import GetUser from './commands/User/GetUser';
 import IDB from './../../../framework/server/database/IDB';
+import {IListItem} from './../../../common/model';
 
 interface APIRoutesSettings {
   webserver: any;
@@ -35,6 +36,11 @@ export default class APIRoutes {
     webserver.post('/api/tasks/executors/update', this.updateExecutor.bind(this));
     webserver.post('/api/form/load', this.loadForm.bind(this));
     webserver.post('/api/form/save', this.saveForm.bind(this));
+
+    webserver.post('/api/list-items', this.getListItems.bind(this));
+    webserver.post('/api/list-items/get', this.getListItem.bind(this));
+    webserver.post('/api/list-items/update', this.updateListItem.bind(this));
+    webserver.post('/api/list-items/delete', this.deleteListItem.bind(this));
   }
 
   @wrapAsync
@@ -156,15 +162,18 @@ export default class APIRoutes {
 
   tasks: Array<{id: number, title: string, status: number, executors?: number[]}>;
   executors: Array<{id: number, name: string, tasks?: number[]}>;
+  listItems: IListItem[];
 
   private _generateStubData() {
     const statuses = [1, 2, 3];
-    const prefixes = ['Ongoing', 'Urgent', 'Decliend', 'Some example', 'Low level prioritized']
+    const prefixes = ['Ongoing', 'Urgent', 'Decliend', 'Some example', 'Low level prioritized'];
+    const randomString = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+
     this.tasks = [];
     for(let i = 0; i < 100; ++i) {
       this.tasks.push({
         id: i,
-        title: `${prefixes[Math.floor(Math.random() * prefixes.length)]} task`,
+        title: `${randomString(prefixes)} task`,
         status: statuses[Math.floor(Math.random() * statuses.length)],
       });
     }
@@ -185,6 +194,25 @@ export default class APIRoutes {
         })
       }
     });
+
+    //List item stub data gen
+    const namePrefixes = ['Red', 'Green', 'Blue', 'Orange', 'White', 'Black'];
+    const nameSuffixes = ['stone', 'markup', 'seage', 'zealot', 'protos', 'terran'];
+    const descPrefixes = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'];
+    const descSuffixes = ['nice description', 'no so nice description', 'very long text', 'very small, but muted message'];
+    const typeCodes    = ['FFE', 'FFD'];
+    this.listItems = [];
+    for (let i = 0; i < 100; ++i) {
+      this.listItems.push({
+        id: i,
+        name: `${randomString(namePrefixes)} ${randomString(nameSuffixes)}`,
+        description: `${randomString(descPrefixes)} ${randomString(descSuffixes)}`,
+        validTill: new Date().toISOString(),
+        typeCode: randomString(typeCodes),
+        enabled: i > 10 && (i % 2) === 0,
+      });
+    }
+
   }
 
   @wrapAsync
@@ -213,6 +241,35 @@ export default class APIRoutes {
       console.log(`Form to save: ${JSON.stringify(form, null, 2)}`);
 
       res.status(200).end();
+    }, 1000);
+  }
+
+
+  @wrapAsync
+  async getListItems(req: Request, res: Response) {
+    setTimeout(() => {
+
+    }, 1000);
+  }
+
+  @wrapAsync
+  async getListItem(req: Request, res: Response) {
+    setTimeout(() => {
+
+    }, 1000);
+  }
+
+  @wrapAsync
+  async updateListItem(req: Request, res: Response) {
+    setTimeout(() => {
+
+    }, 1000);
+  }
+
+  @wrapAsync
+  async deleteListItem(req: Request, res: Response) {
+    setTimeout(() => {
+
     }, 1000);
   }
 
