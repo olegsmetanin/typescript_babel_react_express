@@ -12,5 +12,5 @@ export interface IListState {
   }
 }
 
-export {IListItem} from '../../../../common/model';
+//export {IListItem} from '../../../../common/model';
 export {IListItemsFilter, IListItemsRequest, IListItemsResponse} from '../../../../common/api';
