@@ -8,6 +8,7 @@ import authReducer from './auth/reducers';
 import pingpongReducer from './pingpong/reducers';
 import catchReducer from './catch/reducers';
 import editFormReducer from './editform/reducers';
+import listformReducer from './list/reducers';
 
 const rootReducer = combineReducers({
   index    : indexReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   pingpong : pingpongReducer,
   catch    : catchReducer,
   editform : editFormReducer,
+  listform : listformReducer,
 });
 
 export { rootReducer };

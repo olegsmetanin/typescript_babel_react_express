@@ -13,6 +13,9 @@ import NotImplementedHandler from '../modules/notimplemented/NotImplementedHandl
 import PingPongHandler from '../modules/pingpong/PingPongHandler';
 import EditFormHandler from '../modules/editform/EditFormHandler';
 
+import ListItemListHandler from '../modules/list/ListItemListHandler';
+import ListItemFormHandler from '../modules/list/ListItemFormHandler';
+
 const loadContainerAsync = bundle => (location, cb) => {
   if (typeof window !== 'undefined') {
     bundle(component => {
@@ -33,6 +36,10 @@ let routes = <Route>
     <Route path="tasks" getComponent={loadContainerAsync(require('bundle?lazy&name=tasks!../modules/tasks/TasksHandler'))}  />
     <Route path="pingpong" component={PingPongHandler} />
     <Route path="editform" component={EditFormHandler} />
+
+    <Route path="listform" component={ListItemListHandler}>
+      <Route path="/:id" component={ListItemFormHandler} />
+    </Route>
   </Route>
   <Route path="*" component={NotFoundHandler} />
 </Route>

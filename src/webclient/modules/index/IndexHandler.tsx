@@ -74,6 +74,9 @@ class IndexHandler extends React.Component<IIndexHandlerProps, {}> {
           <Link to="/editform">Edit form validation</Link>
         </li>
         <li>
+          <Link to="/listform">List & form example</Link>
+        </li>
+        <li>
           <a href="http://localhost:3000/api-doc/?url=http://localhost:3000/static/api.json" target="_blank">swagger</a> 
         </li>
       </ul>

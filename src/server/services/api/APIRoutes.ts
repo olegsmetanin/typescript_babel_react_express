@@ -200,7 +200,7 @@ export default class APIRoutes {
     const namePrefixes = ['Red', 'Green', 'Blue', 'Orange', 'White', 'Black'];
     const nameSuffixes = ['stone', 'markup', 'seage', 'zealot', 'protos', 'terran'];
     const descPrefixes = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'];
-    const descSuffixes = ['nice description', 'no so nice description', 'very long text', 'very small, but muted message'];
+    const descSuffixes = ['nice description', 'not so nice description', 'very long text', 'very small, but muted message'];
     const typeCodes    = ['FFE', 'FFD'];
     this.listItems = [];
     for (let i = 0; i < 100; ++i) {
@@ -253,7 +253,7 @@ export default class APIRoutes {
       const {filter: {search}, offset} = options;
 
       const term = (search && search.trim()) || '';
-      const found = term
+      const found: IListItem[] = term
         ? this.listItems.filter(li => li.name.indexOf(term) >= 0 || li.description.indexOf(term) >= 0)
         : this.listItems;
 
