@@ -11,11 +11,11 @@ export interface IFormApi {
 export default class FormApi extends ApiCaller implements IFormApi {
 
   get(options: {id: number}) {
-    return this._post('/api/list-item/get', options);
+    return this._post('/api/list-items/get', options);
   }
 
   update(options: IListItem) {
-    return this._post('/api/list-item/update', options);
+    return this._post('/api/list-items/update', options);
   }
 
 }

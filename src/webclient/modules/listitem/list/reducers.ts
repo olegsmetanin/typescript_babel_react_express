@@ -12,7 +12,7 @@ const initialState: IListState = {
   ui: {loading: false},
 };
 
-export default handleActions({
+export default handleActions<IListState>({
 
   [`${LISTFORM_SEARCH}_BEGIN`]: (state, action) => {
     const ui = Object.assign({}, state.ui, {loading: true});

@@ -3,15 +3,85 @@
 import * as React from 'react';
 import {bindActionCreators, Store, Dispatch} from 'redux';
 import {connect} from 'react-redux';
+import IHTTPClient from '../../../../framework/common/http/IHTTPClient';
+import Validator from '../../../../framework/client/validation/Validator';
+import {IListItem} from '../../../../common/model';
+import {IFormState} from './model';
+import actionsFactory from './actions';
+import FormApi from './api';
+import ViewForm from './components/ViewForm';
+import EditForm from './components/EditForm';
 
-class ListItemFormHandler extends React.Component<{}, {}> {
+const formValidationSchema = require('../../../../common/api/form/form.json');
+const validationMessages = require('./validation_messages.ru');
+
+
+interface IContext {
+  httpClient: IHTTPClient;
+}
+
+interface IProps extends React.Props<ListItemFormHandler> {
+  state    : IFormState;
+  dispatch : Dispatch;
+}
+
+
+class ListItemFormHandler extends React.Component<IProps, {}> {
+
+  static contextTypes: React.ValidationMap<any> = {
+    httpClient: React.PropTypes.object.isRequired,
+  };
+
+  static async composeState(dispatch: Dispatch, httpClient: IHTTPClient) {
+    const api = new FormApi({httpClient});
+    const actions = actionsFactory({api, validator: null});
+    await dispatch(actions.loadForm(1));//TODO get id from route params
+  }
+
+  actions: any;
+  context: IContext;
+
+  constructor(props, context) {
+    super(props, context);
+
+    const api = new FormApi({httpClient: context.httpClient});
+    const validator = new Validator(formValidationSchema, validationMessages);
+    this.actions = bindActionCreators(actionsFactory({api, validator}), props.dispatch);
+  }
+
+  componentWillMount() {
+    if (typeof window !== 'undefined') {
+      this.actions.loadForm(1);//TODO get id from route params
+    }
+  }
 
   render() {
+    const {state: {item, ui}} = this.props;
+
+    const renderLoading = () => {
+      return <div>Loading form data...</div>
+    };
+
     return (
-      <div>TODO edit form for list item</div>
+      <div>
+        {ui.loading && renderLoading()}
+
+        {item && (
+          !ui.editMode
+            ? <ViewForm data={item} onEdit={() => this.actions.editForm()} />
+            : <EditForm errors={ui.errors} data={item} saving={ui.saving} onSave={changedData => this.actions.saveForm(changedData)} />
+          )
+        }
+
+        {!ui.loading && !item && <div>No data to show</div>}
+      </div>
     )
   }
 
 }
 
-export default connect(/*TODO mapStateToProps*/state => ({}))(ListItemFormHandler);
+const mapStateToProps = (state) => ({
+  state: state && state.modules && state.modules.listitem && state.modules.listitem.form
+});
+
+export default connect(mapStateToProps)(ListItemFormHandler);

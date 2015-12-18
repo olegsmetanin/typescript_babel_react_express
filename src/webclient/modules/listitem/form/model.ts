@@ -1,6 +1,6 @@
 import {IListItem} from '../../../../common/model';//TODO not working, why? '../model'
 
-export interface IListState {
+export interface IFormState {
   item  : IListItem;
 
   ui: {
