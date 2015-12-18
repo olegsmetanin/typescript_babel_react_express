@@ -5,6 +5,7 @@ import Delay from './../../../framework/common/commands/Delay';
 import GetUser from './commands/User/GetUser';
 import IDB from './../../../framework/server/database/IDB';
 import {IListItem} from './../../../common/model';
+import {IListItemsRequest, IListItemsResponse} from './../../../common/api';
 
 interface APIRoutesSettings {
   webserver: any;
@@ -248,7 +249,22 @@ export default class APIRoutes {
   @wrapAsync
   async getListItems(req: Request, res: Response) {
     setTimeout(() => {
+      const options: IListItemsRequest = req.body;
+      const {filter: {search}, offset} = options;
 
+      const term = (search && search.trim()) || '';
+      const found = term
+        ? this.listItems.filter(li => li.name.indexOf(term) >= 0 || li.description.indexOf(term) >= 0)
+        : this.listItems;
+
+      const fromIndex = Math.max(0, Math.min(offset, found.length - 1));
+      const toIndex = Math.min(fromIndex + 10, found.length - 1);
+      const result: IListItemsResponse = {
+        items: found.slice(fromIndex, toIndex),
+        count: found.length,
+      };
+
+      res.json(result);
     }, 1000);
   }
 
