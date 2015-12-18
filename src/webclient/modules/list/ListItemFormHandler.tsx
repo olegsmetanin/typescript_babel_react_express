@@ -14,4 +14,4 @@ class ListItemFormHandler extends React.Component<{}, {}> {
 
 }
 
-export default connect(/*TODO mapStateToProps*/)(ListItemFormHandler);
+export default connect(/*TODO mapStateToProps*/state => ({}))(ListItemFormHandler);

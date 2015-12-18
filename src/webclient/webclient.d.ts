@@ -3,6 +3,7 @@
 
 /// <reference path="../../typings/react/react.d.ts"/>
 /// <reference path="../../typings/react/react-dom.d.ts"/>
+/// <reference path="../../typings/react-router/react-router.d.ts"/>
 /// <reference path="../../typings/react/react-addons-linked-state-mixin.d.ts"/>
 /// <reference path="../../typings/react-mixin/react-mixin.d.ts"/>
 /// <reference path="../../typings/redux/redux.d.ts"/>

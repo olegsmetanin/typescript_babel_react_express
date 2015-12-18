@@ -37,8 +37,9 @@ let routes = <Route>
     <Route path="pingpong" component={PingPongHandler} />
     <Route path="editform" component={EditFormHandler} />
 
-    <Route path="listform" component={ListItemListHandler}>
-      <Route path="/:id" component={ListItemFormHandler} />
+    <Route path="listform">
+      <IndexRoute component={ListItemListHandler} />
+      <Route path=":id" component={ListItemFormHandler} />
     </Route>
   </Route>
   <Route path="*" component={NotFoundHandler} />

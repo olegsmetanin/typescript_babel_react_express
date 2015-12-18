@@ -1,6 +1,5 @@
 import * as React from 'react';
-var ReactRouter = require('react-router');
-const { Link } = ReactRouter;
+import { Link } from 'react-router';
 var DocumentMeta = require('react-document-meta');
 import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';

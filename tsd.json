@@ -30,7 +30,7 @@
       "commit": "8ea42cd8bb11863ed6f242d67c502288ebc45a7b"
     },
     "react/react.d.ts": {
-      "commit": "8ea42cd8bb11863ed6f242d67c502288ebc45a7b"
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
     "whatwg-fetch/whatwg-fetch.d.ts": {
       "commit": "8ea42cd8bb11863ed6f242d67c502288ebc45a7b"
@@ -73,6 +73,12 @@
     },
     "react/react-dom.d.ts": {
       "commit": "8ea42cd8bb11863ed6f242d67c502288ebc45a7b"
+    },
+    "react-router/history.d.ts": {
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+    },
+    "react-router/react-router.d.ts": {
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     }
   }
 }
