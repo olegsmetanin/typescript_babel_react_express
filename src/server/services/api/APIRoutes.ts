@@ -271,14 +271,33 @@ export default class APIRoutes {
   @wrapAsync
   async getListItem(req: Request, res: Response) {
     setTimeout(() => {
+      const {id} = req.body;
 
+      const result = this.listItems.find(li => li.id === id);
+      if (!result) {
+        return res.status(404);
+      }
+
+      res.json(result);
     }, 1000);
   }
 
   @wrapAsync
   async updateListItem(req: Request, res: Response) {
     setTimeout(() => {
+      const changed: IListItem = req.body;
+      const target: IListItem = this.listItems.find(li => li.id === changed.id);
+      if (!target) {
+        return res.status(404);
+      }
 
+      target.name = changed.name;
+      target.description = changed.description;
+      target.validTill = changed.validTill;
+      target.typeCode = changed.typeCode;
+      target.enabled = changed.enabled;
+
+      res.json(target);
     }, 1000);
   }
 
