@@ -1,5 +1,5 @@
 export default (options) => {
-  const {head = '', content = '', cachedump = {}, state = {}, socketPath} = options || {};
+  const {head = '', content = '', cachedump = {}, state = {}, socketPath = ''} = options || {};
   const cachedumpJSON = JSON.stringify(cachedump);
   const stateJSON = JSON.stringify(state);
   const socketPathJSON = socketPath ? `'${socketPath}'` : 'undefined';

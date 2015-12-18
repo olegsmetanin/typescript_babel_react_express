@@ -13,7 +13,7 @@ import Error from './Error';
 interface IProps extends React.Props<EditForm> {
   data   : IListItem;
   saving : boolean;
-  onSave : (data: FormData) => void;
+  onSave : (data: IListItem) => void;
   errors : any;
 }
 
